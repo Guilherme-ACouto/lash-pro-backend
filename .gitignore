@@ -1,0 +1,16 @@
+# Java
+target/
+*.class
+*.jar
+
+# Ambiente
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Mac
+.DS_Store
