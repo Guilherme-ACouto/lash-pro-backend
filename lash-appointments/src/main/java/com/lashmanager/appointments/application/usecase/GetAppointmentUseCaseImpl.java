@@ -8,10 +8,12 @@ import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class GetAppointmentUseCaseImpl implements GetAppointmentUseCase {
 

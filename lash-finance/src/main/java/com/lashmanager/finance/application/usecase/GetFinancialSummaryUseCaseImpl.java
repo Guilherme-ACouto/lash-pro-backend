@@ -3,10 +3,12 @@ package com.lashmanager.finance.application.usecase;
 import com.lashmanager.finance.domain.port.in.GetFinancialSummaryUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialSummaryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Service
 @RequiredArgsConstructor
 public class GetFinancialSummaryUseCaseImpl implements GetFinancialSummaryUseCase {
 

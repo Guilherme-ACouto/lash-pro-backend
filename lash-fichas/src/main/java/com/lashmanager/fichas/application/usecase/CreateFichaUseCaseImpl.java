@@ -6,10 +6,12 @@ import com.lashmanager.fichas.domain.model.Ficha;
 import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase;
 import com.lashmanager.fichas.domain.port.out.FichaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class CreateFichaUseCaseImpl implements CreateFichaUseCase {
 

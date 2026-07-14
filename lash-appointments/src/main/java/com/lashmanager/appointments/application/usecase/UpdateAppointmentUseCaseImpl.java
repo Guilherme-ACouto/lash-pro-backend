@@ -8,13 +8,15 @@ import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
-import com.lashmanager.services.domain.model.Service;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class UpdateAppointmentUseCaseImpl implements UpdateAppointmentUseCase {
 
@@ -30,7 +32,7 @@ public class UpdateAppointmentUseCaseImpl implements UpdateAppointmentUseCase {
         Client client = clientRepository.findById(command.clientId())
                 .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.clientId()));
 
-        Service service = serviceRepository.findById(command.serviceId())
+        ServiceOffering service = serviceRepository.findById(command.serviceId())
                 .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.serviceId()));
 
         Appointment updated = existing.toBuilder()

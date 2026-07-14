@@ -7,9 +7,11 @@ import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.in.UpdateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 @RequiredArgsConstructor
 public class UpdateInventoryItemUseCaseImpl implements UpdateInventoryItemUseCase {
 

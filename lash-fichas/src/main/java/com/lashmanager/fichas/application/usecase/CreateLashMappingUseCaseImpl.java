@@ -6,10 +6,12 @@ import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase;
 import com.lashmanager.fichas.domain.port.out.FichaRepository;
 import com.lashmanager.fichas.domain.port.out.LashMappingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class CreateLashMappingUseCaseImpl implements CreateLashMappingUseCase {
 

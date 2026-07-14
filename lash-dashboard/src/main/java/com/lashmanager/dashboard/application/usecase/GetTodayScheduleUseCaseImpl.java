@@ -6,6 +6,7 @@ import com.lashmanager.clients.infrastructure.persistence.repository.ClientJpaRe
 import com.lashmanager.dashboard.domain.port.in.GetTodayScheduleUseCase;
 import com.lashmanager.services.infrastructure.persistence.repository.ServiceJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 @RequiredArgsConstructor
 public class GetTodayScheduleUseCaseImpl implements GetTodayScheduleUseCase {
 

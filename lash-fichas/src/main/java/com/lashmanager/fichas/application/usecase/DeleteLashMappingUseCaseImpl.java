@@ -4,9 +4,11 @@ import com.lashmanager.fichas.domain.exception.LashMappingNotFoundException;
 import com.lashmanager.fichas.domain.port.in.DeleteLashMappingUseCase;
 import com.lashmanager.fichas.domain.port.out.LashMappingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class DeleteLashMappingUseCaseImpl implements DeleteLashMappingUseCase {
 

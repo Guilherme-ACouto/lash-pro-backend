@@ -5,9 +5,11 @@ import com.lashmanager.services.domain.port.in.DeleteServiceUseCase;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class DeleteServiceUseCaseImpl implements DeleteServiceUseCase {
 

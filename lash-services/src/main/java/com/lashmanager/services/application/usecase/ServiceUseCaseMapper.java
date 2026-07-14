@@ -1,13 +1,13 @@
 package com.lashmanager.services.application.usecase;
 
-import com.lashmanager.services.domain.model.Service;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 
 public class ServiceUseCaseMapper {
 
     private ServiceUseCaseMapper() {}
 
-    public static CreateServiceUseCase.ServiceResult toResult(Service service) {
+    public static CreateServiceUseCase.ServiceResult toResult(ServiceOffering service) {
         return new CreateServiceUseCase.ServiceResult(
                 service.getId(),
                 service.getName(),

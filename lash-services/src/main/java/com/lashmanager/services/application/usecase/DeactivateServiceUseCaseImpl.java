@@ -1,15 +1,17 @@
 package com.lashmanager.services.application.usecase;
 
 import com.lashmanager.services.domain.exception.ServiceNotFoundException;
-import com.lashmanager.services.domain.model.Service;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.in.DeactivateServiceUseCase;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class DeactivateServiceUseCaseImpl implements DeactivateServiceUseCase {
 
@@ -17,7 +19,7 @@ public class DeactivateServiceUseCaseImpl implements DeactivateServiceUseCase {
 
     @Override
     public void deactivate(UUID id, boolean force) {
-        Service service = serviceRepository.findById(id)
+        ServiceOffering service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ServiceNotFoundException(id));
 
         if (!force && serviceRepository.hasActiveAppointments(id)) {
@@ -32,7 +34,7 @@ public class DeactivateServiceUseCaseImpl implements DeactivateServiceUseCase {
 
     @Override
     public void reactivate(UUID id) {
-        Service service = serviceRepository.findById(id)
+        ServiceOffering service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ServiceNotFoundException(id));
 
         serviceRepository.save(service.toBuilder()

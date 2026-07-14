@@ -10,10 +10,12 @@ import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class ChangeAppointmentStatusUseCaseImpl implements ChangeAppointmentStatusUseCase {
 

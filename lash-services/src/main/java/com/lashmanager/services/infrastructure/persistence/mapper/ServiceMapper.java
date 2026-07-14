@@ -1,14 +1,14 @@
 package com.lashmanager.services.infrastructure.persistence.mapper;
 
-import com.lashmanager.services.domain.model.Service;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.infrastructure.persistence.entity.ServiceEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ServiceMapper {
 
-    public Service toDomain(ServiceEntity entity) {
-        return Service.builder()
+    public ServiceOffering toDomain(ServiceEntity entity) {
+        return ServiceOffering.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
@@ -20,7 +20,7 @@ public class ServiceMapper {
                 .build();
     }
 
-    public ServiceEntity toEntity(Service domain) {
+    public ServiceEntity toEntity(ServiceOffering domain) {
         return ServiceEntity.builder()
                 .id(domain.getId())
                 .name(domain.getName())

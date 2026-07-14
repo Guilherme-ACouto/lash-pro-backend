@@ -2,15 +2,17 @@ package com.lashmanager.services.application.usecase;
 
 import com.lashmanager.services.domain.exception.ServiceAlreadyExistsException;
 import com.lashmanager.services.domain.exception.ServiceNotFoundException;
-import com.lashmanager.services.domain.model.Service;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 import com.lashmanager.services.domain.port.in.UpdateServiceUseCase;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class UpdateServiceUseCaseImpl implements UpdateServiceUseCase {
 
@@ -18,14 +20,14 @@ public class UpdateServiceUseCaseImpl implements UpdateServiceUseCase {
 
     @Override
     public CreateServiceUseCase.ServiceResult execute(UUID id, UpdateServiceCommand command) {
-        Service existing = serviceRepository.findById(id)
+        ServiceOffering existing = serviceRepository.findById(id)
                 .orElseThrow(() -> new ServiceNotFoundException(id));
 
         if (serviceRepository.existsByNameAndIdNot(command.name(), id)) {
             throw new ServiceAlreadyExistsException(command.name());
         }
 
-        Service updated = existing.toBuilder()
+        ServiceOffering updated = existing.toBuilder()
                 .name(command.name())
                 .description(command.description())
                 .price(command.price())

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Service {
+public class ServiceOffering {
     private UUID id;
     private String name;
     private String description;

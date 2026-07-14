@@ -1,14 +1,16 @@
 package com.lashmanager.services.application.usecase;
 
 import com.lashmanager.services.domain.exception.ServiceAlreadyExistsException;
-import com.lashmanager.services.domain.model.Service;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class CreateServiceUseCaseImpl implements CreateServiceUseCase {
 
@@ -20,7 +22,7 @@ public class CreateServiceUseCaseImpl implements CreateServiceUseCase {
             throw new ServiceAlreadyExistsException(command.name());
         }
 
-        Service service = Service.builder()
+        ServiceOffering service = ServiceOffering.builder()
                 .id(UUID.randomUUID())
                 .name(command.name())
                 .description(command.description())

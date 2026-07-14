@@ -10,10 +10,12 @@ import com.lashmanager.finance.domain.port.in.ListFinancialEntriesUseCase;
 import com.lashmanager.finance.domain.port.in.UpdateFinancialEntryUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class UpdateFinancialEntryUseCaseImpl implements UpdateFinancialEntryUseCase {
 

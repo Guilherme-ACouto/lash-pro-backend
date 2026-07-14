@@ -5,9 +5,11 @@ import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.in.GetInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class GetInventoryItemUseCaseImpl implements GetInventoryItemUseCase {
 

@@ -6,7 +6,9 @@ import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class ListServicesUseCaseImpl implements ListServicesUseCase {
 

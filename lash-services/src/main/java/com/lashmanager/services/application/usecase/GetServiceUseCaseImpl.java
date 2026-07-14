@@ -5,9 +5,11 @@ import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 import com.lashmanager.services.domain.port.in.GetServiceUseCase;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class GetServiceUseCaseImpl implements GetServiceUseCase {
 

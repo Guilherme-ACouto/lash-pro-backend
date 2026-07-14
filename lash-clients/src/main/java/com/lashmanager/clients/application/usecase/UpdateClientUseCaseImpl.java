@@ -7,10 +7,12 @@ import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 import com.lashmanager.clients.domain.port.in.UpdateClientUseCase;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class UpdateClientUseCaseImpl implements UpdateClientUseCase {
 

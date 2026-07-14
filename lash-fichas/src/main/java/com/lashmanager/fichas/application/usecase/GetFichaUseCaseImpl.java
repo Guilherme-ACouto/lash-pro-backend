@@ -5,9 +5,11 @@ import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase;
 import com.lashmanager.fichas.domain.port.in.GetFichaUseCase;
 import com.lashmanager.fichas.domain.port.out.FichaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class GetFichaUseCaseImpl implements GetFichaUseCase {
 

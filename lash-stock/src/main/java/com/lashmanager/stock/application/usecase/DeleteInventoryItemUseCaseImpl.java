@@ -6,9 +6,11 @@ import com.lashmanager.stock.domain.port.in.DeleteInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import com.lashmanager.stock.domain.port.out.InventoryMovementRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class DeleteInventoryItemUseCaseImpl implements DeleteInventoryItemUseCase {
 

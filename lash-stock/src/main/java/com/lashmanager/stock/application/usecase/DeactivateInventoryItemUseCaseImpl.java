@@ -6,10 +6,12 @@ import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.in.DeactivateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class DeactivateInventoryItemUseCaseImpl implements DeactivateInventoryItemUseCase {
 
