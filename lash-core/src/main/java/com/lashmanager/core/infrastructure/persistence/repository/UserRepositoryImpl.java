@@ -26,6 +26,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByActivationKey(String activationKey) {
+        return jpaRepository.findByActivationKey(activationKey).map(mapper::toDomain);
+    }
+
+    @Override
     public User save(User user) {
         return mapper.toDomain(jpaRepository.save(mapper.toEntity(user)));
     }

@@ -6,9 +6,17 @@ import com.lashmanager.clients.domain.exception.ClientAlreadyExistsException;
 import com.lashmanager.clients.domain.exception.ClientNotFoundException;
 import com.lashmanager.clients.domain.exception.HasFutureAppointmentsException;
 import com.lashmanager.core.adapter.web.dto.ErrorResponse;
+import com.lashmanager.core.domain.exception.AccountNotActivatedException;
+import com.lashmanager.core.domain.exception.ActivationKeyExpiredException;
+import com.lashmanager.core.domain.exception.ActivationKeyInvalidException;
 import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.core.domain.exception.DomainException;
+import com.lashmanager.core.domain.exception.EmailAlreadyInUseException;
 import com.lashmanager.core.domain.exception.InvalidCredentialsException;
+import com.lashmanager.core.domain.exception.PlatformAdminRequiredException;
+import com.lashmanager.core.domain.exception.SchemaProvisioningException;
+import com.lashmanager.core.domain.exception.TenantInactiveException;
+import com.lashmanager.core.domain.exception.TenantNotFoundException;
 import com.lashmanager.core.domain.exception.TokenExpiredException;
 import com.lashmanager.core.domain.exception.UserNotFoundException;
 import com.lashmanager.fichas.domain.exception.ClientAlreadyHasFichaException;
@@ -21,6 +29,7 @@ import com.lashmanager.services.domain.exception.ServiceNotFoundException;
 import com.lashmanager.stock.domain.exception.InventoryItemCodeAlreadyExistsException;
 import com.lashmanager.stock.domain.exception.InventoryItemHasMovementsException;
 import com.lashmanager.stock.domain.exception.InventoryItemNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +62,56 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
         return err(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(AccountNotActivatedException.class)
+    public ResponseEntity<ErrorResponse> handleAccountNotActivated(AccountNotActivatedException ex) {
+        return err(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler(TenantInactiveException.class)
+    public ResponseEntity<ErrorResponse> handleTenantInactive(TenantInactiveException ex) {
+        return err(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
+    // ── Administração de tenants ──────────────────────────────────────────────
+
+    @ExceptionHandler(PlatformAdminRequiredException.class)
+    public ResponseEntity<ErrorResponse> handlePlatformAdminRequired(PlatformAdminRequiredException ex) {
+        return err(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler(TenantNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTenantNotFound(TenantNotFoundException ex) {
+        return err(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    // ── Registro / Ativação (multi-tenancy) ──────────────────────────────────
+
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyInUse(EmailAlreadyInUseException ex) {
+        return err(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(ActivationKeyInvalidException.class)
+    public ResponseEntity<ErrorResponse> handleActivationKeyInvalid(ActivationKeyInvalidException ex) {
+        return err(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(ActivationKeyExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleActivationKeyExpired(ActivationKeyExpiredException ex) {
+        return err(HttpStatus.GONE, ex.getMessage());
+    }
+
+    @ExceptionHandler(SchemaProvisioningException.class)
+    public ResponseEntity<ErrorResponse> handleSchemaProvisioning(SchemaProvisioningException ex) {
+        log.error("Falha no provisionamento de schema: ", ex);
+        return err(HttpStatus.INTERNAL_SERVER_ERROR, "Falha ao provisionar ambiente — tente novamente em instantes");
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        return err(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     // ── Clientes ──────────────────────────────────────────────────────────────

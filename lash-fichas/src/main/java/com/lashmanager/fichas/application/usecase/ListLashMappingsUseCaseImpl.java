@@ -2,7 +2,7 @@ package com.lashmanager.fichas.application.usecase;
 
 import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase;
 import com.lashmanager.fichas.domain.port.in.ListLashMappingsUseCase;
-import com.lashmanager.fichas.domain.port.out.LashMappingRepository;
+import com.lashmanager.fichas.domain.port.out.LashMappingQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -14,11 +14,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ListLashMappingsUseCaseImpl implements ListLashMappingsUseCase {
 
-    private final LashMappingRepository mappingRepository;
+    private final LashMappingQueryRepository mappingQueryRepository;
 
     @Override
     public Page<CreateLashMappingUseCase.LashMappingResult> execute(UUID fichaId, Pageable pageable) {
-        return mappingRepository.findByFichaId(fichaId, pageable)
+        return mappingQueryRepository.findByFichaId(fichaId, pageable)
                 .map(FichaUseCaseMapper::toMappingResult);
     }
 }

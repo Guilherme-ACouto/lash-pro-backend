@@ -34,10 +34,13 @@ public class JwtService implements TokenPort {
     }
 
     @Override
-    public String generateAccessToken(String email, String role) {
+    public String generateAccessToken(String email, String role, String tenantId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         claims.put("type", "ACCESS");
+        if (tenantId != null) {
+            claims.put("tenantId", tenantId);
+        }
         return buildToken(claims, email, expiration);
     }
 
@@ -61,6 +64,11 @@ public class JwtService implements TokenPort {
     @Override
     public String extractEmail(String token) {
         return parseClaims(token).getSubject();
+    }
+
+    @Override
+    public String extractTenantId(String token) {
+        return parseClaims(token).get("tenantId", String.class);
     }
 
     @Override

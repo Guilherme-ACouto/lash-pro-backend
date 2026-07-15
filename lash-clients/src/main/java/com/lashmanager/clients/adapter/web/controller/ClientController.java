@@ -3,7 +3,17 @@ package com.lashmanager.clients.adapter.web.controller;
 import com.lashmanager.clients.adapter.web.dto.ClientResponse;
 import com.lashmanager.clients.adapter.web.dto.CreateClientRequest;
 import com.lashmanager.clients.adapter.web.dto.UpdateClientRequest;
-import com.lashmanager.clients.domain.port.in.*;
+import com.lashmanager.clients.application.command.CreateClientCommand;
+import com.lashmanager.clients.application.command.DeactivateClientCommand;
+import com.lashmanager.clients.application.command.DeleteClientCommand;
+import com.lashmanager.clients.application.command.ReactivateClientCommand;
+import com.lashmanager.clients.application.command.UpdateClientCommand;
+import com.lashmanager.clients.application.service.CreateClientApplicationService;
+import com.lashmanager.clients.application.service.DeactivateClientApplicationService;
+import com.lashmanager.clients.application.service.DeleteClientApplicationService;
+import com.lashmanager.clients.application.service.UpdateClientApplicationService;
+import com.lashmanager.clients.domain.port.in.GetClientUseCase;
+import com.lashmanager.clients.domain.port.in.ListClientsUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,16 +30,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClientController {
 
-    private final CreateClientUseCase createClientUseCase;
-    private final UpdateClientUseCase updateClientUseCase;
+    private final CreateClientApplicationService createClientApplicationService;
+    private final UpdateClientApplicationService updateClientApplicationService;
+    private final DeleteClientApplicationService deleteClientApplicationService;
+    private final DeactivateClientApplicationService deactivateClientApplicationService;
     private final GetClientUseCase getClientUseCase;
     private final ListClientsUseCase listClientsUseCase;
-    private final DeleteClientUseCase deleteClientUseCase;
-    private final DeactivateClientUseCase deactivateClientUseCase;
 
     @PostMapping
     public ResponseEntity<ClientResponse> create(@Valid @RequestBody CreateClientRequest request) {
-        var result = createClientUseCase.execute(new CreateClientUseCase.CreateClientCommand(
+        var result = createClientApplicationService.when(new CreateClientCommand(
                 request.name(), request.phone(), request.email(), request.birthDate(), request.notes()
         ));
         return ResponseEntity
@@ -58,15 +68,15 @@ public class ClientController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateClientRequest request
     ) {
-        var result = updateClientUseCase.execute(id, new UpdateClientUseCase.UpdateClientCommand(
-                request.name(), request.phone(), request.email(), request.birthDate(), request.notes()
+        var result = updateClientApplicationService.when(new UpdateClientCommand(
+                id, request.name(), request.phone(), request.email(), request.birthDate(), request.notes()
         ));
         return ResponseEntity.ok(ClientResponse.from(result));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        deleteClientUseCase.execute(id);
+        deleteClientApplicationService.when(new DeleteClientCommand(id));
         return ResponseEntity.noContent().build();
     }
 
@@ -75,13 +85,13 @@ public class ClientController {
             @PathVariable UUID id,
             @RequestParam(defaultValue = "false") boolean force
     ) {
-        deactivateClientUseCase.deactivate(id, force);
+        deactivateClientApplicationService.when(new DeactivateClientCommand(id, force));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/reactivate")
     public ResponseEntity<Void> reactivate(@PathVariable UUID id) {
-        deactivateClientUseCase.reactivate(id);
+        deactivateClientApplicationService.when(new ReactivateClientCommand(id));
         return ResponseEntity.noContent().build();
     }
 }

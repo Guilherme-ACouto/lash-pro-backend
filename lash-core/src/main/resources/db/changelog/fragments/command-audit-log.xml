@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="1" author="lash">
+        <createTable tableName="command_audit_log">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="command_class" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload_json" type="TEXT"/>
+            <column name="user_id" type="VARCHAR(255)"/>
+            <column name="executed_at" type="TIMESTAMP" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="success" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="command_audit_log" indexName="idx_command_audit_log_command_class">
+            <column name="command_class"/>
+        </createIndex>
+        <createIndex tableName="command_audit_log" indexName="idx_command_audit_log_executed_at">
+            <column name="executed_at"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

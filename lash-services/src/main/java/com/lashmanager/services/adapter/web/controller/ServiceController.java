@@ -3,7 +3,17 @@ package com.lashmanager.services.adapter.web.controller;
 import com.lashmanager.services.adapter.web.dto.CreateServiceRequest;
 import com.lashmanager.services.adapter.web.dto.ServiceResponse;
 import com.lashmanager.services.adapter.web.dto.UpdateServiceRequest;
-import com.lashmanager.services.domain.port.in.*;
+import com.lashmanager.services.application.command.CreateServiceCommand;
+import com.lashmanager.services.application.command.DeactivateServiceCommand;
+import com.lashmanager.services.application.command.DeleteServiceCommand;
+import com.lashmanager.services.application.command.ReactivateServiceCommand;
+import com.lashmanager.services.application.command.UpdateServiceCommand;
+import com.lashmanager.services.application.service.CreateServiceApplicationService;
+import com.lashmanager.services.application.service.DeactivateServiceApplicationService;
+import com.lashmanager.services.application.service.DeleteServiceApplicationService;
+import com.lashmanager.services.application.service.UpdateServiceApplicationService;
+import com.lashmanager.services.domain.port.in.GetServiceUseCase;
+import com.lashmanager.services.domain.port.in.ListServicesUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,16 +30,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ServiceController {
 
-    private final CreateServiceUseCase createServiceUseCase;
-    private final UpdateServiceUseCase updateServiceUseCase;
+    private final CreateServiceApplicationService createServiceApplicationService;
+    private final UpdateServiceApplicationService updateServiceApplicationService;
+    private final DeleteServiceApplicationService deleteServiceApplicationService;
+    private final DeactivateServiceApplicationService deactivateServiceApplicationService;
     private final GetServiceUseCase getServiceUseCase;
     private final ListServicesUseCase listServicesUseCase;
-    private final DeleteServiceUseCase deleteServiceUseCase;
-    private final DeactivateServiceUseCase deactivateServiceUseCase;
 
     @PostMapping
     public ResponseEntity<ServiceResponse> create(@Valid @RequestBody CreateServiceRequest request) {
-        var result = createServiceUseCase.execute(new CreateServiceUseCase.CreateServiceCommand(
+        var result = createServiceApplicationService.when(new CreateServiceCommand(
                 request.name(), request.description(), request.price(), request.durationMinutes()
         ));
         return ResponseEntity
@@ -58,15 +68,15 @@ public class ServiceController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateServiceRequest request
     ) {
-        var result = updateServiceUseCase.execute(id, new UpdateServiceUseCase.UpdateServiceCommand(
-                request.name(), request.description(), request.price(), request.durationMinutes()
+        var result = updateServiceApplicationService.when(new UpdateServiceCommand(
+                id, request.name(), request.description(), request.price(), request.durationMinutes()
         ));
         return ResponseEntity.ok(ServiceResponse.from(result));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        deleteServiceUseCase.execute(id);
+        deleteServiceApplicationService.when(new DeleteServiceCommand(id));
         return ResponseEntity.noContent().build();
     }
 
@@ -75,13 +85,13 @@ public class ServiceController {
             @PathVariable UUID id,
             @RequestParam(defaultValue = "false") boolean force
     ) {
-        deactivateServiceUseCase.deactivate(id, force);
+        deactivateServiceApplicationService.when(new DeactivateServiceCommand(id, force));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/reactivate")
     public ResponseEntity<Void> reactivate(@PathVariable UUID id) {
-        deactivateServiceUseCase.reactivate(id);
+        deactivateServiceApplicationService.when(new ReactivateServiceCommand(id));
         return ResponseEntity.noContent().build();
     }
 }

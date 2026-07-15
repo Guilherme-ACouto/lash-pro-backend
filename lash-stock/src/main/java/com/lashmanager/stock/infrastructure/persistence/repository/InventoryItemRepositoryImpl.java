@@ -4,8 +4,6 @@ import com.lashmanager.stock.domain.model.InventoryItem;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import com.lashmanager.stock.infrastructure.persistence.mapper.InventoryItemMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -41,10 +39,5 @@ public class InventoryItemRepositoryImpl implements InventoryItemRepository {
     @Override
     public boolean existsByInternalCodeAndIdNot(String code, UUID id) {
         return jpaRepository.existsByInternalCodeAndIdNot(code, id);
-    }
-
-    @Override
-    public Page<InventoryItem> listWithFilters(String search, Boolean active, boolean onlyLowStock, Pageable pageable) {
-        return jpaRepository.findAllFiltered(search, active, onlyLowStock, pageable).map(mapper::toDomain);
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <!-- Changelog aplicado a cada schema de tenant novo (ver SchemaProvisionerImpl).
+         Ordem espelha os ranges de versão Flyway já usados no schema public/legado:
+         clients (200) -> services (300) -> appointments (400, depende de clients+services)
+         -> finance (500) -> stock (600) -> fichas (700) -> command_audit_log (core).
+
+         errorIfMissing="false": em execução real (lash-app), todos os módulos estão no
+         classpath. Mas quando um módulo roda sua PRÓPRIA suíte de teste isolada (ex.:
+         lash-core ou lash-clients sozinhos), só os changelogs dos módulos dos quais ele
+         depende estão presentes — os demais são ignorados sem erro. -->
+
+    <include file="db/changelog/clients-changelog.xml" relativeToChangelogFile="false" errorIfMissing="false"/>
+    <include file="db/changelog/services-changelog.xml" relativeToChangelogFile="false" errorIfMissing="false"/>
+    <include file="db/changelog/appointments-changelog.xml" relativeToChangelogFile="false" errorIfMissing="false"/>
+    <include file="db/changelog/finance-changelog.xml" relativeToChangelogFile="false" errorIfMissing="false"/>
+    <include file="db/changelog/stock-changelog.xml" relativeToChangelogFile="false" errorIfMissing="false"/>
+    <include file="db/changelog/fichas-changelog.xml" relativeToChangelogFile="false" errorIfMissing="false"/>
+    <include file="db/changelog/fragments/command-audit-log.xml" relativeToChangelogFile="false"/>
+</databaseChangeLog>

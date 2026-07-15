@@ -4,8 +4,6 @@ import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.clients.infrastructure.persistence.mapper.ClientMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -26,11 +24,6 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public Optional<Client> findById(UUID id) {
         return jpaRepository.findById(id).map(mapper::toDomain);
-    }
-
-    @Override
-    public Page<Client> findAll(String search, Boolean active, Pageable pageable) {
-        return jpaRepository.findAllFiltered(search, active, pageable).map(mapper::toDomain);
     }
 
     @Override

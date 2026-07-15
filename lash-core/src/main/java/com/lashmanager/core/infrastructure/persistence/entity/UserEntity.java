@@ -41,6 +41,15 @@ public class UserEntity {
     @Column(name = "password_reset_token_expiry")
     private LocalDateTime passwordResetTokenExpiry;
 
+    @Column(name = "tenant_id")
+    private UUID tenantId;
+
+    @Column(name = "activation_key")
+    private String activationKey;
+
+    @Column(name = "activation_key_expiry")
+    private LocalDateTime activationKeyExpiry;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

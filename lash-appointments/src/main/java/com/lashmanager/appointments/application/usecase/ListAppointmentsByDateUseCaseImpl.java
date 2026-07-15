@@ -2,7 +2,7 @@ package com.lashmanager.appointments.application.usecase;
 
 import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
 import com.lashmanager.appointments.domain.port.in.ListAppointmentsByDateUseCase;
-import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
+import com.lashmanager.appointments.domain.port.out.AppointmentQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListAppointmentsByDateUseCaseImpl implements ListAppointmentsByDateUseCase {
 
-    private final AppointmentRepository appointmentRepository;
+    private final AppointmentQueryRepository appointmentQueryRepository;
 
     @Override
     public List<CreateAppointmentUseCase.AppointmentResult> execute(LocalDate date) {
-        return appointmentRepository.findByDateWithDetails(date);
+        return appointmentQueryRepository.findByDateWithDetails(date);
     }
 
     @Override
     public List<CreateAppointmentUseCase.AppointmentResult> executeRange(LocalDate startDate, LocalDate endDate) {
-        return appointmentRepository.findByDateRangeWithDetails(startDate, endDate);
+        return appointmentQueryRepository.findByDateRangeWithDetails(startDate, endDate);
     }
 }

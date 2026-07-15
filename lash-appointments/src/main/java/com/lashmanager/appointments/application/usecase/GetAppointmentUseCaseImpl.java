@@ -4,7 +4,7 @@ import com.lashmanager.appointments.domain.exception.AppointmentNotFoundExceptio
 import com.lashmanager.appointments.domain.model.Appointment;
 import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
 import com.lashmanager.appointments.domain.port.in.GetAppointmentUseCase;
-import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
+import com.lashmanager.appointments.domain.port.out.AppointmentQueryRepository;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GetAppointmentUseCaseImpl implements GetAppointmentUseCase {
 
-    private final AppointmentRepository appointmentRepository;
+    private final AppointmentQueryRepository appointmentQueryRepository;
     private final ClientRepository clientRepository;
     private final ServiceRepository serviceRepository;
 
     @Override
     public CreateAppointmentUseCase.AppointmentResult execute(UUID id) {
-        Appointment appointment = appointmentRepository.findById(id)
+        Appointment appointment = appointmentQueryRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException(id));
 
         String clientName = appointment.getClientId() != null

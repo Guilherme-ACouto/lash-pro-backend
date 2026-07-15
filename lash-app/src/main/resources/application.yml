@@ -24,6 +24,19 @@ spring:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: false
+    # Ranges de versão são reservados por módulo (V100-199 core, V200+ domínio —
+    # ver RMM-06/STATE.md). Migrations novas do core (ex.: V101-103) podem ter
+    # número menor que migrations de domínio já aplicadas (V200+) — precisa
+    # permitir aplicação fora de ordem.
+    out-of-order: true
+
+  # Liquibase é usado só programaticamente (SchemaProvisionerImpl, ver
+  # refactor-backend) para provisionar schemas de tenant sob demanda — não
+  # queremos a auto-configuração do Spring Boot rodando um changelog padrão
+  # contra o datasource principal no boot (schema public já é governado pelo
+  # Flyway acima).
+  liquibase:
+    enabled: false
 
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
@@ -44,3 +57,7 @@ app:
     refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:4200,http://192.168.18.193:4200}
+  tenant:
+    schema-prefix: ${TENANT_SCHEMA_PREFIX:tenant_}
+  activation:
+    key-expiration-hours: ${ACTIVATION_KEY_HOURS:48}

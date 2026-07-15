@@ -44,4 +44,28 @@ public class EmailPortImpl implements EmailPort {
             log.warn("Falha ao enviar email de recuperação para {}: {}", to, e.getMessage());
         }
     }
+
+    @Override
+    public void sendActivationEmail(String to, String name, String activationKey) {
+        String activationLink = frontendUrl + "/auth/activation?key=" + activationKey;
+        log.info("Link de ativação de conta para {}: {}", to, activationLink);
+
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(to);
+            message.setSubject("Confirme seu cadastro - Lash Manager");
+            message.setText(
+                    "Seja bem-vindo, " + name + "!\n\n" +
+                    "Agora só precisamos que você confirme seu cadastro.\n\n" +
+                    "Clique no link abaixo para ativar sua conta:\n" +
+                    activationLink + "\n\n" +
+                    "Se não foi você, ignore este email.\n\n" +
+                    "Equipe Lash Manager"
+            );
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.warn("Falha ao enviar email de ativação para {}: {}", to, e.getMessage());
+        }
+    }
 }

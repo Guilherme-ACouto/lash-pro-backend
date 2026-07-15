@@ -31,7 +31,8 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
             throw new InvalidCredentialsException();
         }
 
-        String newAccessToken = tokenPort.generateAccessToken(user.getEmail(), user.getRole().name());
+        String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
+        String newAccessToken = tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
         return new RefreshResponse(newAccessToken);
     }
 }

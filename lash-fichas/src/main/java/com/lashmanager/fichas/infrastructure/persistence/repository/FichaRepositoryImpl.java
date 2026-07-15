@@ -4,8 +4,6 @@ import com.lashmanager.fichas.domain.model.Ficha;
 import com.lashmanager.fichas.domain.port.out.FichaRepository;
 import com.lashmanager.fichas.infrastructure.persistence.mapper.FichaMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -24,11 +22,6 @@ public class FichaRepositoryImpl implements FichaRepository {
     }
 
     @Override
-    public Optional<Ficha> findByClientId(UUID clientId) {
-        return jpaRepository.findByClientId(clientId).map(mapper::toDomain);
-    }
-
-    @Override
     public boolean existsByClientId(UUID clientId) {
         return jpaRepository.existsByClientId(clientId);
     }
@@ -36,10 +29,5 @@ public class FichaRepositoryImpl implements FichaRepository {
     @Override
     public Ficha save(Ficha ficha) {
         return mapper.toDomain(jpaRepository.save(mapper.toEntity(ficha)));
-    }
-
-    @Override
-    public Page<Ficha> listWithFilters(String search, Pageable pageable) {
-        return jpaRepository.findAllFiltered(search, pageable).map(mapper::toDomain);
     }
 }

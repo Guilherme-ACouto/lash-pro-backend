@@ -2,7 +2,7 @@ package com.lashmanager.clients.application.usecase;
 
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
-import com.lashmanager.clients.domain.port.out.ClientRepository;
+import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,24 +29,24 @@ import static org.mockito.Mockito.verify;
 class ListClientsUseCaseImplTest {
 
     @Mock
-    private ClientRepository clientRepository;
+    private ClientQueryRepository clientQueryRepository;
 
     private ListClientsUseCaseImpl useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new ListClientsUseCaseImpl(clientRepository);
+        useCase = new ListClientsUseCaseImpl(clientQueryRepository);
     }
 
     @Test
     @DisplayName("deve passar string vazia ao repositório quando a busca é nula")
     void execute_withNullSearch_passesEmptyStringToRepository() {
         ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
-        given(clientRepository.findAll(any(), any(), any())).willReturn(Page.empty());
+        given(clientQueryRepository.findAll(any(), any(), any())).willReturn(Page.empty());
 
         useCase.execute(null, null, PageRequest.of(0, 10));
 
-        verify(clientRepository).findAll(searchCaptor.capture(), isNull(), any());
+        verify(clientQueryRepository).findAll(searchCaptor.capture(), isNull(), any());
         assertThat(searchCaptor.getValue()).isEqualTo("");
     }
 
@@ -54,11 +54,11 @@ class ListClientsUseCaseImplTest {
     @DisplayName("deve remover espaços em branco da busca antes de repassar ao repositório")
     void execute_withWhitespaceSearch_trimsBeforePassing() {
         ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
-        given(clientRepository.findAll(any(), any(), any())).willReturn(Page.empty());
+        given(clientQueryRepository.findAll(any(), any(), any())).willReturn(Page.empty());
 
         useCase.execute("  Ana  ", null, PageRequest.of(0, 10));
 
-        verify(clientRepository).findAll(searchCaptor.capture(), isNull(), any());
+        verify(clientQueryRepository).findAll(searchCaptor.capture(), isNull(), any());
         assertThat(searchCaptor.getValue()).isEqualTo("Ana");
     }
 
@@ -73,7 +73,7 @@ class ListClientsUseCaseImplTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        given(clientRepository.findAll(any(), any(), any()))
+        given(clientQueryRepository.findAll(any(), any(), any()))
                 .willReturn(new PageImpl<>(List.of(client)));
 
         Page<CreateClientUseCase.ClientResult> result =

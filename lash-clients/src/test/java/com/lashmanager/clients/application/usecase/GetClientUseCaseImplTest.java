@@ -3,7 +3,7 @@ package com.lashmanager.clients.application.usecase;
 import com.lashmanager.clients.domain.exception.ClientNotFoundException;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase.ClientResult;
-import com.lashmanager.clients.domain.port.out.ClientRepository;
+import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,13 +24,13 @@ import static org.mockito.BDDMockito.given;
 class GetClientUseCaseImplTest {
 
     @Mock
-    private ClientRepository clientRepository;
+    private ClientQueryRepository clientQueryRepository;
 
     private GetClientUseCaseImpl useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new GetClientUseCaseImpl(clientRepository);
+        useCase = new GetClientUseCaseImpl(clientQueryRepository);
     }
 
     @Test
@@ -44,7 +44,7 @@ class GetClientUseCaseImplTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        given(clientRepository.findById(client.getId())).willReturn(Optional.of(client));
+        given(clientQueryRepository.findById(client.getId())).willReturn(Optional.of(client));
 
         ClientResult result = useCase.execute(client.getId());
 
@@ -57,7 +57,7 @@ class GetClientUseCaseImplTest {
     void execute_withUnknownId_throwsClientNotFoundException() {
         UUID unknownId = UUID.randomUUID();
 
-        given(clientRepository.findById(unknownId)).willReturn(Optional.empty());
+        given(clientQueryRepository.findById(unknownId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> useCase.execute(unknownId))
                 .isInstanceOf(ClientNotFoundException.class);

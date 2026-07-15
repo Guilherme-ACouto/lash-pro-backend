@@ -4,7 +4,17 @@ import com.lashmanager.appointments.adapter.web.dto.AppointmentResponse;
 import com.lashmanager.appointments.adapter.web.dto.CompleteAppointmentRequest;
 import com.lashmanager.appointments.adapter.web.dto.CreateAppointmentRequest;
 import com.lashmanager.appointments.adapter.web.dto.UpdateAppointmentRequest;
-import com.lashmanager.appointments.domain.port.in.*;
+import com.lashmanager.appointments.application.command.CancelAppointmentCommand;
+import com.lashmanager.appointments.application.command.CompleteAppointmentCommand;
+import com.lashmanager.appointments.application.command.ConfirmAppointmentCommand;
+import com.lashmanager.appointments.application.command.CreateAppointmentCommand;
+import com.lashmanager.appointments.application.command.NoShowAppointmentCommand;
+import com.lashmanager.appointments.application.command.UpdateAppointmentCommand;
+import com.lashmanager.appointments.application.service.ChangeAppointmentStatusApplicationService;
+import com.lashmanager.appointments.application.service.CreateAppointmentApplicationService;
+import com.lashmanager.appointments.application.service.UpdateAppointmentApplicationService;
+import com.lashmanager.appointments.domain.port.in.GetAppointmentUseCase;
+import com.lashmanager.appointments.domain.port.in.ListAppointmentsByDateUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,11 +31,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AppointmentController {
 
-    private final CreateAppointmentUseCase createAppointmentUseCase;
-    private final UpdateAppointmentUseCase updateAppointmentUseCase;
+    private final CreateAppointmentApplicationService createAppointmentApplicationService;
+    private final UpdateAppointmentApplicationService updateAppointmentApplicationService;
+    private final ChangeAppointmentStatusApplicationService changeAppointmentStatusApplicationService;
     private final GetAppointmentUseCase getAppointmentUseCase;
     private final ListAppointmentsByDateUseCase listAppointmentsByDateUseCase;
-    private final ChangeAppointmentStatusUseCase changeAppointmentStatusUseCase;
 
     @GetMapping
     public ResponseEntity<List<AppointmentResponse>> listByDate(
@@ -48,7 +58,7 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<AppointmentResponse> create(@Valid @RequestBody CreateAppointmentRequest req) {
-        var result = createAppointmentUseCase.execute(new CreateAppointmentUseCase.CreateAppointmentCommand(
+        var result = createAppointmentApplicationService.when(new CreateAppointmentCommand(
                 req.clientId(), req.serviceId(), req.scheduledDate(), req.scheduledTime(), req.durationMinutes(), req.notes()
         ));
         return ResponseEntity
@@ -66,15 +76,15 @@ public class AppointmentController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateAppointmentRequest req
     ) {
-        var result = updateAppointmentUseCase.execute(id, new UpdateAppointmentUseCase.UpdateAppointmentCommand(
-                req.clientId(), req.serviceId(), req.scheduledDate(), req.scheduledTime(), req.durationMinutes(), req.notes()
+        var result = updateAppointmentApplicationService.when(new UpdateAppointmentCommand(
+                id, req.clientId(), req.serviceId(), req.scheduledDate(), req.scheduledTime(), req.durationMinutes(), req.notes()
         ));
         return ResponseEntity.ok(AppointmentResponse.from(result));
     }
 
     @PatchMapping("/{id}/confirm")
     public ResponseEntity<Void> confirm(@PathVariable UUID id) {
-        changeAppointmentStatusUseCase.confirm(id);
+        changeAppointmentStatusApplicationService.when(new ConfirmAppointmentCommand(id));
         return ResponseEntity.noContent().build();
     }
 
@@ -83,19 +93,20 @@ public class AppointmentController {
             @PathVariable UUID id,
             @RequestBody(required = false) CompleteAppointmentRequest req
     ) {
-        changeAppointmentStatusUseCase.complete(id, req != null ? req.paymentMethod() : null);
+        changeAppointmentStatusApplicationService.when(
+                new CompleteAppointmentCommand(id, req != null ? req.paymentMethod() : null));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable UUID id) {
-        changeAppointmentStatusUseCase.cancel(id);
+        changeAppointmentStatusApplicationService.when(new CancelAppointmentCommand(id));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/no-show")
     public ResponseEntity<Void> noShow(@PathVariable UUID id) {
-        changeAppointmentStatusUseCase.noShow(id);
+        changeAppointmentStatusApplicationService.when(new NoShowAppointmentCommand(id));
         return ResponseEntity.noContent().build();
     }
 }

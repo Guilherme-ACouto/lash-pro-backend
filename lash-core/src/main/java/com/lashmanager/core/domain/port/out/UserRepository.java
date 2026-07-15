@@ -7,6 +7,7 @@ import java.util.Optional;
 public interface UserRepository {
     Optional<User> findByEmail(String email);
     Optional<User> findByPasswordResetToken(String token);
+    Optional<User> findByActivationKey(String activationKey);
     User save(User user);
     boolean existsByEmail(String email);
 }

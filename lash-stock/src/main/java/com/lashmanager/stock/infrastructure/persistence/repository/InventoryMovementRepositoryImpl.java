@@ -4,8 +4,6 @@ import com.lashmanager.stock.domain.model.InventoryMovement;
 import com.lashmanager.stock.domain.port.out.InventoryMovementRepository;
 import com.lashmanager.stock.infrastructure.persistence.mapper.InventoryMovementMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -25,10 +23,5 @@ public class InventoryMovementRepositoryImpl implements InventoryMovementReposit
     @Override
     public boolean existsByItemId(UUID itemId) {
         return jpaRepository.existsByItemId(itemId);
-    }
-
-    @Override
-    public Page<InventoryMovement> findByItemId(UUID itemId, Pageable pageable) {
-        return jpaRepository.findByItemId(itemId, pageable).map(mapper::toDomain);
     }
 }

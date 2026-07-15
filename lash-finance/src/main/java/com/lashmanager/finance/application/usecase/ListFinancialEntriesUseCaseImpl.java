@@ -1,7 +1,7 @@
 package com.lashmanager.finance.application.usecase;
 
 import com.lashmanager.finance.domain.port.in.ListFinancialEntriesUseCase;
-import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
+import com.lashmanager.finance.domain.port.out.FinancialEntryQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListFinancialEntriesUseCaseImpl implements ListFinancialEntriesUseCase {
 
-    private final FinancialEntryRepository repository;
+    private final FinancialEntryQueryRepository repository;
 
     @Override
     public Page<EntryResult> execute(ListQuery query) {

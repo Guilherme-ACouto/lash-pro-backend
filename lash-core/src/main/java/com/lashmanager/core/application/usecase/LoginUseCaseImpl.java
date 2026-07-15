@@ -1,8 +1,12 @@
 package com.lashmanager.core.application.usecase;
 
+import com.lashmanager.core.domain.exception.AccountNotActivatedException;
 import com.lashmanager.core.domain.exception.InvalidCredentialsException;
+import com.lashmanager.core.domain.exception.TenantInactiveException;
+import com.lashmanager.core.domain.model.Tenant;
 import com.lashmanager.core.domain.model.User;
 import com.lashmanager.core.domain.port.in.LoginUseCase;
+import com.lashmanager.core.domain.port.out.TenantRepository;
 import com.lashmanager.core.domain.port.out.TokenPort;
 import com.lashmanager.core.domain.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class LoginUseCaseImpl implements LoginUseCase {
 
     private final UserRepository userRepository;
+    private final TenantRepository tenantRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenPort tokenPort;
 
@@ -24,15 +29,23 @@ public class LoginUseCaseImpl implements LoginUseCase {
         User user = userRepository.findByEmail(command.email())
                 .orElseThrow(InvalidCredentialsException::new);
 
-        if (!user.isActive()) {
-            throw new InvalidCredentialsException();
-        }
-
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
 
-        String accessToken = tokenPort.generateAccessToken(user.getEmail(), user.getRole().name());
+        if (!user.isActive()) {
+            throw new AccountNotActivatedException();
+        }
+
+        if (user.getTenantId() != null) {
+            Tenant tenant = tenantRepository.findById(user.getTenantId()).orElse(null);
+            if (tenant != null && !tenant.isActive()) {
+                throw new TenantInactiveException();
+            }
+        }
+
+        String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
+        String accessToken = tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
         String refreshToken = tokenPort.generateRefreshToken(user.getEmail());
 
         log.info("Login realizado: {}", user.getEmail());

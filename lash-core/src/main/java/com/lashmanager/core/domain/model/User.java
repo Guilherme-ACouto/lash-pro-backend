@@ -21,6 +21,9 @@ public class User {
     private boolean active;
     private String passwordResetToken;
     private LocalDateTime passwordResetTokenExpiry;
+    private UUID tenantId;
+    private String activationKey;
+    private LocalDateTime activationKeyExpiry;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -19,6 +19,9 @@ public class UserMapper {
                 .active(entity.isActive())
                 .passwordResetToken(entity.getPasswordResetToken())
                 .passwordResetTokenExpiry(entity.getPasswordResetTokenExpiry())
+                .tenantId(entity.getTenantId())
+                .activationKey(entity.getActivationKey())
+                .activationKeyExpiry(entity.getActivationKeyExpiry())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
@@ -35,6 +38,9 @@ public class UserMapper {
                 .active(domain.isActive())
                 .passwordResetToken(domain.getPasswordResetToken())
                 .passwordResetTokenExpiry(domain.getPasswordResetTokenExpiry())
+                .tenantId(domain.getTenantId())
+                .activationKey(domain.getActivationKey())
+                .activationKeyExpiry(domain.getActivationKeyExpiry())
                 .createdAt(domain.getCreatedAt())
                 .updatedAt(domain.getUpdatedAt())
                 .build();

@@ -2,7 +2,7 @@ package com.lashmanager.stock.application.usecase;
 
 import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.in.ListInventoryItemsUseCase;
-import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
+import com.lashmanager.stock.domain.port.out.InventoryItemQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -12,14 +12,14 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 public class ListInventoryItemsUseCaseImpl implements ListInventoryItemsUseCase {
 
-    private final InventoryItemRepository itemRepository;
+    private final InventoryItemQueryRepository itemQueryRepository;
 
     @Override
     public Page<CreateInventoryItemUseCase.InventoryItemResult> execute(ListInventoryItemsQuery query, Pageable pageable) {
         Boolean active = resolveActive(query.status());
         boolean onlyLowStock = "LOW_STOCK".equalsIgnoreCase(query.filter());
         String search = query.search() != null ? query.search() : "";
-        return itemRepository.listWithFilters(search, active, onlyLowStock, pageable)
+        return itemQueryRepository.listWithFilters(search, active, onlyLowStock, pageable)
                 .map(InventoryUseCaseMapper::toItemResult);
     }
 

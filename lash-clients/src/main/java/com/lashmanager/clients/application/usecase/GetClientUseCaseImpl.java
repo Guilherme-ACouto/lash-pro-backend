@@ -3,7 +3,7 @@ package com.lashmanager.clients.application.usecase;
 import com.lashmanager.clients.domain.exception.ClientNotFoundException;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 import com.lashmanager.clients.domain.port.in.GetClientUseCase;
-import com.lashmanager.clients.domain.port.out.ClientRepository;
+import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GetClientUseCaseImpl implements GetClientUseCase {
 
-    private final ClientRepository clientRepository;
+    private final ClientQueryRepository clientQueryRepository;
 
     @Override
     public CreateClientUseCase.ClientResult execute(UUID id) {
-        return clientRepository.findById(id)
+        return clientQueryRepository.findById(id)
                 .map(ClientUseCaseMapper::toResult)
                 .orElseThrow(() -> new ClientNotFoundException(id));
     }

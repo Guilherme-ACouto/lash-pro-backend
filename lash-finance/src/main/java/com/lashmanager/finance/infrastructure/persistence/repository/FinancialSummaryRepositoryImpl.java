@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Referência do padrão de leitura por agregação (RBK-27/RBK-25, ver
+ * CONVENTIONS.md): JPQL via EntityManager para GROUP BY/agregações que não se
+ * encaixam em Spring Data JPA simples. Mantém o sufixo RepositoryImpl (não
+ * "Dao", diferente da Pontta) para não ter duas convenções de adapter de
+ * persistência no mesmo codebase.
+ */
 @Repository
 @RequiredArgsConstructor
 public class FinancialSummaryRepositoryImpl implements FinancialSummaryRepository {

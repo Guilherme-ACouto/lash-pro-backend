@@ -4,7 +4,16 @@ import com.lashmanager.finance.adapter.web.dto.CreateFinancialEntryRequest;
 import com.lashmanager.finance.adapter.web.dto.FinancialEntryResponse;
 import com.lashmanager.finance.adapter.web.dto.FinancialSummaryResponse;
 import com.lashmanager.finance.adapter.web.dto.UpdateFinancialEntryRequest;
-import com.lashmanager.finance.domain.port.in.*;
+import com.lashmanager.finance.application.command.CreateFinancialEntryCommand;
+import com.lashmanager.finance.application.command.DeleteFinancialEntryCommand;
+import com.lashmanager.finance.application.command.ToggleFinancialEntryPaidCommand;
+import com.lashmanager.finance.application.command.UpdateFinancialEntryCommand;
+import com.lashmanager.finance.application.service.CreateFinancialEntryApplicationService;
+import com.lashmanager.finance.application.service.DeleteFinancialEntryApplicationService;
+import com.lashmanager.finance.application.service.ToggleFinancialEntryPaidApplicationService;
+import com.lashmanager.finance.application.service.UpdateFinancialEntryApplicationService;
+import com.lashmanager.finance.domain.port.in.GetFinancialSummaryUseCase;
+import com.lashmanager.finance.domain.port.in.ListFinancialEntriesUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,11 +31,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FinancialController {
 
-    private final CreateFinancialEntryUseCase createUseCase;
-    private final UpdateFinancialEntryUseCase updateUseCase;
-    private final DeleteFinancialEntryUseCase deleteUseCase;
+    private final CreateFinancialEntryApplicationService createApplicationService;
+    private final UpdateFinancialEntryApplicationService updateApplicationService;
+    private final DeleteFinancialEntryApplicationService deleteApplicationService;
+    private final ToggleFinancialEntryPaidApplicationService toggleApplicationService;
     private final ListFinancialEntriesUseCase listUseCase;
-    private final ToggleFinancialEntryPaidUseCase toggleUseCase;
     private final GetFinancialSummaryUseCase summaryUseCase;
 
     @GetMapping("/summary")
@@ -60,7 +69,7 @@ public class FinancialController {
 
     @PostMapping
     public ResponseEntity<FinancialEntryResponse> create(@Valid @RequestBody CreateFinancialEntryRequest req) {
-        var result = createUseCase.execute(new CreateFinancialEntryUseCase.CreateCommand(
+        var result = createApplicationService.when(new CreateFinancialEntryCommand(
                 req.type(), req.expenseType(), req.description(), req.amount(),
                 req.dueDate(), req.paymentDate(), req.category(),
                 req.paymentMethod(), req.receivedFrom(), req.notes()
@@ -75,8 +84,8 @@ public class FinancialController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateFinancialEntryRequest req
     ) {
-        var result = updateUseCase.execute(id, new UpdateFinancialEntryUseCase.UpdateCommand(
-                req.type(), req.expenseType(), req.description(), req.amount(),
+        var result = updateApplicationService.when(new UpdateFinancialEntryCommand(
+                id, req.type(), req.expenseType(), req.description(), req.amount(),
                 req.dueDate(), req.paymentDate(), req.category(),
                 req.paymentMethod(), req.receivedFrom(), req.notes()
         ));
@@ -85,12 +94,13 @@ public class FinancialController {
 
     @PatchMapping("/{id}/toggle-paid")
     public ResponseEntity<FinancialEntryResponse> togglePaid(@PathVariable UUID id) {
-        return ResponseEntity.ok(FinancialEntryResponse.from(toggleUseCase.execute(id)));
+        return ResponseEntity.ok(FinancialEntryResponse.from(
+                toggleApplicationService.when(new ToggleFinancialEntryPaidCommand(id))));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        deleteUseCase.execute(id);
+        deleteApplicationService.when(new DeleteFinancialEntryCommand(id));
         return ResponseEntity.noContent().build();
     }
 }
