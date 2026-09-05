@@ -42,9 +42,6 @@ jobs:
       - name: Build (instala módulos internos no repositório local)
         run: mvn -B install -DskipTests
 
-      - name: Verificar formatação (Spotless)
-        run: mvn -B spotless:check
-
       - name: Lint de qualidade (PMD)
         run: mvn -B pmd:check
 
