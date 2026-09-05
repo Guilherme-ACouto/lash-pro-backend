@@ -42,6 +42,25 @@ jobs:
         # cópia velha/incompleta desses artefatos quebra a resolução de dependências.
         run: rm -rf ~/.m2/repository/com/lashmanager
 
+      - name: Diagnóstico temporário
+        run: |
+          echo "=== mvn -version ==="
+          mvn -version
+          echo "=== git log -1 ==="
+          git log -1
+          echo "=== git status ==="
+          git status
+          echo "=== env | grep -i maven ==="
+          env | grep -i maven || echo "(nenhuma)"
+          echo "=== ~/.m2/settings.xml ==="
+          cat ~/.m2/settings.xml 2>/dev/null || echo "(não existe)"
+          echo "=== ~/.m2/repository/com/lashmanager ==="
+          find ~/.m2/repository/com/lashmanager 2>&1 || echo "(não existe)"
+          echo "=== lash-clients/pom.xml ==="
+          cat lash-clients/pom.xml
+          echo "=== compile verbose (grep lash-core/lash-clients) ==="
+          mvn -B -X compile 2>&1 | grep -i -B3 -A40 "lash-clients" | head -150 || true
+
       - name: Verificar formatação (Spotless)
         run: mvn -B spotless:check
 
