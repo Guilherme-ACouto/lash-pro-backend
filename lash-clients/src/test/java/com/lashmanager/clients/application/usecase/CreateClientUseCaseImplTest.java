@@ -42,7 +42,7 @@ class CreateClientUseCaseImplTest {
 
         ClientResult result = useCase.execute(command);
 
-        assertThat(result.name()).isEqualTo("Ana Lima");
+        assertThat(result.name()).isEqualTo("Ana Souza"); // TODO: forçar falha proposital p/ validar CI
         assertThat(result.phone()).isEqualTo("11999999999");
         assertThat(result.active()).isTrue();
     }

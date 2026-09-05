@@ -40,11 +40,8 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<ClientResponse> create(@Valid @RequestBody CreateClientRequest request) {
         var result = createClientApplicationService.when(new CreateClientCommand(
-                request.name(), request.phone(), request.email(), request.birthDate(), request.notes()
-        ));
-        return ResponseEntity
-                .created(URI.create("/api/clients/" + result.id()))
-                .body(ClientResponse.from(result));
+            request.name(), request.phone(), request.email(), request.birthDate(), request.notes()));
+        return ResponseEntity.created(URI.create("/api/clients/" + result.id())).body(ClientResponse.from(result));
     }
 
     @GetMapping("/{id}")
@@ -53,24 +50,15 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ClientResponse>> list(
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) Boolean active,
-            @PageableDefault(size = 20) Pageable pageable
-    ) {
-        return ResponseEntity.ok(
-                listClientsUseCase.execute(search, active, pageable).map(ClientResponse::from)
-        );
+    public ResponseEntity<Page<ClientResponse>> list(@RequestParam(required = false) String search, @RequestParam(required = false) Boolean active,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(listClientsUseCase.execute(search, active, pageable).map(ClientResponse::from));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientResponse> update(
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateClientRequest request
-    ) {
+    public ResponseEntity<ClientResponse> update(@PathVariable UUID id, @Valid @RequestBody UpdateClientRequest request) {
         var result = updateClientApplicationService.when(new UpdateClientCommand(
-                id, request.name(), request.phone(), request.email(), request.birthDate(), request.notes()
-        ));
+            id, request.name(), request.phone(), request.email(), request.birthDate(), request.notes()));
         return ResponseEntity.ok(ClientResponse.from(result));
     }
 
@@ -81,10 +69,7 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivate(
-            @PathVariable UUID id,
-            @RequestParam(defaultValue = "false") boolean force
-    ) {
+    public ResponseEntity<Void> deactivate(@PathVariable UUID id, @RequestParam(defaultValue = "false") boolean force) {
         deactivateClientApplicationService.when(new DeactivateClientCommand(id, force));
         return ResponseEntity.noContent().build();
     }
