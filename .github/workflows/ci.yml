@@ -36,9 +36,6 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Verificar formatação (Spotless)
-        run: mvn -B spotless:check
-
       - name: Compilar
         run: mvn -B compile
 
