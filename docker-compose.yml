@@ -1,0 +1,64 @@
+# Orquestra o ambiente completo do Lash Manager (Postgres + backend + frontend).
+#
+# Pré-requisito: este arquivo espera `lash-frontend/` clonado como pasta IRMÃ
+# de `lash-backend/` (mesmo layout usado hoje em dev):
+#
+#   Lash/
+#   ├── lash-backend/    <- você está aqui, rode `docker compose up` a partir daqui
+#   └── lash-frontend/
+#
+# Uso:
+#   docker compose up --build     # sobe tudo (primeira vez ou após mudar código)
+#   docker compose up -d          # sobe em background
+#   docker compose down           # para tudo
+#   docker compose down -v        # para tudo e apaga o volume do banco (reset total)
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: lash-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lashmanager}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - lash-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-lashmanager}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+    container_name: lash-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-lashmanager}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASS: ${DB_PASS:-postgres}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:4200}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_PASS: ${MAIL_PASS:-}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ../lash-frontend
+    container_name: lash-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  lash-db-data:

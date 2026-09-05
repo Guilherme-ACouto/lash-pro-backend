@@ -1,0 +1,48 @@
+package com.lashmanager.appointments.application.usecase;
+
+import com.lashmanager.appointments.domain.exception.AppointmentNotFoundException;
+import com.lashmanager.appointments.domain.model.Appointment;
+import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
+import com.lashmanager.appointments.domain.port.in.GetAppointmentUseCase;
+import com.lashmanager.appointments.domain.port.out.AppointmentQueryRepository;
+import com.lashmanager.clients.domain.model.Client;
+import com.lashmanager.clients.domain.port.out.ClientRepository;
+import com.lashmanager.services.domain.model.ServiceOffering;
+import com.lashmanager.services.domain.port.out.ServiceRepository;
+import java.math.BigDecimal;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class GetAppointmentUseCaseImpl implements GetAppointmentUseCase {
+
+    private final AppointmentQueryRepository appointmentQueryRepository;
+    private final ClientRepository clientRepository;
+    private final ServiceRepository serviceRepository;
+
+    @Override
+    public CreateAppointmentUseCase.AppointmentResult execute(UUID id) {
+        Appointment appointment =
+                appointmentQueryRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException(id));
+
+        String clientName = appointment.getClientId() != null
+                ? clientRepository
+                        .findById(appointment.getClientId())
+                        .map(Client::getName)
+                        .orElse("—")
+                : "—";
+
+        BigDecimal servicePrice = serviceRepository
+                .findById(appointment.getServiceId())
+                .map(ServiceOffering::getPrice)
+                .orElse(BigDecimal.ZERO);
+        String serviceName = serviceRepository
+                .findById(appointment.getServiceId())
+                .map(ServiceOffering::getName)
+                .orElse("—");
+
+        return AppointmentUseCaseMapper.toResult(appointment, clientName, serviceName, servicePrice);
+    }
+}
