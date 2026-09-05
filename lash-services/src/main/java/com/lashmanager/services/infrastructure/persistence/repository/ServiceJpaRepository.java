@@ -10,17 +10,16 @@ import org.springframework.data.repository.query.Param;
 
 public interface ServiceJpaRepository extends JpaRepository<ServiceEntity, UUID> {
 
-  boolean existsByName(String name);
+    boolean existsByName(String name);
 
-  boolean existsByNameAndIdNot(String name, UUID id);
+    boolean existsByNameAndIdNot(String name, UUID id);
 
-  @Query(
-      """
+    @Query("""
             SELECT s FROM ServiceEntity s
             WHERE (:search IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%')))
             AND (:active IS NULL OR s.active = :active)
             ORDER BY s.name ASC
             """)
-  Page<ServiceEntity> findAllFiltered(
-      @Param("search") String search, @Param("active") Boolean active, Pageable pageable);
+    Page<ServiceEntity> findAllFiltered(
+            @Param("search") String search, @Param("active") Boolean active, Pageable pageable);
 }

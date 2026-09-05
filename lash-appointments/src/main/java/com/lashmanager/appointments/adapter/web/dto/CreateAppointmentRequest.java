@@ -6,9 +6,9 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public record CreateAppointmentRequest(
-    @NotNull UUID clientId,
-    @NotNull UUID serviceId,
-    @NotNull LocalDate scheduledDate,
-    @NotNull LocalTime scheduledTime,
-    int durationMinutes,
-    String notes) {}
+        @NotNull UUID clientId,
+        @NotNull UUID serviceId,
+        @NotNull LocalDate scheduledDate,
+        @NotNull LocalTime scheduledTime,
+        int durationMinutes,
+        String notes) {}

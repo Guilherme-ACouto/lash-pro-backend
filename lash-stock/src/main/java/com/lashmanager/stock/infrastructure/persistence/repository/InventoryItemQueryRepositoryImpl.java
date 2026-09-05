@@ -14,19 +14,18 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class InventoryItemQueryRepositoryImpl implements InventoryItemQueryRepository {
 
-  private final InventoryItemJpaRepository jpaRepository;
-  private final InventoryItemMapper mapper;
+    private final InventoryItemJpaRepository jpaRepository;
+    private final InventoryItemMapper mapper;
 
-  @Override
-  public Optional<InventoryItem> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<InventoryItem> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public Page<InventoryItem> listWithFilters(
-      String search, Boolean active, boolean onlyLowStock, Pageable pageable) {
-    return jpaRepository
-        .findAllFiltered(search, active, onlyLowStock, pageable)
-        .map(mapper::toDomain);
-  }
+    @Override
+    public Page<InventoryItem> listWithFilters(String search, Boolean active, boolean onlyLowStock, Pageable pageable) {
+        return jpaRepository
+                .findAllFiltered(search, active, onlyLowStock, pageable)
+                .map(mapper::toDomain);
+    }
 }

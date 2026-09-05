@@ -26,43 +26,43 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class TenantResolvingFilter extends OncePerRequestFilter {
 
-  private final JwtService jwtService;
-  private final TenantSchemaNaming tenantSchemaNaming;
+    private final JwtService jwtService;
+    private final TenantSchemaNaming tenantSchemaNaming;
 
-  @Override
-  protected void doFilterInternal(
-      @NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain)
-      throws ServletException, IOException {
-    try {
-      resolveTenant(request);
-      filterChain.doFilter(request, response);
-    } finally {
-      TenantContext.clear();
-    }
-  }
-
-  private void resolveTenant(HttpServletRequest request) {
-    String authHeader = request.getHeader("Authorization");
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      return;
+    @Override
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            resolveTenant(request);
+            filterChain.doFilter(request, response);
+        } finally {
+            TenantContext.clear();
+        }
     }
 
-    String token = authHeader.substring(7);
-    try {
-      if (!jwtService.isTokenValid(token)) {
-        return;
-      }
-      String tenantIdClaim = jwtService.extractTenantId(token);
-      if (tenantIdClaim != null) {
-        String schemaName = tenantSchemaNaming.schemaNameFor(UUID.fromString(tenantIdClaim));
-        TenantContext.setCurrentTenant(schemaName);
-      }
-    } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Falha ao resolver tenant do token: {}", e.getMessage());
-      }
+    private void resolveTenant(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return;
+        }
+
+        String token = authHeader.substring(7);
+        try {
+            if (!jwtService.isTokenValid(token)) {
+                return;
+            }
+            String tenantIdClaim = jwtService.extractTenantId(token);
+            if (tenantIdClaim != null) {
+                String schemaName = tenantSchemaNaming.schemaNameFor(UUID.fromString(tenantIdClaim));
+                TenantContext.setCurrentTenant(schemaName);
+            }
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Falha ao resolver tenant do token: {}", e.getMessage());
+            }
+        }
     }
-  }
 }

@@ -14,16 +14,16 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ServiceQueryRepositoryImpl implements ServiceQueryRepository {
 
-  private final ServiceJpaRepository jpaRepository;
-  private final ServiceMapper mapper;
+    private final ServiceJpaRepository jpaRepository;
+    private final ServiceMapper mapper;
 
-  @Override
-  public Optional<ServiceOffering> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<ServiceOffering> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public Page<ServiceOffering> findAll(String search, Boolean active, Pageable pageable) {
-    return jpaRepository.findAllFiltered(search, active, pageable).map(mapper::toDomain);
-  }
+    @Override
+    public Page<ServiceOffering> findAll(String search, Boolean active, Pageable pageable) {
+        return jpaRepository.findAllFiltered(search, active, pageable).map(mapper::toDomain);
+    }
 }

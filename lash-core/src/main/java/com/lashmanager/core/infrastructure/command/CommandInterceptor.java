@@ -32,80 +32,78 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CommandInterceptor {
 
-  private final Validator validator;
-  private final CommandAuditLogRepository commandAuditLogRepository;
-  private final ObjectMapper objectMapper;
+    private final Validator validator;
+    private final CommandAuditLogRepository commandAuditLogRepository;
+    private final ObjectMapper objectMapper;
 
-  @Around("execution(* com.lashmanager..*.application.service.*ApplicationService.when(..))")
-  public Object intercept(ProceedingJoinPoint joinPoint) throws Throwable {
-    AbstractCommand command = extractCommand(joinPoint);
-    validate(command);
+    @Around("execution(* com.lashmanager..*.application.service.*ApplicationService.when(..))")
+    public Object intercept(ProceedingJoinPoint joinPoint) throws Throwable {
+        AbstractCommand command = extractCommand(joinPoint);
+        validate(command);
 
-    long start = System.currentTimeMillis();
-    try {
-      Object result = joinPoint.proceed();
-      audit(command, true);
-      if (log.isInfoEnabled()) {
-        log.info(
-            "Command {} executado em {}ms",
-            command.getClass().getSimpleName(),
-            System.currentTimeMillis() - start);
-      }
-      return result;
-    } catch (Exception e) {
-      audit(command, false);
-      if (log.isWarnEnabled()) {
-        log.warn("Command {} falhou: {}", command.getClass().getSimpleName(), e.getMessage());
-      }
-      throw e;
+        long start = System.currentTimeMillis();
+        try {
+            Object result = joinPoint.proceed();
+            audit(command, true);
+            if (log.isInfoEnabled()) {
+                log.info(
+                        "Command {} executado em {}ms",
+                        command.getClass().getSimpleName(),
+                        System.currentTimeMillis() - start);
+            }
+            return result;
+        } catch (Exception e) {
+            audit(command, false);
+            if (log.isWarnEnabled()) {
+                log.warn("Command {} falhou: {}", command.getClass().getSimpleName(), e.getMessage());
+            }
+            throw e;
+        }
     }
-  }
 
-  private AbstractCommand extractCommand(ProceedingJoinPoint joinPoint) {
-    Object[] args = joinPoint.getArgs();
-    if (args.length == 0 || !(args[0] instanceof AbstractCommand command)) {
-      throw new IllegalStateException(
-          "ApplicationService.when(...) deve receber um AbstractCommand como primeiro argumento: "
-              + joinPoint.getSignature());
+    private AbstractCommand extractCommand(ProceedingJoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        if (args.length == 0 || !(args[0] instanceof AbstractCommand command)) {
+            throw new IllegalStateException(
+                    "ApplicationService.when(...) deve receber um AbstractCommand como primeiro argumento: "
+                            + joinPoint.getSignature());
+        }
+        return command;
     }
-    return command;
-  }
 
-  private void validate(AbstractCommand command) {
-    Set<ConstraintViolation<AbstractCommand>> violations = validator.validate(command);
-    if (!violations.isEmpty()) {
-      String message =
-          violations.stream()
-              .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-              .collect(Collectors.joining(", "));
-      throw new ConstraintViolationException(message, violations);
+    private void validate(AbstractCommand command) {
+        Set<ConstraintViolation<AbstractCommand>> violations = validator.validate(command);
+        if (!violations.isEmpty()) {
+            String message = violations.stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .collect(Collectors.joining(", "));
+            throw new ConstraintViolationException(message, violations);
+        }
     }
-  }
 
-  private void audit(AbstractCommand command, boolean success) {
-    try {
-      String payload = objectMapper.writeValueAsString(command);
-      commandAuditLogRepository.save(
-          CommandAuditLog.builder()
-              .id(UUID.randomUUID())
-              .commandClass(command.getClass().getSimpleName())
-              .payloadJson(payload)
-              .userId(currentUserId())
-              .executedAt(LocalDateTime.now())
-              .success(success)
-              .build());
-    } catch (Exception e) {
-      if (log.isErrorEnabled()) {
-        log.error(
-            "Falha ao gravar auditoria do command {}: {}",
-            command.getClass().getSimpleName(),
-            e.getMessage());
-      }
+    private void audit(AbstractCommand command, boolean success) {
+        try {
+            String payload = objectMapper.writeValueAsString(command);
+            commandAuditLogRepository.save(CommandAuditLog.builder()
+                    .id(UUID.randomUUID())
+                    .commandClass(command.getClass().getSimpleName())
+                    .payloadJson(payload)
+                    .userId(currentUserId())
+                    .executedAt(LocalDateTime.now())
+                    .success(success)
+                    .build());
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error(
+                        "Falha ao gravar auditoria do command {}: {}",
+                        command.getClass().getSimpleName(),
+                        e.getMessage());
+            }
+        }
     }
-  }
 
-  private String currentUserId() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return authentication != null ? authentication.getName() : null;
-  }
+    private String currentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null ? authentication.getName() : null;
+    }
 }

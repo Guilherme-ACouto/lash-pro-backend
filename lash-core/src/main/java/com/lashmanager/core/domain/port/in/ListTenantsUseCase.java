@@ -7,8 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ListTenantsUseCase {
 
-  record TenantResult(
-      UUID id, String name, String schemaName, boolean active, LocalDateTime createdAt) {}
+    record TenantResult(UUID id, String name, String schemaName, boolean active, LocalDateTime createdAt) {}
 
-  Page<TenantResult> execute(Pageable pageable);
+    Page<TenantResult> execute(Pageable pageable);
 }

@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ListInventoryItemsUseCaseImpl implements ListInventoryItemsUseCase {
 
-  private final InventoryItemQueryRepository itemQueryRepository;
+    private final InventoryItemQueryRepository itemQueryRepository;
 
-  @Override
-  public Page<CreateInventoryItemUseCase.InventoryItemResult> execute(
-      ListInventoryItemsQuery query, Pageable pageable) {
-    Boolean active = resolveActive(query.status());
-    boolean onlyLowStock = "LOW_STOCK".equalsIgnoreCase(query.filter());
-    String search = query.search() != null ? query.search() : "";
-    return itemQueryRepository
-        .listWithFilters(search, active, onlyLowStock, pageable)
-        .map(InventoryUseCaseMapper::toItemResult);
-  }
-
-  private Boolean resolveActive(String status) {
-    if ("ACTIVE".equalsIgnoreCase(status)) {
-      return true;
+    @Override
+    public Page<CreateInventoryItemUseCase.InventoryItemResult> execute(
+            ListInventoryItemsQuery query, Pageable pageable) {
+        Boolean active = resolveActive(query.status());
+        boolean onlyLowStock = "LOW_STOCK".equalsIgnoreCase(query.filter());
+        String search = query.search() != null ? query.search() : "";
+        return itemQueryRepository
+                .listWithFilters(search, active, onlyLowStock, pageable)
+                .map(InventoryUseCaseMapper::toItemResult);
     }
-    return "INACTIVE".equalsIgnoreCase(status) ? false : null;
-  }
+
+    private Boolean resolveActive(String status) {
+        if ("ACTIVE".equalsIgnoreCase(status)) {
+            return true;
+        }
+        return "INACTIVE".equalsIgnoreCase(status) ? false : null;
+    }
 }

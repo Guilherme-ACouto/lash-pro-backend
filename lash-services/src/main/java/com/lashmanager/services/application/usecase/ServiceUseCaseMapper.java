@@ -5,16 +5,16 @@ import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 
 public final class ServiceUseCaseMapper {
 
-  private ServiceUseCaseMapper() {}
+    private ServiceUseCaseMapper() {}
 
-  public static CreateServiceUseCase.ServiceResult toResult(ServiceOffering service) {
-    return new CreateServiceUseCase.ServiceResult(
-        service.getId(),
-        service.getName(),
-        service.getDescription(),
-        service.getPrice(),
-        service.getDurationMinutes(),
-        service.isActive(),
-        service.getCreatedAt() != null ? service.getCreatedAt().toString() : null);
-  }
+    public static CreateServiceUseCase.ServiceResult toResult(ServiceOffering service) {
+        return new CreateServiceUseCase.ServiceResult(
+                service.getId(),
+                service.getName(),
+                service.getDescription(),
+                service.getPrice(),
+                service.getDurationMinutes(),
+                service.isActive(),
+                service.getCreatedAt() != null ? service.getCreatedAt().toString() : null);
+    }
 }

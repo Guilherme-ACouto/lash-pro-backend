@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.lashmanager.core")
 @EntityScan(basePackages = "com.lashmanager.core")
 public class CoreTestApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(CoreTestApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(CoreTestApplication.class, args);
+    }
 }

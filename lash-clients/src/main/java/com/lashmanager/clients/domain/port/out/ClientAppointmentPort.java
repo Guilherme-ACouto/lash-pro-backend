@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClientAppointmentPort {
-  List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from);
+    List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from);
 
-  void deleteFutureAppointmentsByClientId(UUID clientId, LocalDate from);
+    void deleteFutureAppointmentsByClientId(UUID clientId, LocalDate from);
 
-  void unlinkClientFromPastAppointments(UUID clientId, LocalDate from);
+    void unlinkClientFromPastAppointments(UUID clientId, LocalDate from);
 }

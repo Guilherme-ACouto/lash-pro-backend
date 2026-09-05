@@ -14,10 +14,9 @@ import java.util.UUID;
  * desnecessário sem poder compilar/testar; a query atual já funciona).
  */
 public interface AppointmentQueryRepository {
-  Optional<Appointment> findById(UUID id);
+    Optional<Appointment> findById(UUID id);
 
-  List<CreateAppointmentUseCase.AppointmentResult> findByDateWithDetails(LocalDate date);
+    List<CreateAppointmentUseCase.AppointmentResult> findByDateWithDetails(LocalDate date);
 
-  List<CreateAppointmentUseCase.AppointmentResult> findByDateRangeWithDetails(
-      LocalDate startDate, LocalDate endDate);
+    List<CreateAppointmentUseCase.AppointmentResult> findByDateRangeWithDetails(LocalDate startDate, LocalDate endDate);
 }

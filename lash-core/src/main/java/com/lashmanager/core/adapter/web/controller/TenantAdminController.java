@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TenantAdminController {
 
-  private final ListTenantsUseCase listTenantsUseCase;
-  private final DeactivateTenantUseCase deactivateTenantUseCase;
+    private final ListTenantsUseCase listTenantsUseCase;
+    private final DeactivateTenantUseCase deactivateTenantUseCase;
 
-  @GetMapping
-  public ResponseEntity<Page<TenantResponse>> list(@PageableDefault(size = 20) Pageable pageable) {
-    return ResponseEntity.ok(listTenantsUseCase.execute(pageable).map(TenantResponse::from));
-  }
+    @GetMapping
+    public ResponseEntity<Page<TenantResponse>> list(@PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(listTenantsUseCase.execute(pageable).map(TenantResponse::from));
+    }
 
-  @PatchMapping("/{id}/deactivate")
-  public ResponseEntity<Void> deactivate(@PathVariable UUID id) {
-    deactivateTenantUseCase.execute(id);
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivate(@PathVariable UUID id) {
+        deactivateTenantUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
 }

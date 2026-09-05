@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface LashMappingJpaRepository extends JpaRepository<LashMappingEntity, UUID> {
 
-  @Query("SELECT m FROM LashMappingEntity m WHERE m.ficha.id = :fichaId ORDER BY m.date DESC")
-  Page<LashMappingEntity> findByFichaId(@Param("fichaId") UUID fichaId, Pageable pageable);
+    @Query("SELECT m FROM LashMappingEntity m WHERE m.ficha.id = :fichaId ORDER BY m.date DESC")
+    Page<LashMappingEntity> findByFichaId(@Param("fichaId") UUID fichaId, Pageable pageable);
 }

@@ -12,15 +12,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteInventoryItemApplicationService {
 
-  private final DeleteInventoryItemUseCase deleteInventoryItemUseCase;
-  private final DeactivateInventoryItemUseCase deactivateInventoryItemUseCase;
+    private final DeleteInventoryItemUseCase deleteInventoryItemUseCase;
+    private final DeactivateInventoryItemUseCase deactivateInventoryItemUseCase;
 
-  public void when(DeleteInventoryItemCommand command) {
-    deleteInventoryItemUseCase.execute(command.getId());
-  }
+    public void when(DeleteInventoryItemCommand command) {
+        deleteInventoryItemUseCase.execute(command.getId());
+    }
 
-  public CreateInventoryItemUseCase.InventoryItemResult when(
-      SetInventoryItemActiveCommand command) {
-    return deactivateInventoryItemUseCase.execute(command.getId(), command.isActivate());
-  }
+    public CreateInventoryItemUseCase.InventoryItemResult when(SetInventoryItemActiveCommand command) {
+        return deactivateInventoryItemUseCase.execute(command.getId(), command.isActivate());
+    }
 }

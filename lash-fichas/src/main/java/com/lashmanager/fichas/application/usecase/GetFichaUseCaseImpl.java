@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetFichaUseCaseImpl implements GetFichaUseCase {
 
-  private final FichaQueryRepository fichaQueryRepository;
+    private final FichaQueryRepository fichaQueryRepository;
 
-  @Override
-  public CreateFichaUseCase.FichaResult execute(UUID id) {
-    return fichaQueryRepository
-        .findById(id)
-        .map(FichaUseCaseMapper::toFichaResult)
-        .orElseThrow(() -> new FichaNotFoundException(id));
-  }
+    @Override
+    public CreateFichaUseCase.FichaResult execute(UUID id) {
+        return fichaQueryRepository
+                .findById(id)
+                .map(FichaUseCaseMapper::toFichaResult)
+                .orElseThrow(() -> new FichaNotFoundException(id));
+    }
 
-  @Override
-  public CreateFichaUseCase.FichaResult executeByClient(UUID clientId) {
-    return fichaQueryRepository
-        .findByClientId(clientId)
-        .map(FichaUseCaseMapper::toFichaResult)
-        .orElseThrow(() -> new FichaNotFoundException(clientId));
-  }
+    @Override
+    public CreateFichaUseCase.FichaResult executeByClient(UUID clientId) {
+        return fichaQueryRepository
+                .findByClientId(clientId)
+                .map(FichaUseCaseMapper::toFichaResult)
+                .orElseThrow(() -> new FichaNotFoundException(clientId));
+    }
 }

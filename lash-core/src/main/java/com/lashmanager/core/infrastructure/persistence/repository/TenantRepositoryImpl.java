@@ -14,26 +14,26 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class TenantRepositoryImpl implements TenantRepository {
 
-  private final TenantJpaRepository jpaRepository;
-  private final TenantMapper mapper;
+    private final TenantJpaRepository jpaRepository;
+    private final TenantMapper mapper;
 
-  @Override
-  public Tenant save(Tenant tenant) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(tenant)));
-  }
+    @Override
+    public Tenant save(Tenant tenant) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(tenant)));
+    }
 
-  @Override
-  public Optional<Tenant> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<Tenant> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public boolean existsBySchemaName(String schemaName) {
-    return jpaRepository.existsBySchemaName(schemaName);
-  }
+    @Override
+    public boolean existsBySchemaName(String schemaName) {
+        return jpaRepository.existsBySchemaName(schemaName);
+    }
 
-  @Override
-  public Page<Tenant> findAll(Pageable pageable) {
-    return jpaRepository.findAll(pageable).map(mapper::toDomain);
-  }
+    @Override
+    public Page<Tenant> findAll(Pageable pageable) {
+        return jpaRepository.findAll(pageable).map(mapper::toDomain);
+    }
 }

@@ -14,32 +14,34 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateFichaCommand extends AbstractCommand {
 
-  @NotNull private UUID clientId;
+    @NotNull
+    private UUID clientId;
 
-  @NotNull private LocalDate date;
+    @NotNull
+    private LocalDate date;
 
-  private String skinType;
-  private String eyeShape;
-  private boolean hasAllergies;
-  private String allergiesDescription;
-  private boolean hasMedications;
-  private String medicationsDescription;
-  private boolean hasSensitivities;
-  private String sensitivitiesDescription;
-  private String observations;
+    private String skinType;
+    private String eyeShape;
+    private boolean hasAllergies;
+    private String allergiesDescription;
+    private boolean hasMedications;
+    private String medicationsDescription;
+    private boolean hasSensitivities;
+    private String sensitivitiesDescription;
+    private String observations;
 
-  public CreateFichaUseCase.CreateFichaCommand toDomainCommand() {
-    return new CreateFichaUseCase.CreateFichaCommand(
-        clientId,
-        date,
-        skinType,
-        eyeShape,
-        hasAllergies,
-        allergiesDescription,
-        hasMedications,
-        medicationsDescription,
-        hasSensitivities,
-        sensitivitiesDescription,
-        observations);
-  }
+    public CreateFichaUseCase.CreateFichaCommand toDomainCommand() {
+        return new CreateFichaUseCase.CreateFichaCommand(
+                clientId,
+                date,
+                skinType,
+                eyeShape,
+                hasAllergies,
+                allergiesDescription,
+                hasMedications,
+                medicationsDescription,
+                hasSensitivities,
+                sensitivitiesDescription,
+                observations);
+    }
 }

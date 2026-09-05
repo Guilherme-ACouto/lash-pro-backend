@@ -16,26 +16,29 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateInventoryItemCommand extends AbstractCommand {
 
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  @NotBlank private String name;
+    @NotBlank
+    private String name;
 
-  @NotBlank private String unit;
+    @NotBlank
+    private String unit;
 
-  @NotNull
-  @DecimalMin("0.00")
-  private BigDecimal costPrice;
+    @NotNull
+    @DecimalMin("0.00")
+    private BigDecimal costPrice;
 
-  private String supplier;
+    private String supplier;
 
-  @NotNull
-  @DecimalMin("0")
-  private BigDecimal minimumQuantity;
+    @NotNull
+    @DecimalMin("0")
+    private BigDecimal minimumQuantity;
 
-  private String notes;
+    private String notes;
 
-  public UpdateInventoryItemUseCase.UpdateInventoryItemCommand toDomainCommand() {
-    return new UpdateInventoryItemUseCase.UpdateInventoryItemCommand(
-        id, name, unit, costPrice, supplier, minimumQuantity, notes);
-  }
+    public UpdateInventoryItemUseCase.UpdateInventoryItemCommand toDomainCommand() {
+        return new UpdateInventoryItemUseCase.UpdateInventoryItemCommand(
+                id, name, unit, costPrice, supplier, minimumQuantity, notes);
+    }
 }

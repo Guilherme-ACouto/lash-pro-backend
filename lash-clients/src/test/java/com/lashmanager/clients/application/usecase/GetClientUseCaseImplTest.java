@@ -22,43 +22,42 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayName("Buscar cliente por id")
 class GetClientUseCaseImplTest {
 
-  @Mock private ClientQueryRepository clientQueryRepository;
+    @Mock
+    private ClientQueryRepository clientQueryRepository;
 
-  private GetClientUseCaseImpl useCase;
+    private GetClientUseCaseImpl useCase;
 
-  @BeforeEach
-  void setUp() {
-    useCase = new GetClientUseCaseImpl(clientQueryRepository);
-  }
+    @BeforeEach
+    void setUp() {
+        useCase = new GetClientUseCaseImpl(clientQueryRepository);
+    }
 
-  @Test
-  @DisplayName("deve retornar o cliente quando o id existe")
-  void execute_withExistingId_returnsClientResult() {
-    Client client =
-        Client.builder()
-            .id(UUID.randomUUID())
-            .name("Ana Lima")
-            .phone("11999999999")
-            .active(true)
-            .createdAt(LocalDateTime.now())
-            .build();
+    @Test
+    @DisplayName("deve retornar o cliente quando o id existe")
+    void execute_withExistingId_returnsClientResult() {
+        Client client = Client.builder()
+                .id(UUID.randomUUID())
+                .name("Ana Lima")
+                .phone("11999999999")
+                .active(true)
+                .createdAt(LocalDateTime.now())
+                .build();
 
-    given(clientQueryRepository.findById(client.getId())).willReturn(Optional.of(client));
+        given(clientQueryRepository.findById(client.getId())).willReturn(Optional.of(client));
 
-    ClientResult result = useCase.execute(client.getId());
+        ClientResult result = useCase.execute(client.getId());
 
-    assertThat(result.id()).isEqualTo(client.getId());
-    assertThat(result.name()).isEqualTo("Ana Lima");
-  }
+        assertThat(result.id()).isEqualTo(client.getId());
+        assertThat(result.name()).isEqualTo("Ana Lima");
+    }
 
-  @Test
-  @DisplayName("deve lançar ClientNotFoundException quando o id não existe")
-  void execute_withUnknownId_throwsClientNotFoundException() {
-    UUID unknownId = UUID.randomUUID();
+    @Test
+    @DisplayName("deve lançar ClientNotFoundException quando o id não existe")
+    void execute_withUnknownId_throwsClientNotFoundException() {
+        UUID unknownId = UUID.randomUUID();
 
-    given(clientQueryRepository.findById(unknownId)).willReturn(Optional.empty());
+        given(clientQueryRepository.findById(unknownId)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> useCase.execute(unknownId))
-        .isInstanceOf(ClientNotFoundException.class);
-  }
+        assertThatThrownBy(() -> useCase.execute(unknownId)).isInstanceOf(ClientNotFoundException.class);
+    }
 }

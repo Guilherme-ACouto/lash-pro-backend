@@ -14,26 +14,25 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DeactivateTenantUseCaseImpl implements DeactivateTenantUseCase {
 
-  private final TenantRepository tenantRepository;
-  private final PlatformAdminChecker platformAdminChecker;
+    private final TenantRepository tenantRepository;
+    private final PlatformAdminChecker platformAdminChecker;
 
-  @Override
-  public void execute(UUID tenantId) {
-    platformAdminChecker.check();
+    @Override
+    public void execute(UUID tenantId) {
+        platformAdminChecker.check();
 
-    Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(TenantNotFoundException::new);
+        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(TenantNotFoundException::new);
 
-    tenantRepository.save(
-        Tenant.builder()
-            .id(tenant.getId())
-            .name(tenant.getName())
-            .schemaName(tenant.getSchemaName())
-            .active(false)
-            .createdAt(tenant.getCreatedAt())
-            .build());
+        tenantRepository.save(Tenant.builder()
+                .id(tenant.getId())
+                .name(tenant.getName())
+                .schemaName(tenant.getSchemaName())
+                .active(false)
+                .createdAt(tenant.getCreatedAt())
+                .build());
 
-    if (log.isInfoEnabled()) {
-      log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());
+        if (log.isInfoEnabled()) {
+            log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());
+        }
     }
-  }
 }

@@ -12,13 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ListFichasUseCaseImpl implements ListFichasUseCase {
 
-  private final FichaQueryRepository fichaQueryRepository;
+    private final FichaQueryRepository fichaQueryRepository;
 
-  @Override
-  public Page<CreateFichaUseCase.FichaResult> execute(ListFichasQuery query, Pageable pageable) {
-    String search = query.search() != null ? query.search() : "";
-    return fichaQueryRepository
-        .listWithFilters(search, pageable)
-        .map(FichaUseCaseMapper::toFichaResult);
-  }
+    @Override
+    public Page<CreateFichaUseCase.FichaResult> execute(ListFichasQuery query, Pageable pageable) {
+        String search = query.search() != null ? query.search() : "";
+        return fichaQueryRepository.listWithFilters(search, pageable).map(FichaUseCaseMapper::toFichaResult);
+    }
 }

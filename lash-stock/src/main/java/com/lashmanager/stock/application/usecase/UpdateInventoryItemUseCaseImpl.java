@@ -13,27 +13,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateInventoryItemUseCaseImpl implements UpdateInventoryItemUseCase {
 
-  private final InventoryItemRepository itemRepository;
+    private final InventoryItemRepository itemRepository;
 
-  @Override
-  public CreateInventoryItemUseCase.InventoryItemResult execute(
-      UpdateInventoryItemCommand command) {
-    InventoryItem existing =
-        itemRepository
-            .findById(command.id())
-            .orElseThrow(() -> new InventoryItemNotFoundException(command.id()));
+    @Override
+    public CreateInventoryItemUseCase.InventoryItemResult execute(UpdateInventoryItemCommand command) {
+        InventoryItem existing = itemRepository
+                .findById(command.id())
+                .orElseThrow(() -> new InventoryItemNotFoundException(command.id()));
 
-    InventoryItem updated =
-        existing.toBuilder()
-            .name(command.name())
-            .unit(command.unit())
-            .costPrice(command.costPrice())
-            .supplier(command.supplier())
-            .minimumQuantity(command.minimumQuantity())
-            .notes(command.notes())
-            .updatedAt(LocalDateTime.now())
-            .build();
+        InventoryItem updated = existing.toBuilder()
+                .name(command.name())
+                .unit(command.unit())
+                .costPrice(command.costPrice())
+                .supplier(command.supplier())
+                .minimumQuantity(command.minimumQuantity())
+                .notes(command.notes())
+                .updatedAt(LocalDateTime.now())
+                .build();
 
-    return InventoryUseCaseMapper.toItemResult(itemRepository.save(updated));
-  }
+        return InventoryUseCaseMapper.toItemResult(itemRepository.save(updated));
+    }
 }

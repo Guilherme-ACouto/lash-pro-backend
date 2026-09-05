@@ -7,13 +7,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record UpdateFinancialEntryRequest(
-    @NotBlank String type,
-    String expenseType,
-    @NotBlank String description,
-    @NotNull @DecimalMin("0.01") BigDecimal amount,
-    @NotNull LocalDate dueDate,
-    LocalDate paymentDate,
-    String category,
-    String paymentMethod,
-    String receivedFrom,
-    String notes) {}
+        @NotBlank String type,
+        String expenseType,
+        @NotBlank String description,
+        @NotNull @DecimalMin("0.01") BigDecimal amount,
+        @NotNull LocalDate dueDate,
+        LocalDate paymentDate,
+        String category,
+        String paymentMethod,
+        String receivedFrom,
+        String notes) {}

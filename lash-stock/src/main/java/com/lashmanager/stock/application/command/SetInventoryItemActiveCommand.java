@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SetInventoryItemActiveCommand extends AbstractCommand {
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  private boolean activate;
+    private boolean activate;
 }

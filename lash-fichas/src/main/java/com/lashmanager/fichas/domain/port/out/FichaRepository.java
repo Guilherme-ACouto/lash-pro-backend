@@ -10,9 +10,9 @@ import java.util.UUID;
  * precisam do agregado completo.
  */
 public interface FichaRepository {
-  Optional<Ficha> findById(UUID id);
+    Optional<Ficha> findById(UUID id);
 
-  boolean existsByClientId(UUID clientId);
+    boolean existsByClientId(UUID clientId);
 
-  Ficha save(Ficha ficha);
+    Ficha save(Ficha ficha);
 }

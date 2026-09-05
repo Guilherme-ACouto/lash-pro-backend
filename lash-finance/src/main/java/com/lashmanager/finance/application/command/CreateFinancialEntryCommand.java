@@ -16,34 +16,38 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateFinancialEntryCommand extends AbstractCommand {
 
-  @NotBlank private String type;
-  private String expenseType;
+    @NotBlank
+    private String type;
 
-  @NotBlank private String description;
+    private String expenseType;
 
-  @NotNull
-  @DecimalMin("0.01")
-  private BigDecimal amount;
+    @NotBlank
+    private String description;
 
-  @NotNull private LocalDate dueDate;
+    @NotNull
+    @DecimalMin("0.01")
+    private BigDecimal amount;
 
-  private LocalDate paymentDate;
-  private String category;
-  private String paymentMethod;
-  private String receivedFrom;
-  private String notes;
+    @NotNull
+    private LocalDate dueDate;
 
-  public CreateFinancialEntryUseCase.CreateCommand toDomainCommand() {
-    return new CreateFinancialEntryUseCase.CreateCommand(
-        type,
-        expenseType,
-        description,
-        amount,
-        dueDate,
-        paymentDate,
-        category,
-        paymentMethod,
-        receivedFrom,
-        notes);
-  }
+    private LocalDate paymentDate;
+    private String category;
+    private String paymentMethod;
+    private String receivedFrom;
+    private String notes;
+
+    public CreateFinancialEntryUseCase.CreateCommand toDomainCommand() {
+        return new CreateFinancialEntryUseCase.CreateCommand(
+                type,
+                expenseType,
+                description,
+                amount,
+                dueDate,
+                paymentDate,
+                category,
+                paymentMethod,
+                receivedFrom,
+                notes);
+    }
 }

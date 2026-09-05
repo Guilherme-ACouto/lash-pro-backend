@@ -10,21 +10,21 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 public class LashMapping {
 
-  private UUID id;
-  private UUID fichaId;
-  private UUID appointmentId;
+    private UUID id;
+    private UUID fichaId;
+    private UUID appointmentId;
 
-  private LocalDate date;
+    private LocalDate date;
 
-  private String technique;
-  private String curvature;
-  private String thickness;
-  private String length;
+    private String technique;
+    private String curvature;
+    private String thickness;
+    private String length;
 
-  private String rightEyeNotes;
-  private String leftEyeNotes;
-  private String notes;
+    private String rightEyeNotes;
+    private String leftEyeNotes;
+    private String notes;
 
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

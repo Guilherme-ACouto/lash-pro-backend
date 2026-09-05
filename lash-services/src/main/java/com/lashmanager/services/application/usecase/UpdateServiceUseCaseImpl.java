@@ -15,26 +15,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateServiceUseCaseImpl implements UpdateServiceUseCase {
 
-  private final ServiceRepository serviceRepository;
+    private final ServiceRepository serviceRepository;
 
-  @Override
-  public CreateServiceUseCase.ServiceResult execute(UUID id, UpdateServiceCommand command) {
-    ServiceOffering existing =
-        serviceRepository.findById(id).orElseThrow(() -> new ServiceNotFoundException(id));
+    @Override
+    public CreateServiceUseCase.ServiceResult execute(UUID id, UpdateServiceCommand command) {
+        ServiceOffering existing = serviceRepository.findById(id).orElseThrow(() -> new ServiceNotFoundException(id));
 
-    if (serviceRepository.existsByNameAndIdNot(command.name(), id)) {
-      throw new ServiceAlreadyExistsException(command.name());
+        if (serviceRepository.existsByNameAndIdNot(command.name(), id)) {
+            throw new ServiceAlreadyExistsException(command.name());
+        }
+
+        ServiceOffering updated = existing.toBuilder()
+                .name(command.name())
+                .description(command.description())
+                .price(command.price())
+                .durationMinutes(command.durationMinutes())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        return ServiceUseCaseMapper.toResult(serviceRepository.save(updated));
     }
-
-    ServiceOffering updated =
-        existing.toBuilder()
-            .name(command.name())
-            .description(command.description())
-            .price(command.price())
-            .durationMinutes(command.durationMinutes())
-            .updatedAt(LocalDateTime.now())
-            .build();
-
-    return ServiceUseCaseMapper.toResult(serviceRepository.save(updated));
-  }
 }

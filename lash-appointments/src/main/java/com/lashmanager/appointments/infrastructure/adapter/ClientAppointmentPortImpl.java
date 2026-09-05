@@ -13,20 +13,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ClientAppointmentPortImpl implements ClientAppointmentPort {
 
-  private final AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
-  @Override
-  public List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from) {
-    return appointmentRepository.findFutureActiveByClientId(clientId, from);
-  }
+    @Override
+    public List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from) {
+        return appointmentRepository.findFutureActiveByClientId(clientId, from);
+    }
 
-  @Override
-  public void deleteFutureAppointmentsByClientId(UUID clientId, LocalDate from) {
-    appointmentRepository.deleteFutureAppointmentsByClientId(clientId, from);
-  }
+    @Override
+    public void deleteFutureAppointmentsByClientId(UUID clientId, LocalDate from) {
+        appointmentRepository.deleteFutureAppointmentsByClientId(clientId, from);
+    }
 
-  @Override
-  public void unlinkClientFromPastAppointments(UUID clientId, LocalDate from) {
-    appointmentRepository.unlinkClientFromPastAppointments(clientId, from);
-  }
+    @Override
+    public void unlinkClientFromPastAppointments(UUID clientId, LocalDate from) {
+        appointmentRepository.unlinkClientFromPastAppointments(clientId, from);
+    }
 }

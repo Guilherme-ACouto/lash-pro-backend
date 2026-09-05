@@ -142,10 +142,9 @@
                 <version>2.43.0</version>
                 <configuration>
                     <java>
-                        <googleJavaFormat>
-                            <version>1.22.0</version>
-                            <style>GOOGLE</style>
-                        </googleJavaFormat>
+                        <palantirJavaFormat>
+                            <version>2.97.0</version>
+                        </palantirJavaFormat>
                         <removeUnusedImports/>
                         <importOrder/>
                         <trimTrailingWhitespace/>

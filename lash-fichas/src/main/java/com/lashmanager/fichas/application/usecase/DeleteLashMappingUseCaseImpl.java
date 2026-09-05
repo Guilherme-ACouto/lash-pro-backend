@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteLashMappingUseCaseImpl implements DeleteLashMappingUseCase {
 
-  private final LashMappingRepository mappingRepository;
+    private final LashMappingRepository mappingRepository;
 
-  @Override
-  public void execute(UUID id) {
-    if (mappingRepository.findById(id).isEmpty()) {
-      throw new LashMappingNotFoundException(id);
+    @Override
+    public void execute(UUID id) {
+        if (mappingRepository.findById(id).isEmpty()) {
+            throw new LashMappingNotFoundException(id);
+        }
+        mappingRepository.delete(id);
     }
-    mappingRepository.delete(id);
-  }
 }

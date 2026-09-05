@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteFinancialEntryApplicationService {
 
-  private final DeleteFinancialEntryUseCase deleteFinancialEntryUseCase;
+    private final DeleteFinancialEntryUseCase deleteFinancialEntryUseCase;
 
-  public void when(DeleteFinancialEntryCommand command) {
-    deleteFinancialEntryUseCase.execute(command.getId());
-  }
+    public void when(DeleteFinancialEntryCommand command) {
+        deleteFinancialEntryUseCase.execute(command.getId());
+    }
 }

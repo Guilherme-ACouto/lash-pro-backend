@@ -10,13 +10,13 @@ import java.util.UUID;
  */
 public interface FinancialEntryRepository {
 
-  record FinancialEntryWithCounterpart(FinancialEntry entry, String counterpart) {}
+    record FinancialEntryWithCounterpart(FinancialEntry entry, String counterpart) {}
 
-  FinancialEntry save(FinancialEntry entry);
+    FinancialEntry save(FinancialEntry entry);
 
-  Optional<FinancialEntry> findById(UUID id);
+    Optional<FinancialEntry> findById(UUID id);
 
-  void delete(UUID id);
+    void delete(UUID id);
 
-  boolean existsByIdAndAppointmentIdIsNull(UUID id);
+    boolean existsByIdAndAppointmentIdIsNull(UUID id);
 }

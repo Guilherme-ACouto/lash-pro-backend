@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Client {
-  private UUID id;
-  private String name;
-  private String phone;
-  private String email;
-  private LocalDate birthDate;
-  private String notes;
-  private boolean active;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+    private UUID id;
+    private String name;
+    private String phone;
+    private String email;
+    private LocalDate birthDate;
+    private String notes;
+    private boolean active;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

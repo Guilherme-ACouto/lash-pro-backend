@@ -12,31 +12,31 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ClientRepositoryImpl implements ClientRepository {
 
-  private final ClientJpaRepository jpaRepository;
-  private final ClientMapper mapper;
+    private final ClientJpaRepository jpaRepository;
+    private final ClientMapper mapper;
 
-  @Override
-  public Client save(Client client) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(client)));
-  }
+    @Override
+    public Client save(Client client) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(client)));
+    }
 
-  @Override
-  public Optional<Client> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<Client> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public boolean existsByPhone(String phone) {
-    return jpaRepository.existsByPhone(phone);
-  }
+    @Override
+    public boolean existsByPhone(String phone) {
+        return jpaRepository.existsByPhone(phone);
+    }
 
-  @Override
-  public boolean existsByPhoneAndIdNot(String phone, UUID id) {
-    return jpaRepository.existsByPhoneAndIdNot(phone, id);
-  }
+    @Override
+    public boolean existsByPhoneAndIdNot(String phone, UUID id) {
+        return jpaRepository.existsByPhoneAndIdNot(phone, id);
+    }
 
-  @Override
-  public void deleteById(UUID id) {
-    jpaRepository.deleteById(id);
-  }
+    @Override
+    public void deleteById(UUID id) {
+        jpaRepository.deleteById(id);
+    }
 }

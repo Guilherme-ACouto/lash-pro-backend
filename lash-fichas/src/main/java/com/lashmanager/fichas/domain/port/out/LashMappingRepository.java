@@ -9,9 +9,9 @@ import java.util.UUID;
  * (RBK-27).
  */
 public interface LashMappingRepository {
-  Optional<LashMapping> findById(UUID id);
+    Optional<LashMapping> findById(UUID id);
 
-  LashMapping save(LashMapping mapping);
+    LashMapping save(LashMapping mapping);
 
-  void delete(UUID id);
+    void delete(UUID id);
 }

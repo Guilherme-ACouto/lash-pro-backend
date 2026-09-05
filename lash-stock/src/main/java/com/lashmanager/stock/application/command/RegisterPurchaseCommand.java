@@ -17,27 +17,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegisterPurchaseCommand extends AbstractCommand {
 
-  @NotNull private UUID itemId;
+    @NotNull
+    private UUID itemId;
 
-  @NotNull
-  @DecimalMin("0.001")
-  private BigDecimal quantity;
+    @NotNull
+    @DecimalMin("0.001")
+    private BigDecimal quantity;
 
-  @NotNull
-  @DecimalMin("0.00")
-  private BigDecimal unitCost;
+    @NotNull
+    @DecimalMin("0.00")
+    private BigDecimal unitCost;
 
-  private String supplier;
+    private String supplier;
 
-  @NotNull private LocalDate purchaseDate;
+    @NotNull
+    private LocalDate purchaseDate;
 
-  @NotBlank private String paymentType;
+    @NotBlank
+    private String paymentType;
 
-  private LocalDate dueDate;
-  private String notes;
+    private LocalDate dueDate;
+    private String notes;
 
-  public RegisterPurchaseUseCase.RegisterPurchaseCommand toDomainCommand() {
-    return new RegisterPurchaseUseCase.RegisterPurchaseCommand(
-        itemId, quantity, unitCost, supplier, purchaseDate, paymentType, dueDate, notes);
-  }
+    public RegisterPurchaseUseCase.RegisterPurchaseCommand toDomainCommand() {
+        return new RegisterPurchaseUseCase.RegisterPurchaseCommand(
+                itemId, quantity, unitCost, supplier, purchaseDate, paymentType, dueDate, notes);
+    }
 }

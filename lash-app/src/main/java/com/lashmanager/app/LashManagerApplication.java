@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.lashmanager")
 public final class LashManagerApplication {
 
-  private LashManagerApplication() {}
+    private LashManagerApplication() {}
 
-  public static void main(String[] args) {
-    SpringApplication.run(LashManagerApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(LashManagerApplication.class, args);
+    }
 }

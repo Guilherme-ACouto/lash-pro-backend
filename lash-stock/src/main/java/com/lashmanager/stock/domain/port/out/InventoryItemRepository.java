@@ -9,13 +9,13 @@ import java.util.UUID;
  * (RBK-27) — findById continua aqui porque os use cases de escrita precisam do agregado completo.
  */
 public interface InventoryItemRepository {
-  InventoryItem save(InventoryItem item);
+    InventoryItem save(InventoryItem item);
 
-  Optional<InventoryItem> findById(UUID id);
+    Optional<InventoryItem> findById(UUID id);
 
-  boolean existsByInternalCode(String code);
+    boolean existsByInternalCode(String code);
 
-  boolean existsByInternalCodeAndIdNot(String code, UUID id);
+    boolean existsByInternalCodeAndIdNot(String code, UUID id);
 
-  void delete(UUID id);
+    void delete(UUID id);
 }

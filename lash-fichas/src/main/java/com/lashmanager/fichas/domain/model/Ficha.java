@@ -10,28 +10,28 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 public class Ficha {
 
-  private UUID id;
-  private UUID clientId;
-  private String clientName;
+    private UUID id;
+    private UUID clientId;
+    private String clientName;
 
-  private LocalDate date;
+    private LocalDate date;
 
-  private String skinType;
-  private String eyeShape;
+    private String skinType;
+    private String eyeShape;
 
-  private boolean hasAllergies;
-  private String allergiesDescription;
+    private boolean hasAllergies;
+    private String allergiesDescription;
 
-  private boolean hasMedications;
-  private String medicationsDescription;
+    private boolean hasMedications;
+    private String medicationsDescription;
 
-  private boolean hasSensitivities;
-  private String sensitivitiesDescription;
+    private boolean hasSensitivities;
+    private String sensitivitiesDescription;
 
-  private String observations;
+    private String observations;
 
-  private boolean active;
+    private boolean active;
 
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

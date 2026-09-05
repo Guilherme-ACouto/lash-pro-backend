@@ -10,15 +10,15 @@ import java.util.UUID;
  * agregado completo.
  */
 public interface ServiceRepository {
-  ServiceOffering save(ServiceOffering service);
+    ServiceOffering save(ServiceOffering service);
 
-  Optional<ServiceOffering> findById(UUID id);
+    Optional<ServiceOffering> findById(UUID id);
 
-  boolean existsByName(String name);
+    boolean existsByName(String name);
 
-  boolean existsByNameAndIdNot(String name, UUID id);
+    boolean existsByNameAndIdNot(String name, UUID id);
 
-  boolean hasActiveAppointments(UUID serviceId);
+    boolean hasActiveAppointments(UUID serviceId);
 
-  void deleteById(UUID id);
+    void deleteById(UUID id);
 }

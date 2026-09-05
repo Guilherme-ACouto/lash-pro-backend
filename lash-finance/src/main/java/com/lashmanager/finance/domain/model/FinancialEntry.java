@@ -14,19 +14,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FinancialEntry {
-  private UUID id;
-  private FinancialEntryType type;
-  private FinancialEntryExpenseType expenseType;
-  private String description;
-  private BigDecimal amount;
-  private LocalDate dueDate;
-  private LocalDate paymentDate;
-  private FinancialEntryStatus status;
-  private UUID appointmentId;
-  private String category;
-  private String paymentMethod;
-  private String receivedFrom;
-  private String notes;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+    private UUID id;
+    private FinancialEntryType type;
+    private FinancialEntryExpenseType expenseType;
+    private String description;
+    private BigDecimal amount;
+    private LocalDate dueDate;
+    private LocalDate paymentDate;
+    private FinancialEntryStatus status;
+    private UUID appointmentId;
+    private String category;
+    private String paymentMethod;
+    private String receivedFrom;
+    private String notes;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

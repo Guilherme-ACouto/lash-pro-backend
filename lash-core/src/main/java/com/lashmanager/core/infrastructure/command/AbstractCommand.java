@@ -13,11 +13,13 @@ import lombok.Getter;
 @Getter
 public class AbstractCommand {
 
-  protected AbstractCommand() {
-    // vazio: apenas restringe a instanciação direta, use uma subclasse concreta
-  }
+    protected AbstractCommand() {
+        // vazio: apenas restringe a instanciação direta, use uma subclasse concreta
+    }
 
-  @JsonIgnore private final UUID commandId = UUID.randomUUID();
+    @JsonIgnore
+    private final UUID commandId = UUID.randomUUID();
 
-  @JsonIgnore private final LocalDateTime issuedAt = LocalDateTime.now();
+    @JsonIgnore
+    private final LocalDateTime issuedAt = LocalDateTime.now();
 }

@@ -18,36 +18,36 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeactivateClientUseCaseImpl implements DeactivateClientUseCase {
 
-  private final ClientRepository clientRepository;
-  private final ClientAppointmentPort clientAppointmentPort;
+    private final ClientRepository clientRepository;
+    private final ClientAppointmentPort clientAppointmentPort;
 
-  @Override
-  public void deactivate(UUID id, boolean force) {
-    Client client =
-        clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
+    @Override
+    public void deactivate(UUID id, boolean force) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
 
-    if (!force) {
-      List<AppointmentSummary> futureAppointments =
-          clientAppointmentPort.findFutureActiveByClientId(id, LocalDate.now());
-      if (!futureAppointments.isEmpty()) {
-        throw new HasFutureAppointmentsException("cliente", futureAppointments);
-      }
-    } else {
-      clientAppointmentPort.deleteFutureAppointmentsByClientId(id, LocalDate.now());
+        if (!force) {
+            List<AppointmentSummary> futureAppointments =
+                    clientAppointmentPort.findFutureActiveByClientId(id, LocalDate.now());
+            if (!futureAppointments.isEmpty()) {
+                throw new HasFutureAppointmentsException("cliente", futureAppointments);
+            }
+        } else {
+            clientAppointmentPort.deleteFutureAppointmentsByClientId(id, LocalDate.now());
+        }
+
+        Client deactivated =
+                client.toBuilder().active(false).updatedAt(LocalDateTime.now()).build();
+
+        clientRepository.save(deactivated);
     }
 
-    Client deactivated = client.toBuilder().active(false).updatedAt(LocalDateTime.now()).build();
+    @Override
+    public void reactivate(UUID id) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
 
-    clientRepository.save(deactivated);
-  }
+        Client reactivated =
+                client.toBuilder().active(true).updatedAt(LocalDateTime.now()).build();
 
-  @Override
-  public void reactivate(UUID id) {
-    Client client =
-        clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
-
-    Client reactivated = client.toBuilder().active(true).updatedAt(LocalDateTime.now()).build();
-
-    clientRepository.save(reactivated);
-  }
+        clientRepository.save(reactivated);
+    }
 }

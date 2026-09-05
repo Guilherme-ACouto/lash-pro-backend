@@ -18,34 +18,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private final LoginUseCase loginUseCase;
-  private final ForgotPasswordUseCase forgotPasswordUseCase;
-  private final RefreshTokenUseCase refreshTokenUseCase;
+    private final LoginUseCase loginUseCase;
+    private final ForgotPasswordUseCase forgotPasswordUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
-  @PostMapping("/login")
-  public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-    LoginUseCase.LoginResponse result =
-        loginUseCase.execute(new LoginUseCase.LoginCommand(request.email(), request.password()));
-    return ResponseEntity.ok(
-        new LoginResponse(
-            result.accessToken(),
-            result.refreshToken(),
-            result.name(),
-            result.email(),
-            result.role()));
-  }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginUseCase.LoginResponse result =
+                loginUseCase.execute(new LoginUseCase.LoginCommand(request.email(), request.password()));
+        return ResponseEntity.ok(new LoginResponse(
+                result.accessToken(), result.refreshToken(), result.name(), result.email(), result.role()));
+    }
 
-  @PostMapping("/forgot-password")
-  public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-    forgotPasswordUseCase.execute(request.email());
-    return ResponseEntity.noContent().build();
-  }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        forgotPasswordUseCase.execute(request.email());
+        return ResponseEntity.noContent().build();
+    }
 
-  @PostMapping("/refresh")
-  public ResponseEntity<Map<String, String>> refresh(
-      @Valid @RequestBody RefreshTokenRequest request) {
-    RefreshTokenUseCase.RefreshResponse result =
-        refreshTokenUseCase.execute(request.refreshToken());
-    return ResponseEntity.ok(Map.of("accessToken", result.accessToken()));
-  }
+    @PostMapping("/refresh")
+    public ResponseEntity<Map<String, String>> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        RefreshTokenUseCase.RefreshResponse result = refreshTokenUseCase.execute(request.refreshToken());
+        return ResponseEntity.ok(Map.of("accessToken", result.accessToken()));
+    }
 }

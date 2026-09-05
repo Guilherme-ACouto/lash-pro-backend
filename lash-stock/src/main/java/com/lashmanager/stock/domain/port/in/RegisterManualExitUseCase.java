@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public interface RegisterManualExitUseCase {
 
-  record RegisterManualExitCommand(
-      UUID itemId, BigDecimal quantity, String reason, String notes, LocalDate exitDate) {}
+    record RegisterManualExitCommand(
+            UUID itemId, BigDecimal quantity, String reason, String notes, LocalDate exitDate) {}
 
-  RegisterPurchaseUseCase.InventoryMovementResult execute(RegisterManualExitCommand command);
+    RegisterPurchaseUseCase.InventoryMovementResult execute(RegisterManualExitCommand command);
 }

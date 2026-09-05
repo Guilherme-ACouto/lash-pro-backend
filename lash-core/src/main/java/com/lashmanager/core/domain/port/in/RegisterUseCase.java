@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface RegisterUseCase {
 
-  record RegisterData(String name, String email, String password) {}
+    record RegisterData(String name, String email, String password) {}
 
-  record RegisterResult(UUID userId, String email) {}
+    record RegisterResult(UUID userId, String email) {}
 
-  RegisterResult execute(RegisterData data);
+    RegisterResult execute(RegisterData data);
 }

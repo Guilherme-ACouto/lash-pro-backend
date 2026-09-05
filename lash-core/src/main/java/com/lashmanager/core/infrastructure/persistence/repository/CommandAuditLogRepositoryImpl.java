@@ -11,23 +11,23 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CommandAuditLogRepositoryImpl implements CommandAuditLogRepository {
 
-  private final CommandAuditLogJpaRepository jpaRepository;
-  private final CommandAuditLogMapper mapper;
+    private final CommandAuditLogJpaRepository jpaRepository;
+    private final CommandAuditLogMapper mapper;
 
-  @Override
-  public CommandAuditLog save(CommandAuditLog commandAuditLog) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(commandAuditLog)));
-  }
+    @Override
+    public CommandAuditLog save(CommandAuditLog commandAuditLog) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(commandAuditLog)));
+    }
 
-  @Override
-  public boolean existsByCommandClass(String commandClass) {
-    return jpaRepository.existsByCommandClass(commandClass);
-  }
+    @Override
+    public boolean existsByCommandClass(String commandClass) {
+        return jpaRepository.existsByCommandClass(commandClass);
+    }
 
-  @Override
-  public Optional<CommandAuditLog> findLatestByCommandClass(String commandClass) {
-    return jpaRepository
-        .findTopByCommandClassOrderByExecutedAtDesc(commandClass)
-        .map(mapper::toDomain);
-  }
+    @Override
+    public Optional<CommandAuditLog> findLatestByCommandClass(String commandClass) {
+        return jpaRepository
+                .findTopByCommandClassOrderByExecutedAtDesc(commandClass)
+                .map(mapper::toDomain);
+    }
 }

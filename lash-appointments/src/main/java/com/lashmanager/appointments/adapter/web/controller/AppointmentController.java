@@ -30,58 +30,50 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AppointmentController {
 
-  private final CreateAppointmentApplicationService createAppointmentApplicationService;
-  private final UpdateAppointmentApplicationService updateAppointmentApplicationService;
-  private final ChangeAppointmentStatusApplicationService changeAppointmentStatusApplicationService;
-  private final GetAppointmentUseCase getAppointmentUseCase;
-  private final ListAppointmentsByDateUseCase listAppointmentsByDateUseCase;
+    private final CreateAppointmentApplicationService createAppointmentApplicationService;
+    private final UpdateAppointmentApplicationService updateAppointmentApplicationService;
+    private final ChangeAppointmentStatusApplicationService changeAppointmentStatusApplicationService;
+    private final GetAppointmentUseCase getAppointmentUseCase;
+    private final ListAppointmentsByDateUseCase listAppointmentsByDateUseCase;
 
-  @GetMapping
-  public ResponseEntity<List<AppointmentResponse>> listByDate(
-      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-          LocalDate endDate) {
-    if (endDate != null) {
-      LocalDate startDate = date != null ? date : LocalDate.now();
-      return ResponseEntity.ok(
-          listAppointmentsByDateUseCase.executeRange(startDate, endDate).stream()
-              .map(AppointmentResponse::from)
-              .toList());
+    @GetMapping
+    public ResponseEntity<List<AppointmentResponse>> listByDate(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        if (endDate != null) {
+            LocalDate startDate = date != null ? date : LocalDate.now();
+            return ResponseEntity.ok(listAppointmentsByDateUseCase.executeRange(startDate, endDate).stream()
+                    .map(AppointmentResponse::from)
+                    .toList());
+        }
+        LocalDate targetDate = date != null ? date : LocalDate.now();
+        return ResponseEntity.ok(listAppointmentsByDateUseCase.execute(targetDate).stream()
+                .map(AppointmentResponse::from)
+                .toList());
     }
-    LocalDate targetDate = date != null ? date : LocalDate.now();
-    return ResponseEntity.ok(
-        listAppointmentsByDateUseCase.execute(targetDate).stream()
-            .map(AppointmentResponse::from)
-            .toList());
-  }
 
-  @PostMapping
-  public ResponseEntity<AppointmentResponse> create(
-      @Valid @RequestBody CreateAppointmentRequest req) {
-    var result =
-        createAppointmentApplicationService.when(
-            new CreateAppointmentCommand(
+    @PostMapping
+    public ResponseEntity<AppointmentResponse> create(@Valid @RequestBody CreateAppointmentRequest req) {
+        var result = createAppointmentApplicationService.when(new CreateAppointmentCommand(
                 req.clientId(),
                 req.serviceId(),
                 req.scheduledDate(),
                 req.scheduledTime(),
                 req.durationMinutes(),
                 req.notes()));
-    return ResponseEntity.created(URI.create("/api/appointments/" + result.id()))
-        .body(AppointmentResponse.from(result));
-  }
+        return ResponseEntity.created(URI.create("/api/appointments/" + result.id()))
+                .body(AppointmentResponse.from(result));
+    }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<AppointmentResponse> getById(@PathVariable UUID id) {
-    return ResponseEntity.ok(AppointmentResponse.from(getAppointmentUseCase.execute(id)));
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<AppointmentResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(AppointmentResponse.from(getAppointmentUseCase.execute(id)));
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<AppointmentResponse> update(
-      @PathVariable UUID id, @Valid @RequestBody UpdateAppointmentRequest req) {
-    var result =
-        updateAppointmentApplicationService.when(
-            new UpdateAppointmentCommand(
+    @PutMapping("/{id}")
+    public ResponseEntity<AppointmentResponse> update(
+            @PathVariable UUID id, @Valid @RequestBody UpdateAppointmentRequest req) {
+        var result = updateAppointmentApplicationService.when(new UpdateAppointmentCommand(
                 id,
                 req.clientId(),
                 req.serviceId(),
@@ -89,32 +81,32 @@ public class AppointmentController {
                 req.scheduledTime(),
                 req.durationMinutes(),
                 req.notes()));
-    return ResponseEntity.ok(AppointmentResponse.from(result));
-  }
+        return ResponseEntity.ok(AppointmentResponse.from(result));
+    }
 
-  @PatchMapping("/{id}/confirm")
-  public ResponseEntity<Void> confirm(@PathVariable UUID id) {
-    changeAppointmentStatusApplicationService.when(new ConfirmAppointmentCommand(id));
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/confirm")
+    public ResponseEntity<Void> confirm(@PathVariable UUID id) {
+        changeAppointmentStatusApplicationService.when(new ConfirmAppointmentCommand(id));
+        return ResponseEntity.noContent().build();
+    }
 
-  @PatchMapping("/{id}/complete")
-  public ResponseEntity<Void> complete(
-      @PathVariable UUID id, @RequestBody(required = false) CompleteAppointmentRequest req) {
-    changeAppointmentStatusApplicationService.when(
-        new CompleteAppointmentCommand(id, req != null ? req.paymentMethod() : null));
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Void> complete(
+            @PathVariable UUID id, @RequestBody(required = false) CompleteAppointmentRequest req) {
+        changeAppointmentStatusApplicationService.when(
+                new CompleteAppointmentCommand(id, req != null ? req.paymentMethod() : null));
+        return ResponseEntity.noContent().build();
+    }
 
-  @PatchMapping("/{id}/cancel")
-  public ResponseEntity<Void> cancel(@PathVariable UUID id) {
-    changeAppointmentStatusApplicationService.when(new CancelAppointmentCommand(id));
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancel(@PathVariable UUID id) {
+        changeAppointmentStatusApplicationService.when(new CancelAppointmentCommand(id));
+        return ResponseEntity.noContent().build();
+    }
 
-  @PatchMapping("/{id}/no-show")
-  public ResponseEntity<Void> noShow(@PathVariable UUID id) {
-    changeAppointmentStatusApplicationService.when(new NoShowAppointmentCommand(id));
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/no-show")
+    public ResponseEntity<Void> noShow(@PathVariable UUID id) {
+        changeAppointmentStatusApplicationService.when(new NoShowAppointmentCommand(id));
+        return ResponseEntity.noContent().build();
+    }
 }

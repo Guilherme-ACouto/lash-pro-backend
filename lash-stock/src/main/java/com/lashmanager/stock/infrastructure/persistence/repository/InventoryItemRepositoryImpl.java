@@ -12,31 +12,31 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class InventoryItemRepositoryImpl implements InventoryItemRepository {
 
-  private final InventoryItemJpaRepository jpaRepository;
-  private final InventoryItemMapper mapper;
+    private final InventoryItemJpaRepository jpaRepository;
+    private final InventoryItemMapper mapper;
 
-  @Override
-  public Optional<InventoryItem> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<InventoryItem> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public InventoryItem save(InventoryItem item) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(item)));
-  }
+    @Override
+    public InventoryItem save(InventoryItem item) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(item)));
+    }
 
-  @Override
-  public void delete(UUID id) {
-    jpaRepository.deleteById(id);
-  }
+    @Override
+    public void delete(UUID id) {
+        jpaRepository.deleteById(id);
+    }
 
-  @Override
-  public boolean existsByInternalCode(String code) {
-    return jpaRepository.existsByInternalCode(code);
-  }
+    @Override
+    public boolean existsByInternalCode(String code) {
+        return jpaRepository.existsByInternalCode(code);
+    }
 
-  @Override
-  public boolean existsByInternalCodeAndIdNot(String code, UUID id) {
-    return jpaRepository.existsByInternalCodeAndIdNot(code, id);
-  }
+    @Override
+    public boolean existsByInternalCodeAndIdNot(String code, UUID id) {
+        return jpaRepository.existsByInternalCodeAndIdNot(code, id);
+    }
 }

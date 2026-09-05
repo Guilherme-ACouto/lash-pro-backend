@@ -11,16 +11,16 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
 
-  private final InventoryMovementJpaRepository jpaRepository;
-  private final InventoryMovementMapper mapper;
+    private final InventoryMovementJpaRepository jpaRepository;
+    private final InventoryMovementMapper mapper;
 
-  @Override
-  public InventoryMovement save(InventoryMovement movement) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(movement)));
-  }
+    @Override
+    public InventoryMovement save(InventoryMovement movement) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(movement)));
+    }
 
-  @Override
-  public boolean existsByItemId(UUID itemId) {
-    return jpaRepository.existsByItemId(itemId);
-  }
+    @Override
+    public boolean existsByItemId(UUID itemId) {
+        return jpaRepository.existsByItemId(itemId);
+    }
 }

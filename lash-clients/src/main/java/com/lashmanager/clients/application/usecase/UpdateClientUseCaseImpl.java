@@ -15,27 +15,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateClientUseCaseImpl implements UpdateClientUseCase {
 
-  private final ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-  @Override
-  public CreateClientUseCase.ClientResult execute(UUID id, UpdateClientCommand command) {
-    Client existing =
-        clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
+    @Override
+    public CreateClientUseCase.ClientResult execute(UUID id, UpdateClientCommand command) {
+        Client existing = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
 
-    if (clientRepository.existsByPhoneAndIdNot(command.phone(), id)) {
-      throw new ClientAlreadyExistsException(command.phone());
+        if (clientRepository.existsByPhoneAndIdNot(command.phone(), id)) {
+            throw new ClientAlreadyExistsException(command.phone());
+        }
+
+        Client updated = existing.toBuilder()
+                .name(command.name())
+                .phone(command.phone())
+                .email(command.email())
+                .birthDate(command.birthDate())
+                .notes(command.notes())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        return ClientUseCaseMapper.toResult(clientRepository.save(updated));
     }
-
-    Client updated =
-        existing.toBuilder()
-            .name(command.name())
-            .phone(command.phone())
-            .email(command.email())
-            .birthDate(command.birthDate())
-            .notes(command.notes())
-            .updatedAt(LocalDateTime.now())
-            .build();
-
-    return ClientUseCaseMapper.toResult(clientRepository.save(updated));
-  }
 }

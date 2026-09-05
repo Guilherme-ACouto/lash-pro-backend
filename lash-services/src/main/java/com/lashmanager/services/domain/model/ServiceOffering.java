@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceOffering {
-  private UUID id;
-  private String name;
-  private String description;
-  private BigDecimal price;
-  private int durationMinutes;
-  private boolean active;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+    private UUID id;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private int durationMinutes;
+    private boolean active;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

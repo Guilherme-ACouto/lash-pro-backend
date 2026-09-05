@@ -5,16 +5,16 @@ import java.util.UUID;
 
 public interface UpdateLashMappingUseCase {
 
-  record UpdateLashMappingCommand(
-      UUID id,
-      LocalDate date,
-      String technique,
-      String curvature,
-      String thickness,
-      String length,
-      String rightEyeNotes,
-      String leftEyeNotes,
-      String notes) {}
+    record UpdateLashMappingCommand(
+            UUID id,
+            LocalDate date,
+            String technique,
+            String curvature,
+            String thickness,
+            String length,
+            String rightEyeNotes,
+            String leftEyeNotes,
+            String notes) {}
 
-  CreateLashMappingUseCase.LashMappingResult execute(UpdateLashMappingCommand command);
+    CreateLashMappingUseCase.LashMappingResult execute(UpdateLashMappingCommand command);
 }

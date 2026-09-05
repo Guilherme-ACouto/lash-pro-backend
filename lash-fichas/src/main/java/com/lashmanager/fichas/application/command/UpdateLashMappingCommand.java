@@ -14,20 +14,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateLashMappingCommand extends AbstractCommand {
 
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  @NotNull private LocalDate date;
+    @NotNull
+    private LocalDate date;
 
-  private String technique;
-  private String curvature;
-  private String thickness;
-  private String length;
-  private String rightEyeNotes;
-  private String leftEyeNotes;
-  private String notes;
+    private String technique;
+    private String curvature;
+    private String thickness;
+    private String length;
+    private String rightEyeNotes;
+    private String leftEyeNotes;
+    private String notes;
 
-  public UpdateLashMappingUseCase.UpdateLashMappingCommand toDomainCommand() {
-    return new UpdateLashMappingUseCase.UpdateLashMappingCommand(
-        id, date, technique, curvature, thickness, length, rightEyeNotes, leftEyeNotes, notes);
-  }
+    public UpdateLashMappingUseCase.UpdateLashMappingCommand toDomainCommand() {
+        return new UpdateLashMappingUseCase.UpdateLashMappingCommand(
+                id, date, technique, curvature, thickness, length, rightEyeNotes, leftEyeNotes, notes);
+    }
 }

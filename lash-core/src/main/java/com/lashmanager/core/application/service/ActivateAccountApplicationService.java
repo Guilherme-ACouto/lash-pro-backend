@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ActivateAccountApplicationService {
 
-  private final ActivateAccountUseCase activateAccountUseCase;
+    private final ActivateAccountUseCase activateAccountUseCase;
 
-  public ActivateAccountUseCase.ActivationResult when(ActivateAccountCommand command) {
-    return activateAccountUseCase.execute(command.getActivationKey());
-  }
+    public ActivateAccountUseCase.ActivationResult when(ActivateAccountCommand command) {
+        return activateAccountUseCase.execute(command.getActivationKey());
+    }
 }

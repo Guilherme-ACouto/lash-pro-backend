@@ -14,32 +14,31 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateLashMappingUseCaseImpl implements CreateLashMappingUseCase {
 
-  private final LashMappingRepository mappingRepository;
-  private final FichaRepository fichaRepository;
+    private final LashMappingRepository mappingRepository;
+    private final FichaRepository fichaRepository;
 
-  @Override
-  public LashMappingResult execute(CreateLashMappingCommand command) {
-    if (fichaRepository.findById(command.fichaId()).isEmpty()) {
-      throw new FichaNotFoundException(command.fichaId());
+    @Override
+    public LashMappingResult execute(CreateLashMappingCommand command) {
+        if (fichaRepository.findById(command.fichaId()).isEmpty()) {
+            throw new FichaNotFoundException(command.fichaId());
+        }
+
+        LashMapping mapping = LashMapping.builder()
+                .id(UUID.randomUUID())
+                .fichaId(command.fichaId())
+                .appointmentId(command.appointmentId())
+                .date(command.date())
+                .technique(command.technique())
+                .curvature(command.curvature())
+                .thickness(command.thickness())
+                .length(command.length())
+                .rightEyeNotes(command.rightEyeNotes())
+                .leftEyeNotes(command.leftEyeNotes())
+                .notes(command.notes())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        return FichaUseCaseMapper.toMappingResult(mappingRepository.save(mapping));
     }
-
-    LashMapping mapping =
-        LashMapping.builder()
-            .id(UUID.randomUUID())
-            .fichaId(command.fichaId())
-            .appointmentId(command.appointmentId())
-            .date(command.date())
-            .technique(command.technique())
-            .curvature(command.curvature())
-            .thickness(command.thickness())
-            .length(command.length())
-            .rightEyeNotes(command.rightEyeNotes())
-            .leftEyeNotes(command.leftEyeNotes())
-            .notes(command.notes())
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build();
-
-    return FichaUseCaseMapper.toMappingResult(mappingRepository.save(mapping));
-  }
 }

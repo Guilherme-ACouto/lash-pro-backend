@@ -27,51 +27,48 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SchemaProvisionerImpl implements SchemaProvisionerPort {
 
-  private static final String MASTER_CHANGELOG = "db/changelog/master.xml";
+    private static final String MASTER_CHANGELOG = "db/changelog/master.xml";
 
-  private final String url;
-  private final String username;
-  private final String password;
-  private final TenantSchemaNaming tenantSchemaNaming;
+    private final String url;
+    private final String username;
+    private final String password;
+    private final TenantSchemaNaming tenantSchemaNaming;
 
-  public SchemaProvisionerImpl(
-      @Value("${spring.datasource.url}") String url,
-      @Value("${spring.datasource.username}") String username,
-      @Value("${spring.datasource.password}") String password,
-      TenantSchemaNaming tenantSchemaNaming) {
-    this.url = url;
-    this.username = username;
-    this.password = password;
-    this.tenantSchemaNaming = tenantSchemaNaming;
-  }
-
-  @Override
-  public void provision(UUID tenantId) {
-    String schemaName = tenantSchemaNaming.schemaNameFor(tenantId);
-    try (Connection connection = DriverManager.getConnection(url, username, password)) {
-      createSchemaIfNotExists(connection, schemaName);
-      runChangelog(connection, schemaName);
-      log.info("Schema provisionado para tenant {}: {}", tenantId, schemaName);
-    } catch (Exception e) {
-      throw new SchemaProvisioningException(tenantId, e);
+    public SchemaProvisionerImpl(
+            @Value("${spring.datasource.url}") String url,
+            @Value("${spring.datasource.username}") String username,
+            @Value("${spring.datasource.password}") String password,
+            TenantSchemaNaming tenantSchemaNaming) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.tenantSchemaNaming = tenantSchemaNaming;
     }
-  }
 
-  private void createSchemaIfNotExists(Connection connection, String schemaName)
-      throws SQLException {
-    try (Statement statement = connection.createStatement()) {
-      statement.execute("CREATE SCHEMA IF NOT EXISTS \"" + schemaName + "\"");
+    @Override
+    public void provision(UUID tenantId) {
+        String schemaName = tenantSchemaNaming.schemaNameFor(tenantId);
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            createSchemaIfNotExists(connection, schemaName);
+            runChangelog(connection, schemaName);
+            log.info("Schema provisionado para tenant {}: {}", tenantId, schemaName);
+        } catch (Exception e) {
+            throw new SchemaProvisioningException(tenantId, e);
+        }
     }
-  }
 
-  private void runChangelog(Connection connection, String schemaName) throws Exception {
-    Database database =
-        DatabaseFactory.getInstance()
-            .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-    database.setDefaultSchemaName(schemaName);
-    try (Liquibase liquibase =
-        new Liquibase(MASTER_CHANGELOG, new ClassLoaderResourceAccessor(), database)) {
-      liquibase.update();
+    private void createSchemaIfNotExists(Connection connection, String schemaName) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("CREATE SCHEMA IF NOT EXISTS \"" + schemaName + "\"");
+        }
     }
-  }
+
+    private void runChangelog(Connection connection, String schemaName) throws Exception {
+        Database database =
+                DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+        database.setDefaultSchemaName(schemaName);
+        try (Liquibase liquibase = new Liquibase(MASTER_CHANGELOG, new ClassLoaderResourceAccessor(), database)) {
+            liquibase.update();
+        }
+    }
 }

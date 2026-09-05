@@ -20,13 +20,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PlatformAdminChecker {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public void check() {
-    String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-    if (user.getTenantId() != null) {
-      throw new PlatformAdminRequiredException();
+    public void check() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        if (user.getTenantId() != null) {
+            throw new PlatformAdminRequiredException();
+        }
     }
-  }
 }

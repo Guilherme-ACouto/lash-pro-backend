@@ -28,126 +28,133 @@ import org.springframework.data.domain.PageRequest;
 @DisplayName("Clientes — integração")
 class ClientITest extends AbstractIntegrationTest {
 
-  @Autowired CreateClientUseCase createClientUseCase;
-  @Autowired UpdateClientUseCase updateClientUseCase;
-  @Autowired GetClientUseCase getClientUseCase;
-  @Autowired ListClientsUseCase listClientsUseCase;
-  @Autowired DeleteClientUseCase deleteClientUseCase;
-  @Autowired DeactivateClientUseCase deactivateClientUseCase;
+    @Autowired
+    CreateClientUseCase createClientUseCase;
 
-  @MockBean ClientAppointmentPort clientAppointmentPort;
+    @Autowired
+    UpdateClientUseCase updateClientUseCase;
 
-  @BeforeEach
-  void setUpAppointmentPortStub() {
-    given(clientAppointmentPort.findFutureActiveByClientId(any(), any()))
-        .willReturn(Collections.emptyList());
-  }
+    @Autowired
+    GetClientUseCase getClientUseCase;
 
-  private CreateClientUseCase.ClientResult createClient(String name, String phone) {
-    return createClientUseCase.execute(
-        new CreateClientUseCase.CreateClientCommand(name, phone, null, null, null));
-  }
+    @Autowired
+    ListClientsUseCase listClientsUseCase;
 
-  @Test
-  @DisplayName("deve criar, buscar, atualizar e excluir um cliente com sucesso")
-  void createFindUpdateDelete_fullCrudFlow() {
-    String phone = uniquePhone();
+    @Autowired
+    DeleteClientUseCase deleteClientUseCase;
 
-    CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
-    UUID id = created.id();
+    @Autowired
+    DeactivateClientUseCase deactivateClientUseCase;
 
-    assertThat(created.name()).isEqualTo("Ana Lima");
-    assertThat(created.active()).isTrue();
+    @MockBean
+    ClientAppointmentPort clientAppointmentPort;
 
-    CreateClientUseCase.ClientResult found = getClientUseCase.execute(id);
-    assertThat(found.name()).isEqualTo("Ana Lima");
-    assertThat(found.phone()).isEqualTo(phone);
+    @BeforeEach
+    void setUpAppointmentPortStub() {
+        given(clientAppointmentPort.findFutureActiveByClientId(any(), any())).willReturn(Collections.emptyList());
+    }
 
-    updateClientUseCase.execute(
-        id, new UpdateClientUseCase.UpdateClientCommand("Ana Costa", phone, null, null, null));
+    private CreateClientUseCase.ClientResult createClient(String name, String phone) {
+        return createClientUseCase.execute(new CreateClientUseCase.CreateClientCommand(name, phone, null, null, null));
+    }
 
-    CreateClientUseCase.ClientResult updated = getClientUseCase.execute(id);
-    assertThat(updated.name()).isEqualTo("Ana Costa");
+    @Test
+    @DisplayName("deve criar, buscar, atualizar e excluir um cliente com sucesso")
+    void createFindUpdateDelete_fullCrudFlow() {
+        String phone = uniquePhone();
 
-    deleteClientUseCase.execute(id);
+        CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
+        UUID id = created.id();
 
-    assertThatThrownBy(() -> getClientUseCase.execute(id))
-        .isInstanceOf(ClientNotFoundException.class);
-  }
+        assertThat(created.name()).isEqualTo("Ana Lima");
+        assertThat(created.active()).isTrue();
 
-  @Test
-  @DisplayName("deve lançar ClientAlreadyExistsException ao cadastrar telefone duplicado")
-  void create_withDuplicatePhone_throwsClientAlreadyExistsException() {
-    String phone = uniquePhone();
-    createClient("Ana Lima", phone);
+        CreateClientUseCase.ClientResult found = getClientUseCase.execute(id);
+        assertThat(found.name()).isEqualTo("Ana Lima");
+        assertThat(found.phone()).isEqualTo(phone);
 
-    assertThatThrownBy(() -> createClient("Beatriz Costa", phone))
-        .isInstanceOf(ClientAlreadyExistsException.class);
-  }
+        updateClientUseCase.execute(
+                id, new UpdateClientUseCase.UpdateClientCommand("Ana Costa", phone, null, null, null));
 
-  @Test
-  @DisplayName("deve persistir active=false no banco após desativar o cliente")
-  void deactivate_persistsActiveFalseInDatabase() {
-    String phone = uniquePhone();
-    CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
-    UUID id = created.id();
+        CreateClientUseCase.ClientResult updated = getClientUseCase.execute(id);
+        assertThat(updated.name()).isEqualTo("Ana Costa");
 
-    deactivateClientUseCase.deactivate(id, false);
+        deleteClientUseCase.execute(id);
 
-    CreateClientUseCase.ClientResult result = getClientUseCase.execute(id);
-    assertThat(result.active()).isFalse();
-  }
+        assertThatThrownBy(() -> getClientUseCase.execute(id)).isInstanceOf(ClientNotFoundException.class);
+    }
 
-  @Test
-  @DisplayName("deve persistir active=true no banco após reativar o cliente")
-  void reactivate_persistsActiveTrueInDatabase() {
-    String phone = uniquePhone();
-    CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
-    UUID id = created.id();
+    @Test
+    @DisplayName("deve lançar ClientAlreadyExistsException ao cadastrar telefone duplicado")
+    void create_withDuplicatePhone_throwsClientAlreadyExistsException() {
+        String phone = uniquePhone();
+        createClient("Ana Lima", phone);
 
-    deactivateClientUseCase.deactivate(id, false);
-    deactivateClientUseCase.reactivate(id);
+        assertThatThrownBy(() -> createClient("Beatriz Costa", phone)).isInstanceOf(ClientAlreadyExistsException.class);
+    }
 
-    CreateClientUseCase.ClientResult result = getClientUseCase.execute(id);
-    assertThat(result.active()).isTrue();
-  }
+    @Test
+    @DisplayName("deve persistir active=false no banco após desativar o cliente")
+    void deactivate_persistsActiveFalseInDatabase() {
+        String phone = uniquePhone();
+        CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
+        UUID id = created.id();
 
-  @Test
-  @DisplayName("deve retornar apenas clientes que correspondem ao texto de busca")
-  void listBySearch_returnsOnlyMatchingClients() {
-    String phoneAna = uniquePhone();
-    String phoneBea = uniquePhone();
-    createClient("Ana Lima", phoneAna);
-    createClient("Beatriz Costa", phoneBea);
+        deactivateClientUseCase.deactivate(id, false);
 
-    Page<CreateClientUseCase.ClientResult> page =
-        listClientsUseCase.execute("Ana Lima", null, PageRequest.of(0, 10));
+        CreateClientUseCase.ClientResult result = getClientUseCase.execute(id);
+        assertThat(result.active()).isFalse();
+    }
 
-    assertThat(page.getContent())
-        .isNotEmpty()
-        .allSatisfy(c -> assertThat(c.name()).containsIgnoringCase("Ana Lima"));
-  }
+    @Test
+    @DisplayName("deve persistir active=true no banco após reativar o cliente")
+    void reactivate_persistsActiveTrueInDatabase() {
+        String phone = uniquePhone();
+        CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
+        UUID id = created.id();
 
-  @Test
-  @DisplayName("deve retornar apenas clientes inativos ao filtrar por active=false")
-  void listByActiveFilter_returnsOnlyInactiveClients() {
-    String phoneAtivo = uniquePhone();
-    String phoneInativo = uniquePhone();
+        deactivateClientUseCase.deactivate(id, false);
+        deactivateClientUseCase.reactivate(id);
 
-    CreateClientUseCase.ClientResult ativo = createClient("Cliente Ativo", phoneAtivo);
-    CreateClientUseCase.ClientResult inativo = createClient("Cliente Inativo", phoneInativo);
-    deactivateClientUseCase.deactivate(inativo.id(), false);
+        CreateClientUseCase.ClientResult result = getClientUseCase.execute(id);
+        assertThat(result.active()).isTrue();
+    }
 
-    Page<CreateClientUseCase.ClientResult> page =
-        listClientsUseCase.execute("", false, PageRequest.of(0, 50));
+    @Test
+    @DisplayName("deve retornar apenas clientes que correspondem ao texto de busca")
+    void listBySearch_returnsOnlyMatchingClients() {
+        String phoneAna = uniquePhone();
+        String phoneBea = uniquePhone();
+        createClient("Ana Lima", phoneAna);
+        createClient("Beatriz Costa", phoneBea);
 
-    assertThat(page.getContent())
-        .extracting(CreateClientUseCase.ClientResult::id)
-        .contains(inativo.id())
-        .doesNotContain(ativo.id());
-  }
+        Page<CreateClientUseCase.ClientResult> page =
+                listClientsUseCase.execute("Ana Lima", null, PageRequest.of(0, 10));
 
-  private String uniquePhone() {
-    return "119" + (System.nanoTime() % 100_000_000L);
-  }
+        assertThat(page.getContent())
+                .isNotEmpty()
+                .allSatisfy(c -> assertThat(c.name()).containsIgnoringCase("Ana Lima"));
+    }
+
+    @Test
+    @DisplayName("deve retornar apenas clientes inativos ao filtrar por active=false")
+    void listByActiveFilter_returnsOnlyInactiveClients() {
+        String phoneAtivo = uniquePhone();
+        String phoneInativo = uniquePhone();
+
+        CreateClientUseCase.ClientResult ativo = createClient("Cliente Ativo", phoneAtivo);
+        CreateClientUseCase.ClientResult inativo = createClient("Cliente Inativo", phoneInativo);
+        deactivateClientUseCase.deactivate(inativo.id(), false);
+
+        Page<CreateClientUseCase.ClientResult> page = listClientsUseCase.execute("", false, PageRequest.of(0, 50));
+
+        assertThat(page.getContent())
+                .extracting(CreateClientUseCase.ClientResult::id)
+                .contains(inativo.id())
+                .doesNotContain(ativo.id());
+    }
+
+    private String uniquePhone() {
+        return "119" + (System.nanoTime() % 100_000_000L);
+    }
 }

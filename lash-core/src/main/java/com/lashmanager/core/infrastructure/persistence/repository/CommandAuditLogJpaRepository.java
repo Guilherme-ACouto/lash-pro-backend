@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommandAuditLogJpaRepository extends JpaRepository<CommandAuditLogEntity, UUID> {
-  boolean existsByCommandClass(String commandClass);
+    boolean existsByCommandClass(String commandClass);
 
-  Optional<CommandAuditLogEntity> findTopByCommandClassOrderByExecutedAtDesc(String commandClass);
+    Optional<CommandAuditLogEntity> findTopByCommandClassOrderByExecutedAtDesc(String commandClass);
 }

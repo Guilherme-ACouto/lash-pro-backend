@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
  * do refactor-backend).
  */
 public interface ClientQueryRepository {
-  Optional<Client> findById(UUID id);
+    Optional<Client> findById(UUID id);
 
-  Page<Client> findAll(String search, Boolean active, Pageable pageable);
+    Page<Client> findAll(String search, Boolean active, Pageable pageable);
 }

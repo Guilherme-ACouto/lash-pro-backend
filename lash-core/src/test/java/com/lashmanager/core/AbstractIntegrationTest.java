@@ -26,21 +26,22 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 public abstract class AbstractIntegrationTest {
 
-  protected static final UUID TEST_TENANT_ID =
-      UUID.fromString("00000000-0000-0000-0000-000000000001");
+    protected static final UUID TEST_TENANT_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
-  @Autowired private SchemaProvisionerPort schemaProvisionerPort;
+    @Autowired
+    private SchemaProvisionerPort schemaProvisionerPort;
 
-  @Autowired private TenantSchemaNaming tenantSchemaNaming;
+    @Autowired
+    private TenantSchemaNaming tenantSchemaNaming;
 
-  @BeforeEach
-  void setUpTenantSchema() {
-    schemaProvisionerPort.provision(TEST_TENANT_ID);
-    TenantContext.setCurrentTenant(tenantSchemaNaming.schemaNameFor(TEST_TENANT_ID));
-  }
+    @BeforeEach
+    void setUpTenantSchema() {
+        schemaProvisionerPort.provision(TEST_TENANT_ID);
+        TenantContext.setCurrentTenant(tenantSchemaNaming.schemaNameFor(TEST_TENANT_ID));
+    }
 
-  @AfterEach
-  void clearTenantSchema() {
-    TenantContext.clear();
-  }
+    @AfterEach
+    void clearTenantSchema() {
+        TenantContext.clear();
+    }
 }

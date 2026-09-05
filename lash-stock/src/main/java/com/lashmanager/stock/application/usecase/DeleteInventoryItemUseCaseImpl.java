@@ -13,17 +13,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteInventoryItemUseCaseImpl implements DeleteInventoryItemUseCase {
 
-  private final InventoryItemRepository itemRepository;
-  private final InventoryMovementRepository movementRepository;
+    private final InventoryItemRepository itemRepository;
+    private final InventoryMovementRepository movementRepository;
 
-  @Override
-  public void execute(UUID id) {
-    if (itemRepository.findById(id).isEmpty()) {
-      throw new InventoryItemNotFoundException(id);
+    @Override
+    public void execute(UUID id) {
+        if (itemRepository.findById(id).isEmpty()) {
+            throw new InventoryItemNotFoundException(id);
+        }
+        if (movementRepository.existsByItemId(id)) {
+            throw new InventoryItemHasMovementsException();
+        }
+        itemRepository.delete(id);
     }
-    if (movementRepository.existsByItemId(id)) {
-      throw new InventoryItemHasMovementsException();
-    }
-    itemRepository.delete(id);
-  }
 }

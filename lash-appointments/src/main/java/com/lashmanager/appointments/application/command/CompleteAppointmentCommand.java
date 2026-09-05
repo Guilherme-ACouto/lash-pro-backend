@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompleteAppointmentCommand extends AbstractCommand {
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  private String paymentMethod;
+    private String paymentMethod;
 }

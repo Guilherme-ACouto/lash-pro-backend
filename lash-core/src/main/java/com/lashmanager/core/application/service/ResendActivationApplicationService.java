@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ResendActivationApplicationService {
 
-  private final ResendActivationUseCase resendActivationUseCase;
+    private final ResendActivationUseCase resendActivationUseCase;
 
-  public void when(ResendActivationCommand command) {
-    resendActivationUseCase.execute(command.getEmail());
-  }
+    public void when(ResendActivationCommand command) {
+        resendActivationUseCase.execute(command.getEmail());
+    }
 }

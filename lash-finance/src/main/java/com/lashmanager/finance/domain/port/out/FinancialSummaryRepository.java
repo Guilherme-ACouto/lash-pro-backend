@@ -6,15 +6,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FinancialSummaryRepository {
-  BigDecimal sumIncomePaidInMonth(LocalDate monthStart, LocalDate monthEnd);
+    BigDecimal sumIncomePaidInMonth(LocalDate monthStart, LocalDate monthEnd);
 
-  BigDecimal sumIncomeTotalInMonth(LocalDate monthStart, LocalDate monthEnd);
+    BigDecimal sumIncomeTotalInMonth(LocalDate monthStart, LocalDate monthEnd);
 
-  BigDecimal sumExpensePaidInMonth(LocalDate monthStart, LocalDate monthEnd);
+    BigDecimal sumExpensePaidInMonth(LocalDate monthStart, LocalDate monthEnd);
 
-  BigDecimal sumExpenseTotalInMonth(LocalDate monthStart, LocalDate monthEnd);
+    BigDecimal sumExpenseTotalInMonth(LocalDate monthStart, LocalDate monthEnd);
 
-  BigDecimal sumAllTimePaidBalance();
+    BigDecimal sumAllTimePaidBalance();
 
-  List<MonthlyFinancialStat> last6MonthsStats();
+    List<MonthlyFinancialStat> last6MonthsStats();
 }

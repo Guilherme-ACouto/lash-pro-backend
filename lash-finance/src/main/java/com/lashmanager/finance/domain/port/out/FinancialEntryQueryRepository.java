@@ -13,13 +13,8 @@ import org.springframework.data.domain.Pageable;
  */
 public interface FinancialEntryQueryRepository {
 
-  Page<FinancialEntryRepository.FinancialEntryWithCounterpart> listWithFilters(
-      LocalDate from,
-      LocalDate to,
-      String category,
-      String expenseType,
-      String type,
-      Pageable pageable);
+    Page<FinancialEntryRepository.FinancialEntryWithCounterpart> listWithFilters(
+            LocalDate from, LocalDate to, String category, String expenseType, String type, Pageable pageable);
 
-  List<String> findDistinctCategories();
+    List<String> findDistinctCategories();
 }

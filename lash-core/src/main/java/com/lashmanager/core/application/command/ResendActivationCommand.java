@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResendActivationCommand extends AbstractCommand {
 
-  @NotBlank(message = "Email é obrigatório")
-  @Email(message = "Email inválido")
-  private String email;
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
+    private String email;
 }

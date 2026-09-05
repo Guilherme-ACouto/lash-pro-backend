@@ -18,33 +18,31 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetAppointmentUseCaseImpl implements GetAppointmentUseCase {
 
-  private final AppointmentQueryRepository appointmentQueryRepository;
-  private final ClientRepository clientRepository;
-  private final ServiceRepository serviceRepository;
+    private final AppointmentQueryRepository appointmentQueryRepository;
+    private final ClientRepository clientRepository;
+    private final ServiceRepository serviceRepository;
 
-  @Override
-  public CreateAppointmentUseCase.AppointmentResult execute(UUID id) {
-    Appointment appointment =
-        appointmentQueryRepository
-            .findById(id)
-            .orElseThrow(() -> new AppointmentNotFoundException(id));
+    @Override
+    public CreateAppointmentUseCase.AppointmentResult execute(UUID id) {
+        Appointment appointment =
+                appointmentQueryRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException(id));
 
-    String clientName =
-        appointment.getClientId() != null
-            ? clientRepository.findById(appointment.getClientId()).map(Client::getName).orElse("—")
-            : "—";
+        String clientName = appointment.getClientId() != null
+                ? clientRepository
+                        .findById(appointment.getClientId())
+                        .map(Client::getName)
+                        .orElse("—")
+                : "—";
 
-    BigDecimal servicePrice =
-        serviceRepository
-            .findById(appointment.getServiceId())
-            .map(ServiceOffering::getPrice)
-            .orElse(BigDecimal.ZERO);
-    String serviceName =
-        serviceRepository
-            .findById(appointment.getServiceId())
-            .map(ServiceOffering::getName)
-            .orElse("—");
+        BigDecimal servicePrice = serviceRepository
+                .findById(appointment.getServiceId())
+                .map(ServiceOffering::getPrice)
+                .orElse(BigDecimal.ZERO);
+        String serviceName = serviceRepository
+                .findById(appointment.getServiceId())
+                .map(ServiceOffering::getName)
+                .orElse("—");
 
-    return AppointmentUseCaseMapper.toResult(appointment, clientName, serviceName, servicePrice);
-  }
+        return AppointmentUseCaseMapper.toResult(appointment, clientName, serviceName, servicePrice);
+    }
 }

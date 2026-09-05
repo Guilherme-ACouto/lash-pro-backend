@@ -37,17 +37,9 @@ jobs:
           cache: maven
 
       - name: Limpar artefatos internos do cache
-        # Módulos com.lashmanager.* nunca devem vir do cache do Maven — eles são
-        # resolvidos direto do reactor a cada build. Um cache restaurado com uma
-        # cópia velha/incompleta desses artefatos quebra a resolução de dependências.
         run: rm -rf ~/.m2/repository/com/lashmanager
 
       - name: Build (instala módulos internos no repositório local)
-        # Em vez de depender da resolução "ao vivo" do reactor entre módulos
-        # (que tem se mostrado instável no Maven 3.9.x nesse runner), instalamos
-        # os .jar de cada módulo com.lashmanager.* no ~/.m2 de verdade. Assim os
-        # próximos comandos resolvem as dependências internas normalmente,
-        # como qualquer outra dependência publicada.
         run: mvn -B install -DskipTests
 
       - name: Verificar formatação (Spotless)
