@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface ActivateAccountUseCase {
 
-  record ActivationResult(String email, UUID tenantId) {}
+    record ActivationResult(String email, UUID tenantId) {}
 
-  ActivationResult execute(String activationKey);
+    ActivationResult execute(String activationKey);
 }

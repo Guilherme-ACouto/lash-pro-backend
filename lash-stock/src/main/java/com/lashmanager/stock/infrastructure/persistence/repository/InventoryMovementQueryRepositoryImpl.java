@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class InventoryMovementQueryRepositoryImpl implements InventoryMovementQueryRepository {
 
-  private final InventoryMovementJpaRepository jpaRepository;
-  private final InventoryMovementMapper mapper;
+    private final InventoryMovementJpaRepository jpaRepository;
+    private final InventoryMovementMapper mapper;
 
-  @Override
-  public Page<InventoryMovement> findByItemId(UUID itemId, Pageable pageable) {
-    return jpaRepository.findByItemId(itemId, pageable).map(mapper::toDomain);
-  }
+    @Override
+    public Page<InventoryMovement> findByItemId(UUID itemId, Pageable pageable) {
+        return jpaRepository.findByItemId(itemId, pageable).map(mapper::toDomain);
+    }
 }

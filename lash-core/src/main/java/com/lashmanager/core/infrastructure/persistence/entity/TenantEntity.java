@@ -14,24 +14,26 @@ import lombok.*;
 @Builder
 public class TenantEntity {
 
-  @Id
-  @Column(name = "id", updatable = false, nullable = false)
-  private UUID id;
+    @Id
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
-  @Column(name = "name", nullable = false)
-  private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-  @Column(name = "schema_name", nullable = false, unique = true)
-  private String schemaName;
+    @Column(name = "schema_name", nullable = false, unique = true)
+    private String schemaName;
 
-  @Column(name = "active", nullable = false)
-  private boolean active;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-  @PrePersist
-  void prePersist() {
-    if (createdAt == null) createdAt = LocalDateTime.now();
-  }
+    @PrePersist
+    void prePersist() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
 }

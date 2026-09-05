@@ -12,8 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface FinancialEntryJpaRepository extends JpaRepository<FinancialEntryEntity, UUID> {
 
-  @Query(
-      """
+    @Query("""
             SELECT f FROM FinancialEntryEntity f
             WHERE (:type IS NULL OR f.type = :type)
             AND (:expenseType IS NULL OR f.expenseType = :expenseType)
@@ -21,17 +20,16 @@ public interface FinancialEntryJpaRepository extends JpaRepository<FinancialEntr
             AND (:category IS NULL OR f.category = :category)
             ORDER BY f.dueDate DESC
             """)
-  Page<FinancialEntryEntity> findWithFilters(
-      @Param("from") LocalDate from,
-      @Param("to") LocalDate to,
-      @Param("category") String category,
-      @Param("type") String type,
-      @Param("expenseType") String expenseType,
-      Pageable pageable);
+    Page<FinancialEntryEntity> findWithFilters(
+            @Param("from") LocalDate from,
+            @Param("to") LocalDate to,
+            @Param("category") String category,
+            @Param("type") String type,
+            @Param("expenseType") String expenseType,
+            Pageable pageable);
 
-  boolean existsByIdAndAppointmentIdIsNull(UUID id);
+    boolean existsByIdAndAppointmentIdIsNull(UUID id);
 
-  @Query(
-      "SELECT DISTINCT f.category FROM FinancialEntryEntity f WHERE f.category IS NOT NULL ORDER BY f.category")
-  List<String> findDistinctCategories();
+    @Query("SELECT DISTINCT f.category FROM FinancialEntryEntity f WHERE f.category IS NOT NULL ORDER BY f.category")
+    List<String> findDistinctCategories();
 }

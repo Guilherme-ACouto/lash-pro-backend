@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  * ServiceJpaRepository/ServiceMapper por baixo.
  */
 public interface ServiceQueryRepository {
-  Optional<ServiceOffering> findById(UUID id);
+    Optional<ServiceOffering> findById(UUID id);
 
-  Page<ServiceOffering> findAll(String search, Boolean active, Pageable pageable);
+    Page<ServiceOffering> findAll(String search, Boolean active, Pageable pageable);
 }

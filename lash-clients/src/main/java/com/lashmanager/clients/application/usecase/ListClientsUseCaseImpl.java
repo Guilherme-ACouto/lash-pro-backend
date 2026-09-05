@@ -12,14 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ListClientsUseCaseImpl implements ListClientsUseCase {
 
-  private final ClientQueryRepository clientQueryRepository;
+    private final ClientQueryRepository clientQueryRepository;
 
-  @Override
-  public Page<CreateClientUseCase.ClientResult> execute(
-      String search, Boolean active, Pageable pageable) {
-    String normalizedSearch = search == null ? "" : search.trim();
-    return clientQueryRepository
-        .findAll(normalizedSearch, active, pageable)
-        .map(ClientUseCaseMapper::toResult);
-  }
+    @Override
+    public Page<CreateClientUseCase.ClientResult> execute(String search, Boolean active, Pageable pageable) {
+        String normalizedSearch = search == null ? "" : search.trim();
+        return clientQueryRepository.findAll(normalizedSearch, active, pageable).map(ClientUseCaseMapper::toResult);
+    }
 }

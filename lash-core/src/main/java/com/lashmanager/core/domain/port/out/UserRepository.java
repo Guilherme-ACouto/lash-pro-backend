@@ -4,13 +4,13 @@ import com.lashmanager.core.domain.model.User;
 import java.util.Optional;
 
 public interface UserRepository {
-  Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-  Optional<User> findByPasswordResetToken(String token);
+    Optional<User> findByPasswordResetToken(String token);
 
-  Optional<User> findByActivationKey(String activationKey);
+    Optional<User> findByActivationKey(String activationKey);
 
-  User save(User user);
+    User save(User user);
 
-  boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 }

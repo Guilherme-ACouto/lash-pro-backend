@@ -11,9 +11,15 @@ import lombok.Getter;
  * cada Command manualmente.
  */
 @Getter
-public abstract class AbstractCommand {
+public class AbstractCommand {
 
-  @JsonIgnore private final UUID commandId = UUID.randomUUID();
+    protected AbstractCommand() {
+        // vazio: apenas restringe a instanciação direta, use uma subclasse concreta
+    }
 
-  @JsonIgnore private final LocalDateTime issuedAt = LocalDateTime.now();
+    @JsonIgnore
+    private final UUID commandId = UUID.randomUUID();
+
+    @JsonIgnore
+    private final LocalDateTime issuedAt = LocalDateTime.now();
 }

@@ -12,26 +12,26 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class FinancialEntryRepositoryImpl implements FinancialEntryRepository {
 
-  private final FinancialEntryJpaRepository jpaRepository;
-  private final FinancialEntryPersistenceMapper mapper;
+    private final FinancialEntryJpaRepository jpaRepository;
+    private final FinancialEntryPersistenceMapper mapper;
 
-  @Override
-  public FinancialEntry save(FinancialEntry entry) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(entry)));
-  }
+    @Override
+    public FinancialEntry save(FinancialEntry entry) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(entry)));
+    }
 
-  @Override
-  public Optional<FinancialEntry> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<FinancialEntry> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public void delete(UUID id) {
-    jpaRepository.deleteById(id);
-  }
+    @Override
+    public void delete(UUID id) {
+        jpaRepository.deleteById(id);
+    }
 
-  @Override
-  public boolean existsByIdAndAppointmentIdIsNull(UUID id) {
-    return jpaRepository.existsByIdAndAppointmentIdIsNull(id);
-  }
+    @Override
+    public boolean existsByIdAndAppointmentIdIsNull(UUID id) {
+        return jpaRepository.existsByIdAndAppointmentIdIsNull(id);
+    }
 }

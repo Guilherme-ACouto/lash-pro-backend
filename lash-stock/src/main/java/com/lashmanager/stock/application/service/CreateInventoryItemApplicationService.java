@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateInventoryItemApplicationService {
 
-  private final CreateInventoryItemUseCase createInventoryItemUseCase;
+    private final CreateInventoryItemUseCase createInventoryItemUseCase;
 
-  public CreateInventoryItemUseCase.InventoryItemResult when(CreateInventoryItemCommand command) {
-    return createInventoryItemUseCase.execute(command.toDomainCommand());
-  }
+    public CreateInventoryItemUseCase.InventoryItemResult when(CreateInventoryItemCommand command) {
+        return createInventoryItemUseCase.execute(command.toDomainCommand());
+    }
 }

@@ -19,41 +19,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateAppointmentUseCaseImpl implements UpdateAppointmentUseCase {
 
-  private final AppointmentRepository appointmentRepository;
-  private final ClientRepository clientRepository;
-  private final ServiceRepository serviceRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final ClientRepository clientRepository;
+    private final ServiceRepository serviceRepository;
 
-  @Override
-  public CreateAppointmentUseCase.AppointmentResult execute(
-      UUID id, UpdateAppointmentCommand command) {
-    Appointment existing =
-        appointmentRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException(id));
+    @Override
+    public CreateAppointmentUseCase.AppointmentResult execute(UUID id, UpdateAppointmentCommand command) {
+        Appointment existing =
+                appointmentRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException(id));
 
-    Client client =
-        clientRepository
-            .findById(command.clientId())
-            .orElseThrow(
-                () -> new BusinessException("Cliente não encontrado: " + command.clientId()));
+        Client client = clientRepository
+                .findById(command.clientId())
+                .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.clientId()));
 
-    ServiceOffering service =
-        serviceRepository
-            .findById(command.serviceId())
-            .orElseThrow(
-                () -> new BusinessException("Serviço não encontrado: " + command.serviceId()));
+        ServiceOffering service = serviceRepository
+                .findById(command.serviceId())
+                .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.serviceId()));
 
-    Appointment updated =
-        existing.toBuilder()
-            .clientId(command.clientId())
-            .serviceId(command.serviceId())
-            .scheduledDate(command.scheduledDate())
-            .scheduledTime(command.scheduledTime())
-            .durationMinutes(command.durationMinutes())
-            .notes(command.notes())
-            .updatedAt(LocalDateTime.now())
-            .build();
+        Appointment updated = existing.toBuilder()
+                .clientId(command.clientId())
+                .serviceId(command.serviceId())
+                .scheduledDate(command.scheduledDate())
+                .scheduledTime(command.scheduledTime())
+                .durationMinutes(command.durationMinutes())
+                .notes(command.notes())
+                .updatedAt(LocalDateTime.now())
+                .build();
 
-    Appointment saved = appointmentRepository.save(updated);
-    return AppointmentUseCaseMapper.toResult(
-        saved, client.getName(), service.getName(), service.getPrice());
-  }
+        Appointment saved = appointmentRepository.save(updated);
+        return AppointmentUseCaseMapper.toResult(saved, client.getName(), service.getName(), service.getPrice());
+    }
 }

@@ -10,8 +10,8 @@ import com.lashmanager.fichas.application.service.CreateFichaApplicationService;
 import com.lashmanager.fichas.application.service.LashMappingApplicationService;
 import com.lashmanager.fichas.application.service.UpdateFichaApplicationService;
 import com.lashmanager.fichas.domain.port.in.*;
-import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase.*;
-import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase.*;
+import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase.FichaResult;
+import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase.LashMappingResult;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -27,20 +27,18 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("isAuthenticated()")
 public class FichaController {
 
-  private final CreateFichaApplicationService createFichaApplicationService;
-  private final UpdateFichaApplicationService updateFichaApplicationService;
-  private final LashMappingApplicationService lashMappingApplicationService;
-  private final GetFichaUseCase getFichaUseCase;
-  private final ListFichasUseCase listFichasUseCase;
-  private final ListLashMappingsUseCase listLashMappingsUseCase;
+    private final CreateFichaApplicationService createFichaApplicationService;
+    private final UpdateFichaApplicationService updateFichaApplicationService;
+    private final LashMappingApplicationService lashMappingApplicationService;
+    private final GetFichaUseCase getFichaUseCase;
+    private final ListFichasUseCase listFichasUseCase;
+    private final ListLashMappingsUseCase listLashMappingsUseCase;
 
-  // ── Fichas ──────────────────────────────────────────────────────────────
+    // ── Fichas ──────────────────────────────────────────────────────────────
 
-  @PostMapping
-  public ResponseEntity<FichaResult> create(@Valid @RequestBody CreateFichaRequest req) {
-    var result =
-        createFichaApplicationService.when(
-            new CreateFichaCommand(
+    @PostMapping
+    public ResponseEntity<FichaResult> create(@Valid @RequestBody CreateFichaRequest req) {
+        var result = createFichaApplicationService.when(new CreateFichaCommand(
                 req.clientId(),
                 req.date(),
                 req.skinType(),
@@ -52,15 +50,12 @@ public class FichaController {
                 req.hasSensitivities(),
                 req.sensitivitiesDescription(),
                 req.observations()));
-    return ResponseEntity.status(201).body(result);
-  }
+        return ResponseEntity.status(201).body(result);
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<FichaResult> update(
-      @PathVariable UUID id, @Valid @RequestBody UpdateFichaRequest req) {
-    var result =
-        updateFichaApplicationService.when(
-            new UpdateFichaCommand(
+    @PutMapping("/{id}")
+    public ResponseEntity<FichaResult> update(@PathVariable UUID id, @Valid @RequestBody UpdateFichaRequest req) {
+        var result = updateFichaApplicationService.when(new UpdateFichaCommand(
                 id,
                 req.date(),
                 req.skinType(),
@@ -72,34 +67,30 @@ public class FichaController {
                 req.hasSensitivities(),
                 req.sensitivitiesDescription(),
                 req.observations()));
-    return ResponseEntity.ok(result);
-  }
+        return ResponseEntity.ok(result);
+    }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<FichaResult> get(@PathVariable UUID id) {
-    return ResponseEntity.ok(getFichaUseCase.execute(id));
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<FichaResult> get(@PathVariable UUID id) {
+        return ResponseEntity.ok(getFichaUseCase.execute(id));
+    }
 
-  @GetMapping("/client/{clientId}")
-  public ResponseEntity<FichaResult> getByClient(@PathVariable UUID clientId) {
-    return ResponseEntity.ok(getFichaUseCase.executeByClient(clientId));
-  }
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<FichaResult> getByClient(@PathVariable UUID clientId) {
+        return ResponseEntity.ok(getFichaUseCase.executeByClient(clientId));
+    }
 
-  @GetMapping
-  public ResponseEntity<Page<FichaResult>> list(
-      @RequestParam(required = false) String search, Pageable pageable) {
-    return ResponseEntity.ok(
-        listFichasUseCase.execute(new ListFichasUseCase.ListFichasQuery(search), pageable));
-  }
+    @GetMapping
+    public ResponseEntity<Page<FichaResult>> list(@RequestParam(required = false) String search, Pageable pageable) {
+        return ResponseEntity.ok(listFichasUseCase.execute(new ListFichasUseCase.ListFichasQuery(search), pageable));
+    }
 
-  // ── Mapeamentos ──────────────────────────────────────────────────────────
+    // ── Mapeamentos ──────────────────────────────────────────────────────────
 
-  @PostMapping("/{fichaId}/mappings")
-  public ResponseEntity<LashMappingResult> createMapping(
-      @PathVariable UUID fichaId, @Valid @RequestBody CreateLashMappingRequest req) {
-    var result =
-        lashMappingApplicationService.when(
-            new CreateLashMappingCommand(
+    @PostMapping("/{fichaId}/mappings")
+    public ResponseEntity<LashMappingResult> createMapping(
+            @PathVariable UUID fichaId, @Valid @RequestBody CreateLashMappingRequest req) {
+        var result = lashMappingApplicationService.when(new CreateLashMappingCommand(
                 fichaId,
                 req.appointmentId(),
                 req.date(),
@@ -110,17 +101,15 @@ public class FichaController {
                 req.rightEyeNotes(),
                 req.leftEyeNotes(),
                 req.notes()));
-    return ResponseEntity.status(201).body(result);
-  }
+        return ResponseEntity.status(201).body(result);
+    }
 
-  @PutMapping("/{fichaId}/mappings/{mappingId}")
-  public ResponseEntity<LashMappingResult> updateMapping(
-      @PathVariable UUID fichaId,
-      @PathVariable UUID mappingId,
-      @Valid @RequestBody UpdateLashMappingRequest req) {
-    var result =
-        lashMappingApplicationService.when(
-            new UpdateLashMappingCommand(
+    @PutMapping("/{fichaId}/mappings/{mappingId}")
+    public ResponseEntity<LashMappingResult> updateMapping(
+            @PathVariable UUID fichaId,
+            @PathVariable UUID mappingId,
+            @Valid @RequestBody UpdateLashMappingRequest req) {
+        var result = lashMappingApplicationService.when(new UpdateLashMappingCommand(
                 mappingId,
                 req.date(),
                 req.technique(),
@@ -130,19 +119,17 @@ public class FichaController {
                 req.rightEyeNotes(),
                 req.leftEyeNotes(),
                 req.notes()));
-    return ResponseEntity.ok(result);
-  }
+        return ResponseEntity.ok(result);
+    }
 
-  @GetMapping("/{fichaId}/mappings")
-  public ResponseEntity<Page<LashMappingResult>> listMappings(
-      @PathVariable UUID fichaId, Pageable pageable) {
-    return ResponseEntity.ok(listLashMappingsUseCase.execute(fichaId, pageable));
-  }
+    @GetMapping("/{fichaId}/mappings")
+    public ResponseEntity<Page<LashMappingResult>> listMappings(@PathVariable UUID fichaId, Pageable pageable) {
+        return ResponseEntity.ok(listLashMappingsUseCase.execute(fichaId, pageable));
+    }
 
-  @DeleteMapping("/{fichaId}/mappings/{mappingId}")
-  public ResponseEntity<Void> deleteMapping(
-      @PathVariable UUID fichaId, @PathVariable UUID mappingId) {
-    lashMappingApplicationService.when(new DeleteLashMappingCommand(mappingId));
-    return ResponseEntity.noContent().build();
-  }
+    @DeleteMapping("/{fichaId}/mappings/{mappingId}")
+    public ResponseEntity<Void> deleteMapping(@PathVariable UUID fichaId, @PathVariable UUID mappingId) {
+        lashMappingApplicationService.when(new DeleteLashMappingCommand(mappingId));
+        return ResponseEntity.noContent().build();
+    }
 }

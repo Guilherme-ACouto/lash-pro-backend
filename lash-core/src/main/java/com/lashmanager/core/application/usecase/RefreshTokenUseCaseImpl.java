@@ -14,25 +14,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
 
-  private final TokenPort tokenPort;
-  private final UserRepository userRepository;
+    private final TokenPort tokenPort;
+    private final UserRepository userRepository;
 
-  @Override
-  public RefreshResponse execute(String refreshToken) {
-    if (!tokenPort.isRefreshTokenValid(refreshToken)) {
-      throw new TokenExpiredException();
+    @Override
+    public RefreshResponse execute(String refreshToken) {
+        if (!tokenPort.isRefreshTokenValid(refreshToken)) {
+            throw new TokenExpiredException();
+        }
+
+        String email = tokenPort.extractEmail(refreshToken);
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+        if (!user.isActive()) {
+            throw new InvalidCredentialsException();
+        }
+
+        String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
+        String newAccessToken =
+                tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
+        return new RefreshResponse(newAccessToken);
     }
-
-    String email = tokenPort.extractEmail(refreshToken);
-    User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-
-    if (!user.isActive()) {
-      throw new InvalidCredentialsException();
-    }
-
-    String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
-    String newAccessToken =
-        tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
-    return new RefreshResponse(newAccessToken);
-  }
 }

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class TenantSchemaNaming {
 
-  private final String schemaPrefix;
+    private final String schemaPrefix;
 
-  public TenantSchemaNaming(@Value("${app.tenant.schema-prefix:tenant_}") String schemaPrefix) {
-    this.schemaPrefix = schemaPrefix;
-  }
+    public TenantSchemaNaming(@Value("${app.tenant.schema-prefix:tenant_}") String schemaPrefix) {
+        this.schemaPrefix = schemaPrefix;
+    }
 
-  public String schemaNameFor(UUID tenantId) {
-    return schemaPrefix + tenantId.toString().replace("-", "");
-  }
+    public String schemaNameFor(UUID tenantId) {
+        return schemaPrefix + tenantId.toString().replace("-", "");
+    }
 }

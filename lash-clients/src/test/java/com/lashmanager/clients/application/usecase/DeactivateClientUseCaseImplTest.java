@@ -34,108 +34,101 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayName("Desativar e reativar cliente")
 class DeactivateClientUseCaseImplTest {
 
-  @Mock private ClientRepository clientRepository;
+    @Mock
+    private ClientRepository clientRepository;
 
-  @Mock private ClientAppointmentPort clientAppointmentPort;
+    @Mock
+    private ClientAppointmentPort clientAppointmentPort;
 
-  private DeactivateClientUseCaseImpl useCase;
-  private UUID clientId;
-  private Client activeClient;
+    private DeactivateClientUseCaseImpl useCase;
+    private UUID clientId;
+    private Client activeClient;
 
-  @BeforeEach
-  void setUp() {
-    useCase = new DeactivateClientUseCaseImpl(clientRepository, clientAppointmentPort);
-    clientId = UUID.randomUUID();
-    activeClient =
-        Client.builder()
-            .id(clientId)
-            .name("Ana Lima")
-            .phone("11999999999")
-            .active(true)
-            .createdAt(LocalDateTime.now())
-            .build();
-  }
+    @BeforeEach
+    void setUp() {
+        useCase = new DeactivateClientUseCaseImpl(clientRepository, clientAppointmentPort);
+        clientId = UUID.randomUUID();
+        activeClient = Client.builder()
+                .id(clientId)
+                .name("Ana Lima")
+                .phone("11999999999")
+                .active(true)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 
-  @Test
-  @DisplayName(
-      "deve salvar cliente com active=false quando não há agendamentos futuros e force=false")
-  void deactivate_withNoFutureAppointmentsAndForceFalse_savesWithActiveFalse() {
-    given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
-    given(clientAppointmentPort.findFutureActiveByClientId(any(UUID.class), any(LocalDate.class)))
-        .willReturn(Collections.emptyList());
-    willAnswer(inv -> inv.getArgument(0)).given(clientRepository).save(any(Client.class));
+    @Test
+    @DisplayName("deve salvar cliente com active=false quando não há agendamentos futuros e force=false")
+    void deactivate_withNoFutureAppointmentsAndForceFalse_savesWithActiveFalse() {
+        given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
+        given(clientAppointmentPort.findFutureActiveByClientId(any(UUID.class), any(LocalDate.class)))
+                .willReturn(Collections.emptyList());
+        willAnswer(inv -> inv.getArgument(0)).given(clientRepository).save(any(Client.class));
 
-    useCase.deactivate(clientId, false);
+        useCase.deactivate(clientId, false);
 
-    ArgumentCaptor<Client> captor = ArgumentCaptor.forClass(Client.class);
-    verify(clientRepository).save(captor.capture());
-    assertThat(captor.getValue().isActive()).isFalse();
-  }
+        ArgumentCaptor<Client> captor = ArgumentCaptor.forClass(Client.class);
+        verify(clientRepository).save(captor.capture());
+        assertThat(captor.getValue().isActive()).isFalse();
+    }
 
-  @Test
-  @DisplayName(
-      "deve lançar HasFutureAppointmentsException quando há agendamentos futuros e force=false")
-  void deactivate_withFutureAppointmentsAndForceFalse_throwsHasFutureAppointmentsException() {
-    AppointmentSummary summary =
-        new AppointmentSummary(
-            UUID.randomUUID().toString(),
-            LocalDate.now().plusDays(3),
-            LocalTime.of(10, 0),
-            "Extensão de cílios");
-    given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
-    given(clientAppointmentPort.findFutureActiveByClientId(any(UUID.class), any(LocalDate.class)))
-        .willReturn(List.of(summary));
+    @Test
+    @DisplayName("deve lançar HasFutureAppointmentsException quando há agendamentos futuros e force=false")
+    void deactivate_withFutureAppointmentsAndForceFalse_throwsHasFutureAppointmentsException() {
+        AppointmentSummary summary = new AppointmentSummary(
+                UUID.randomUUID().toString(), LocalDate.now().plusDays(3), LocalTime.of(10, 0), "Extensão de cílios");
+        given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
+        given(clientAppointmentPort.findFutureActiveByClientId(any(UUID.class), any(LocalDate.class)))
+                .willReturn(List.of(summary));
 
-    assertThatThrownBy(() -> useCase.deactivate(clientId, false))
-        .isInstanceOf(HasFutureAppointmentsException.class);
+        assertThatThrownBy(() -> useCase.deactivate(clientId, false))
+                .isInstanceOf(HasFutureAppointmentsException.class);
 
-    then(clientRepository).should(never()).save(any());
-  }
+        then(clientRepository).should(never()).save(any());
+    }
 
-  @Test
-  @DisplayName("deve cancelar agendamentos futuros e desativar o cliente quando force=true")
-  void deactivate_withFutureAppointmentsAndForceTrue_ignoresAppointmentsAndSaves() {
-    given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
-    willAnswer(inv -> inv.getArgument(0)).given(clientRepository).save(any(Client.class));
+    @Test
+    @DisplayName("deve cancelar agendamentos futuros e desativar o cliente quando force=true")
+    void deactivate_withFutureAppointmentsAndForceTrue_ignoresAppointmentsAndSaves() {
+        given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
+        willAnswer(inv -> inv.getArgument(0)).given(clientRepository).save(any(Client.class));
 
-    useCase.deactivate(clientId, true);
+        useCase.deactivate(clientId, true);
 
-    then(clientAppointmentPort).should(never()).findFutureActiveByClientId(any(), any());
-    then(clientAppointmentPort).should().deleteFutureAppointmentsByClientId(any(), any());
+        then(clientAppointmentPort).should(never()).findFutureActiveByClientId(any(), any());
+        then(clientAppointmentPort).should().deleteFutureAppointmentsByClientId(any(), any());
 
-    ArgumentCaptor<Client> captor = ArgumentCaptor.forClass(Client.class);
-    verify(clientRepository).save(captor.capture());
-    assertThat(captor.getValue().isActive()).isFalse();
-  }
+        ArgumentCaptor<Client> captor = ArgumentCaptor.forClass(Client.class);
+        verify(clientRepository).save(captor.capture());
+        assertThat(captor.getValue().isActive()).isFalse();
+    }
 
-  @Test
-  @DisplayName("deve lançar ClientNotFoundException ao desativar quando o id não existe")
-  void deactivate_withUnknownId_throwsClientNotFoundException() {
-    given(clientRepository.findById(clientId)).willReturn(Optional.empty());
+    @Test
+    @DisplayName("deve lançar ClientNotFoundException ao desativar quando o id não existe")
+    void deactivate_withUnknownId_throwsClientNotFoundException() {
+        given(clientRepository.findById(clientId)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> useCase.deactivate(clientId, false))
-        .isInstanceOf(ClientNotFoundException.class);
-  }
+        assertThatThrownBy(() -> useCase.deactivate(clientId, false)).isInstanceOf(ClientNotFoundException.class);
+    }
 
-  @Test
-  @DisplayName("deve salvar cliente com active=true ao reativar")
-  void reactivate_withExistingClient_savesWithActiveTrue() {
-    given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
-    willAnswer(inv -> inv.getArgument(0)).given(clientRepository).save(any(Client.class));
+    @Test
+    @DisplayName("deve salvar cliente com active=true ao reativar")
+    void reactivate_withExistingClient_savesWithActiveTrue() {
+        given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
+        willAnswer(inv -> inv.getArgument(0)).given(clientRepository).save(any(Client.class));
 
-    useCase.reactivate(clientId);
+        useCase.reactivate(clientId);
 
-    ArgumentCaptor<Client> captor = ArgumentCaptor.forClass(Client.class);
-    verify(clientRepository).save(captor.capture());
-    assertThat(captor.getValue().isActive()).isTrue();
-  }
+        ArgumentCaptor<Client> captor = ArgumentCaptor.forClass(Client.class);
+        verify(clientRepository).save(captor.capture());
+        assertThat(captor.getValue().isActive()).isTrue();
+    }
 
-  @Test
-  @DisplayName("deve lançar ClientNotFoundException ao reativar quando o id não existe")
-  void reactivate_withUnknownId_throwsClientNotFoundException() {
-    given(clientRepository.findById(clientId)).willReturn(Optional.empty());
+    @Test
+    @DisplayName("deve lançar ClientNotFoundException ao reativar quando o id não existe")
+    void reactivate_withUnknownId_throwsClientNotFoundException() {
+        given(clientRepository.findById(clientId)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> useCase.reactivate(clientId))
-        .isInstanceOf(ClientNotFoundException.class);
-  }
+        assertThatThrownBy(() -> useCase.reactivate(clientId)).isInstanceOf(ClientNotFoundException.class);
+    }
 }

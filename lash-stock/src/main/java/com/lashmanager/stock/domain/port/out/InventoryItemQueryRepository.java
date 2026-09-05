@@ -11,8 +11,7 @@ import org.springframework.data.domain.Pageable;
  * mesmo InventoryItemJpaRepository/Mapper por baixo.
  */
 public interface InventoryItemQueryRepository {
-  Optional<InventoryItem> findById(UUID id);
+    Optional<InventoryItem> findById(UUID id);
 
-  Page<InventoryItem> listWithFilters(
-      String search, Boolean active, boolean onlyLowStock, Pageable pageable);
+    Page<InventoryItem> listWithFilters(String search, Boolean active, boolean onlyLowStock, Pageable pageable);
 }

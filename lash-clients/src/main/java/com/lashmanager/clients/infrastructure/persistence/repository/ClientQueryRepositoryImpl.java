@@ -14,16 +14,16 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ClientQueryRepositoryImpl implements ClientQueryRepository {
 
-  private final ClientJpaRepository jpaRepository;
-  private final ClientMapper mapper;
+    private final ClientJpaRepository jpaRepository;
+    private final ClientMapper mapper;
 
-  @Override
-  public Optional<Client> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<Client> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public Page<Client> findAll(String search, Boolean active, Pageable pageable) {
-    return jpaRepository.findAllFiltered(search, active, pageable).map(mapper::toDomain);
-  }
+    @Override
+    public Page<Client> findAll(String search, Boolean active, Pageable pageable) {
+        return jpaRepository.findAllFiltered(search, active, pageable).map(mapper::toDomain);
+    }
 }

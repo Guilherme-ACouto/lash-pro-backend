@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Appointment {
-  private UUID id;
-  private UUID clientId;
-  private UUID serviceId;
-  private LocalDate scheduledDate;
-  private LocalTime scheduledTime;
-  private int durationMinutes;
-  private AppointmentStatus status;
-  private String notes;
-  private UUID financialEntryId;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+    private UUID id;
+    private UUID clientId;
+    private UUID serviceId;
+    private LocalDate scheduledDate;
+    private LocalTime scheduledTime;
+    private int durationMinutes;
+    private AppointmentStatus status;
+    private String notes;
+    private UUID financialEntryId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

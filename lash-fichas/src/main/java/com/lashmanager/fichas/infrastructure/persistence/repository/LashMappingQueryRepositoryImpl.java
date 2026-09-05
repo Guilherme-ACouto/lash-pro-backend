@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class LashMappingQueryRepositoryImpl implements LashMappingQueryRepository {
 
-  private final LashMappingJpaRepository jpaRepository;
-  private final LashMappingMapper mapper;
+    private final LashMappingJpaRepository jpaRepository;
+    private final LashMappingMapper mapper;
 
-  @Override
-  public Page<LashMapping> findByFichaId(UUID fichaId, Pageable pageable) {
-    return jpaRepository.findByFichaId(fichaId, pageable).map(mapper::toDomain);
-  }
+    @Override
+    public Page<LashMapping> findByFichaId(UUID fichaId, Pageable pageable) {
+        return jpaRepository.findByFichaId(fichaId, pageable).map(mapper::toDomain);
+    }
 }

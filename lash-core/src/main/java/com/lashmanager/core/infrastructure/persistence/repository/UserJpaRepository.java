@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserEntity, UUID> {
-  Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
-  Optional<UserEntity> findByPasswordResetToken(String token);
+    Optional<UserEntity> findByPasswordResetToken(String token);
 
-  Optional<UserEntity> findByActivationKey(String activationKey);
+    Optional<UserEntity> findByActivationKey(String activationKey);
 
-  boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 }

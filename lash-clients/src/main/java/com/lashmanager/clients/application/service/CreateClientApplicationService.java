@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateClientApplicationService {
 
-  private final CreateClientUseCase createClientUseCase;
+    private final CreateClientUseCase createClientUseCase;
 
-  public CreateClientUseCase.ClientResult when(CreateClientCommand command) {
-    return createClientUseCase.execute(command.toDomainCommand());
-  }
+    public CreateClientUseCase.ClientResult when(CreateClientCommand command) {
+        return createClientUseCase.execute(command.toDomainCommand());
+    }
 }

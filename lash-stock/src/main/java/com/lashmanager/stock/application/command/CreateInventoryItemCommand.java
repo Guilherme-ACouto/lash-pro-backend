@@ -15,29 +15,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateInventoryItemCommand extends AbstractCommand {
 
-  @NotBlank private String name;
-  private String internalCode;
+    @NotBlank
+    private String name;
 
-  @NotBlank private String unit;
+    private String internalCode;
 
-  @NotNull
-  @DecimalMin("0.00")
-  private BigDecimal costPrice;
+    @NotBlank
+    private String unit;
 
-  private String supplier;
+    @NotNull
+    @DecimalMin("0.00")
+    private BigDecimal costPrice;
 
-  @NotNull
-  @DecimalMin("0")
-  private BigDecimal currentQuantity;
+    private String supplier;
 
-  @NotNull
-  @DecimalMin("0")
-  private BigDecimal minimumQuantity;
+    @NotNull
+    @DecimalMin("0")
+    private BigDecimal currentQuantity;
 
-  private String notes;
+    @NotNull
+    @DecimalMin("0")
+    private BigDecimal minimumQuantity;
 
-  public CreateInventoryItemUseCase.CreateInventoryItemCommand toDomainCommand() {
-    return new CreateInventoryItemUseCase.CreateInventoryItemCommand(
-        name, internalCode, unit, costPrice, supplier, currentQuantity, minimumQuantity, notes);
-  }
+    private String notes;
+
+    public CreateInventoryItemUseCase.CreateInventoryItemCommand toDomainCommand() {
+        return new CreateInventoryItemUseCase.CreateInventoryItemCommand(
+                name, internalCode, unit, costPrice, supplier, currentQuantity, minimumQuantity, notes);
+    }
 }

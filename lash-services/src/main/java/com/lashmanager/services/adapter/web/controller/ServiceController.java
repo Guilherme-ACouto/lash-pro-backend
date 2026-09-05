@@ -29,67 +29,58 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ServiceController {
 
-  private final CreateServiceApplicationService createServiceApplicationService;
-  private final UpdateServiceApplicationService updateServiceApplicationService;
-  private final DeleteServiceApplicationService deleteServiceApplicationService;
-  private final DeactivateServiceApplicationService deactivateServiceApplicationService;
-  private final GetServiceUseCase getServiceUseCase;
-  private final ListServicesUseCase listServicesUseCase;
+    private final CreateServiceApplicationService createServiceApplicationService;
+    private final UpdateServiceApplicationService updateServiceApplicationService;
+    private final DeleteServiceApplicationService deleteServiceApplicationService;
+    private final DeactivateServiceApplicationService deactivateServiceApplicationService;
+    private final GetServiceUseCase getServiceUseCase;
+    private final ListServicesUseCase listServicesUseCase;
 
-  @PostMapping
-  public ResponseEntity<ServiceResponse> create(@Valid @RequestBody CreateServiceRequest request) {
-    var result =
-        createServiceApplicationService.when(
-            new CreateServiceCommand(
+    @PostMapping
+    public ResponseEntity<ServiceResponse> create(@Valid @RequestBody CreateServiceRequest request) {
+        var result = createServiceApplicationService.when(new CreateServiceCommand(
                 request.name(), request.description(), request.price(), request.durationMinutes()));
-    return ResponseEntity.created(URI.create("/api/services/" + result.id()))
-        .body(ServiceResponse.from(result));
-  }
+        return ResponseEntity.created(URI.create("/api/services/" + result.id()))
+                .body(ServiceResponse.from(result));
+    }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<ServiceResponse> getById(@PathVariable UUID id) {
-    return ResponseEntity.ok(ServiceResponse.from(getServiceUseCase.execute(id)));
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<ServiceResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ServiceResponse.from(getServiceUseCase.execute(id)));
+    }
 
-  @GetMapping
-  public ResponseEntity<Page<ServiceResponse>> list(
-      @RequestParam(required = false) String search,
-      @RequestParam(required = false) Boolean active,
-      @PageableDefault(size = 20) Pageable pageable) {
-    return ResponseEntity.ok(
-        listServicesUseCase.execute(search, active, pageable).map(ServiceResponse::from));
-  }
+    @GetMapping
+    public ResponseEntity<Page<ServiceResponse>> list(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean active,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(
+                listServicesUseCase.execute(search, active, pageable).map(ServiceResponse::from));
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<ServiceResponse> update(
-      @PathVariable UUID id, @Valid @RequestBody UpdateServiceRequest request) {
-    var result =
-        updateServiceApplicationService.when(
-            new UpdateServiceCommand(
-                id,
-                request.name(),
-                request.description(),
-                request.price(),
-                request.durationMinutes()));
-    return ResponseEntity.ok(ServiceResponse.from(result));
-  }
+    @PutMapping("/{id}")
+    public ResponseEntity<ServiceResponse> update(
+            @PathVariable UUID id, @Valid @RequestBody UpdateServiceRequest request) {
+        var result = updateServiceApplicationService.when(new UpdateServiceCommand(
+                id, request.name(), request.description(), request.price(), request.durationMinutes()));
+        return ResponseEntity.ok(ServiceResponse.from(result));
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable UUID id) {
-    deleteServiceApplicationService.when(new DeleteServiceCommand(id));
-    return ResponseEntity.noContent().build();
-  }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        deleteServiceApplicationService.when(new DeleteServiceCommand(id));
+        return ResponseEntity.noContent().build();
+    }
 
-  @PatchMapping("/{id}/deactivate")
-  public ResponseEntity<Void> deactivate(
-      @PathVariable UUID id, @RequestParam(defaultValue = "false") boolean force) {
-    deactivateServiceApplicationService.when(new DeactivateServiceCommand(id, force));
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivate(@PathVariable UUID id, @RequestParam(defaultValue = "false") boolean force) {
+        deactivateServiceApplicationService.when(new DeactivateServiceCommand(id, force));
+        return ResponseEntity.noContent().build();
+    }
 
-  @PatchMapping("/{id}/reactivate")
-  public ResponseEntity<Void> reactivate(@PathVariable UUID id) {
-    deactivateServiceApplicationService.when(new ReactivateServiceCommand(id));
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/reactivate")
+    public ResponseEntity<Void> reactivate(@PathVariable UUID id) {
+        deactivateServiceApplicationService.when(new ReactivateServiceCommand(id));
+        return ResponseEntity.noContent().build();
+    }
 }

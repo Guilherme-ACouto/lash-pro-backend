@@ -10,13 +10,13 @@ import java.util.UUID;
  * carregar o agregado completo antes de mutar e salvar.
  */
 public interface ClientRepository {
-  Client save(Client client);
+    Client save(Client client);
 
-  Optional<Client> findById(UUID id);
+    Optional<Client> findById(UUID id);
 
-  boolean existsByPhone(String phone);
+    boolean existsByPhone(String phone);
 
-  boolean existsByPhoneAndIdNot(String phone, UUID id);
+    boolean existsByPhoneAndIdNot(String phone, UUID id);
 
-  void deleteById(UUID id);
+    void deleteById(UUID id);
 }

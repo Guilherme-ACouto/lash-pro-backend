@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 /** Porta de leitura — separada de FichaRepository (escrita) conforme RBK-27. */
 public interface FichaQueryRepository {
-  Optional<Ficha> findById(UUID id);
+    Optional<Ficha> findById(UUID id);
 
-  Optional<Ficha> findByClientId(UUID clientId);
+    Optional<Ficha> findByClientId(UUID clientId);
 
-  Page<Ficha> listWithFilters(String search, Pageable pageable);
+    Page<Ficha> listWithFilters(String search, Pageable pageable);
 }

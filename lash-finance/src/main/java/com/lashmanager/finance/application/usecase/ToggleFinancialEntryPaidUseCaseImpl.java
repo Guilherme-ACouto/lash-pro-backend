@@ -18,39 +18,35 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ToggleFinancialEntryPaidUseCaseImpl implements ToggleFinancialEntryPaidUseCase {
 
-  private final FinancialEntryRepository repository;
+    private final FinancialEntryRepository repository;
 
-  @Override
-  public ListFinancialEntriesUseCase.EntryResult execute(UUID id) {
-    FinancialEntry existing =
-        repository.findById(id).orElseThrow(() -> new FinancialEntryNotFoundException(id));
+    @Override
+    public ListFinancialEntriesUseCase.EntryResult execute(UUID id) {
+        FinancialEntry existing = repository.findById(id).orElseThrow(() -> new FinancialEntryNotFoundException(id));
 
-    if (existing.getStatus() == FinancialEntryStatus.OVERDUE) {
-      throw new BusinessException("Lançamento vencido não pode ser alternado via toggle");
-    }
-    if (existing.getType() == FinancialEntryType.INCOME
-        && existing.getStatus() == FinancialEntryStatus.PAID) {
-      throw new BusinessException("Receita já recebida não pode ser revertida para pendente");
-    }
+        if (existing.getStatus() == FinancialEntryStatus.OVERDUE) {
+            throw new BusinessException("Lançamento vencido não pode ser alternado via toggle");
+        }
+        if (existing.getType() == FinancialEntryType.INCOME && existing.getStatus() == FinancialEntryStatus.PAID) {
+            throw new BusinessException("Receita já recebida não pode ser revertida para pendente");
+        }
 
-    LocalDate newPaymentDate;
-    FinancialEntryStatus newStatus;
-    if (existing.getStatus() == FinancialEntryStatus.PENDING) {
-      newStatus = FinancialEntryStatus.PAID;
-      newPaymentDate = LocalDate.now();
-    } else {
-      newStatus = FinancialEntryStatus.PENDING;
-      newPaymentDate = null;
-    }
+        LocalDate newPaymentDate;
+        FinancialEntryStatus newStatus;
+        if (existing.getStatus() == FinancialEntryStatus.PENDING) {
+            newStatus = FinancialEntryStatus.PAID;
+            newPaymentDate = LocalDate.now();
+        } else {
+            newStatus = FinancialEntryStatus.PENDING;
+            newPaymentDate = null;
+        }
 
-    FinancialEntry saved =
-        repository.save(
-            existing.toBuilder()
+        FinancialEntry saved = repository.save(existing.toBuilder()
                 .paymentDate(newPaymentDate)
                 .status(newStatus)
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-    return FinancialEntryMapper.toResult(saved, saved.getReceivedFrom());
-  }
+        return FinancialEntryMapper.toResult(saved, saved.getReceivedFrom());
+    }
 }

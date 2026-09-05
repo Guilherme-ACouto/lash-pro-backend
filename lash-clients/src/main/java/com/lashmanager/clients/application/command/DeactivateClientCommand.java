@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeactivateClientCommand extends AbstractCommand {
 
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  private boolean force;
+    private boolean force;
 }

@@ -5,14 +5,14 @@ import java.util.UUID;
 
 public interface UpdateInventoryItemUseCase {
 
-  record UpdateInventoryItemCommand(
-      UUID id,
-      String name,
-      String unit,
-      BigDecimal costPrice,
-      String supplier,
-      BigDecimal minimumQuantity,
-      String notes) {}
+    record UpdateInventoryItemCommand(
+            UUID id,
+            String name,
+            String unit,
+            BigDecimal costPrice,
+            String supplier,
+            BigDecimal minimumQuantity,
+            String notes) {}
 
-  CreateInventoryItemUseCase.InventoryItemResult execute(UpdateInventoryItemCommand command);
+    CreateInventoryItemUseCase.InventoryItemResult execute(UpdateInventoryItemCommand command);
 }

@@ -25,69 +25,69 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class RegisterUseCaseImpl implements RegisterUseCase {
 
-  private final UserRepository userRepository;
-  private final TenantRepository tenantRepository;
-  private final TenantSchemaNaming tenantSchemaNaming;
-  private final PasswordEncoder passwordEncoder;
-  private final EmailPort emailPort;
-  private final ResendActivationUseCase resendActivationUseCase;
+    private final UserRepository userRepository;
+    private final TenantRepository tenantRepository;
+    private final TenantSchemaNaming tenantSchemaNaming;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailPort emailPort;
+    private final ResendActivationUseCase resendActivationUseCase;
 
-  @Value("${app.activation.key-expiration-hours:48}")
-  private long activationKeyExpirationHours;
+    @Value("${app.activation.key-expiration-hours:48}")
+    private long activationKeyExpirationHours;
 
-  @Override
-  @Transactional
-  public RegisterResult execute(RegisterData data) {
-    Optional<User> existing = userRepository.findByEmail(data.email());
+    @Override
+    @Transactional
+    public RegisterResult execute(RegisterData data) {
+        Optional<User> existing = userRepository.findByEmail(data.email());
 
-    if (existing.isPresent()) {
-      User existingUser = existing.get();
-      if (existingUser.isActive()) {
-        throw new EmailAlreadyInUseException(data.email());
-      }
-      resendActivationUseCase.execute(data.email());
-      return new RegisterResult(existingUser.getId(), existingUser.getEmail());
+        if (existing.isPresent()) {
+            User existingUser = existing.get();
+            if (existingUser.isActive()) {
+                throw new EmailAlreadyInUseException(data.email());
+            }
+            resendActivationUseCase.execute(data.email());
+            return new RegisterResult(existingUser.getId(), existingUser.getEmail());
+        }
+
+        String activationKey = UUID.randomUUID().toString();
+        LocalDateTime now = LocalDateTime.now();
+
+        // tenantId já é atribuído aqui (não na ativação): se o provisionamento do
+        // schema falhar e a ativação precisar ser tentada de novo, o retry usa o
+        // mesmo tenantId (persistido desde o registro, fora da transação de
+        // ativação) — evita gerar um schema órfão a cada nova tentativa. A linha
+        // em `tenants` também precisa existir já aqui (inativa) — users.tenant_id
+        // tem FK para tenants.id, então não dá pra só atribuir o id sem o registro
+        // correspondente; ActivateAccountUseCaseImpl só marca active=true depois.
+        UUID tenantId = UUID.randomUUID();
+        tenantRepository.save(Tenant.builder()
+                .id(tenantId)
+                .name(data.name())
+                .schemaName(tenantSchemaNaming.schemaNameFor(tenantId))
+                .active(false)
+                .createdAt(now)
+                .build());
+
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .name(data.name())
+                .email(data.email())
+                .password(passwordEncoder.encode(data.password()))
+                .role(UserRole.OWNER)
+                .active(false)
+                .tenantId(tenantId)
+                .activationKey(activationKey)
+                .activationKeyExpiry(now.plusHours(activationKeyExpirationHours))
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+
+        User saved = userRepository.save(user);
+        emailPort.sendActivationEmail(saved.getEmail(), saved.getName(), activationKey);
+        if (log.isInfoEnabled()) {
+            log.info("Cadastro criado, aguardando ativação: {}", saved.getEmail());
+        }
+
+        return new RegisterResult(saved.getId(), saved.getEmail());
     }
-
-    String activationKey = UUID.randomUUID().toString();
-    LocalDateTime now = LocalDateTime.now();
-
-    // tenantId já é atribuído aqui (não na ativação): se o provisionamento do
-    // schema falhar e a ativação precisar ser tentada de novo, o retry usa o
-    // mesmo tenantId (persistido desde o registro, fora da transação de
-    // ativação) — evita gerar um schema órfão a cada nova tentativa. A linha
-    // em `tenants` também precisa existir já aqui (inativa) — users.tenant_id
-    // tem FK para tenants.id, então não dá pra só atribuir o id sem o registro
-    // correspondente; ActivateAccountUseCaseImpl só marca active=true depois.
-    UUID tenantId = UUID.randomUUID();
-    tenantRepository.save(
-        Tenant.builder()
-            .id(tenantId)
-            .name(data.name())
-            .schemaName(tenantSchemaNaming.schemaNameFor(tenantId))
-            .active(false)
-            .createdAt(now)
-            .build());
-
-    User user =
-        User.builder()
-            .id(UUID.randomUUID())
-            .name(data.name())
-            .email(data.email())
-            .password(passwordEncoder.encode(data.password()))
-            .role(UserRole.OWNER)
-            .active(false)
-            .tenantId(tenantId)
-            .activationKey(activationKey)
-            .activationKeyExpiry(now.plusHours(activationKeyExpirationHours))
-            .createdAt(now)
-            .updatedAt(now)
-            .build();
-
-    User saved = userRepository.save(user);
-    emailPort.sendActivationEmail(saved.getEmail(), saved.getName(), activationKey);
-    log.info("Cadastro criado, aguardando ativação: {}", saved.getEmail());
-
-    return new RegisterResult(saved.getId(), saved.getEmail());
-  }
 }

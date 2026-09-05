@@ -14,21 +14,21 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class FichaQueryRepositoryImpl implements FichaQueryRepository {
 
-  private final FichaJpaRepository jpaRepository;
-  private final FichaMapper mapper;
+    private final FichaJpaRepository jpaRepository;
+    private final FichaMapper mapper;
 
-  @Override
-  public Optional<Ficha> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<Ficha> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public Optional<Ficha> findByClientId(UUID clientId) {
-    return jpaRepository.findByClientId(clientId).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<Ficha> findByClientId(UUID clientId) {
+        return jpaRepository.findByClientId(clientId).map(mapper::toDomain);
+    }
 
-  @Override
-  public Page<Ficha> listWithFilters(String search, Pageable pageable) {
-    return jpaRepository.findAllFiltered(search, pageable).map(mapper::toDomain);
-  }
+    @Override
+    public Page<Ficha> listWithFilters(String search, Pageable pageable) {
+        return jpaRepository.findAllFiltered(search, pageable).map(mapper::toDomain);
+    }
 }

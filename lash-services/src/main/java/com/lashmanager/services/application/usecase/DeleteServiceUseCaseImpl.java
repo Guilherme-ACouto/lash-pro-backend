@@ -12,17 +12,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteServiceUseCaseImpl implements DeleteServiceUseCase {
 
-  private final ServiceRepository serviceRepository;
+    private final ServiceRepository serviceRepository;
 
-  @Override
-  public void execute(UUID id) {
-    if (serviceRepository.findById(id).isEmpty()) {
-      throw new ServiceNotFoundException(id);
+    @Override
+    public void execute(UUID id) {
+        if (serviceRepository.findById(id).isEmpty()) {
+            throw new ServiceNotFoundException(id);
+        }
+        if (serviceRepository.hasActiveAppointments(id)) {
+            throw new BusinessException("Não é possível excluir: serviço possui agendamentos vinculados.");
+        }
+        serviceRepository.deleteById(id);
     }
-    if (serviceRepository.hasActiveAppointments(id)) {
-      throw new BusinessException(
-          "Não é possível excluir: serviço possui agendamentos vinculados.");
-    }
-    serviceRepository.deleteById(id);
-  }
 }

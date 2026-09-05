@@ -10,16 +10,14 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class HibernateMultiTenantConfig {
 
-  private final MultiTenantConnectionProviderImpl multiTenantConnectionProvider;
-  private final CurrentTenantIdentifierResolverImpl currentTenantIdentifierResolver;
+    private final MultiTenantConnectionProviderImpl multiTenantConnectionProvider;
+    private final CurrentTenantIdentifierResolverImpl currentTenantIdentifierResolver;
 
-  @Bean
-  public HibernatePropertiesCustomizer hibernatePropertiesCustomizer() {
-    return properties -> {
-      properties.put(
-          AvailableSettings.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
-      properties.put(
-          AvailableSettings.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
-    };
-  }
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer() {
+        return properties -> {
+            properties.put(AvailableSettings.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
+            properties.put(AvailableSettings.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
+        };
+    }
 }

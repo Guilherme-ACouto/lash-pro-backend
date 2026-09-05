@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetClientUseCaseImpl implements GetClientUseCase {
 
-  private final ClientQueryRepository clientQueryRepository;
+    private final ClientQueryRepository clientQueryRepository;
 
-  @Override
-  public CreateClientUseCase.ClientResult execute(UUID id) {
-    return clientQueryRepository
-        .findById(id)
-        .map(ClientUseCaseMapper::toResult)
-        .orElseThrow(() -> new ClientNotFoundException(id));
-  }
+    @Override
+    public CreateClientUseCase.ClientResult execute(UUID id) {
+        return clientQueryRepository
+                .findById(id)
+                .map(ClientUseCaseMapper::toResult)
+                .orElseThrow(() -> new ClientNotFoundException(id));
+    }
 }

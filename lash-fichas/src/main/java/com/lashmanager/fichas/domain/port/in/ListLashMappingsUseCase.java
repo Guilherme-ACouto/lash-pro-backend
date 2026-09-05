@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ListLashMappingsUseCase {
-  Page<CreateLashMappingUseCase.LashMappingResult> execute(UUID fichaId, Pageable pageable);
+    Page<CreateLashMappingUseCase.LashMappingResult> execute(UUID fichaId, Pageable pageable);
 }

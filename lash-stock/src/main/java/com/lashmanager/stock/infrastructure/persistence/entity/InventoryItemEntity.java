@@ -15,37 +15,38 @@ import lombok.*;
 @Builder
 public class InventoryItemEntity {
 
-  @Id private UUID id;
+    @Id
+    private UUID id;
 
-  @Column(nullable = false)
-  private String name;
+    @Column(nullable = false)
+    private String name;
 
-  @Column(name = "internal_code", nullable = false, unique = true)
-  private String internalCode;
+    @Column(name = "internal_code", nullable = false, unique = true)
+    private String internalCode;
 
-  @Column(nullable = false)
-  private String unit;
+    @Column(nullable = false)
+    private String unit;
 
-  @Column(name = "cost_price", nullable = false, precision = 10, scale = 2)
-  private BigDecimal costPrice;
+    @Column(name = "cost_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal costPrice;
 
-  private String supplier;
+    private String supplier;
 
-  @Column(name = "current_quantity", nullable = false, precision = 10, scale = 3)
-  private BigDecimal currentQuantity;
+    @Column(name = "current_quantity", nullable = false, precision = 10, scale = 3)
+    private BigDecimal currentQuantity;
 
-  @Column(name = "minimum_quantity", nullable = false, precision = 10, scale = 3)
-  private BigDecimal minimumQuantity;
+    @Column(name = "minimum_quantity", nullable = false, precision = 10, scale = 3)
+    private BigDecimal minimumQuantity;
 
-  @Column(nullable = false)
-  private boolean active;
+    @Column(nullable = false)
+    private boolean active;
 
-  @Column(columnDefinition = "TEXT")
-  private String notes;
+    @Column(columnDefinition = "TEXT")
+    private String notes;
 
-  @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 }

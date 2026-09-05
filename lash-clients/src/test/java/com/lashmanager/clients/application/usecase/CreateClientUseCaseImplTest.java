@@ -22,42 +22,40 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayName("Criar cliente")
 class CreateClientUseCaseImplTest {
 
-  @Mock private ClientRepository clientRepository;
+    @Mock
+    private ClientRepository clientRepository;
 
-  private CreateClientUseCaseImpl useCase;
+    private CreateClientUseCaseImpl useCase;
 
-  @BeforeEach
-  void setUp() {
-    useCase = new CreateClientUseCaseImpl(clientRepository);
-  }
+    @BeforeEach
+    void setUp() {
+        useCase = new CreateClientUseCaseImpl(clientRepository);
+    }
 
-  @Test
-  @DisplayName("deve criar cliente quando o telefone ainda não está cadastrado")
-  void execute_withNewPhone_returnsClientResult() {
-    given(clientRepository.existsByPhone("11999999999")).willReturn(false);
-    given(clientRepository.save(any())).willAnswer(inv -> inv.getArgument(0));
+    @Test
+    @DisplayName("deve criar cliente quando o telefone ainda não está cadastrado")
+    void execute_withNewPhone_returnsClientResult() {
+        given(clientRepository.existsByPhone("11999999999")).willReturn(false);
+        given(clientRepository.save(any())).willAnswer(inv -> inv.getArgument(0));
 
-    CreateClientCommand command =
-        new CreateClientCommand("Ana Lima", "11999999999", null, null, null);
+        CreateClientCommand command = new CreateClientCommand("Ana Lima", "11999999999", null, null, null);
 
-    ClientResult result = useCase.execute(command);
+        ClientResult result = useCase.execute(command);
 
-    assertThat(result.name()).isEqualTo("Ana Lima");
-    assertThat(result.phone()).isEqualTo("11999999999");
-    assertThat(result.active()).isTrue();
-  }
+        assertThat(result.name()).isEqualTo("Ana Lima");
+        assertThat(result.phone()).isEqualTo("11999999999");
+        assertThat(result.active()).isTrue();
+    }
 
-  @Test
-  @DisplayName("deve lançar ClientAlreadyExistsException quando o telefone já está cadastrado")
-  void execute_withDuplicatePhone_throwsClientAlreadyExistsException() {
-    given(clientRepository.existsByPhone(any())).willReturn(true);
+    @Test
+    @DisplayName("deve lançar ClientAlreadyExistsException quando o telefone já está cadastrado")
+    void execute_withDuplicatePhone_throwsClientAlreadyExistsException() {
+        given(clientRepository.existsByPhone(any())).willReturn(true);
 
-    CreateClientCommand command =
-        new CreateClientCommand("Ana Lima", "11999999999", null, null, null);
+        CreateClientCommand command = new CreateClientCommand("Ana Lima", "11999999999", null, null, null);
 
-    assertThatThrownBy(() -> useCase.execute(command))
-        .isInstanceOf(ClientAlreadyExistsException.class);
+        assertThatThrownBy(() -> useCase.execute(command)).isInstanceOf(ClientAlreadyExistsException.class);
 
-    then(clientRepository).should(never()).save(any());
-  }
+        then(clientRepository).should(never()).save(any());
+    }
 }

@@ -12,21 +12,21 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class LashMappingRepositoryImpl implements LashMappingRepository {
 
-  private final LashMappingJpaRepository jpaRepository;
-  private final LashMappingMapper mapper;
+    private final LashMappingJpaRepository jpaRepository;
+    private final LashMappingMapper mapper;
 
-  @Override
-  public Optional<LashMapping> findById(UUID id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
-  }
+    @Override
+    public Optional<LashMapping> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
 
-  @Override
-  public LashMapping save(LashMapping mapping) {
-    return mapper.toDomain(jpaRepository.save(mapper.toEntity(mapping)));
-  }
+    @Override
+    public LashMapping save(LashMapping mapping) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(mapping)));
+    }
 
-  @Override
-  public void delete(UUID id) {
-    jpaRepository.deleteById(id);
-  }
+    @Override
+    public void delete(UUID id) {
+        jpaRepository.deleteById(id);
+    }
 }

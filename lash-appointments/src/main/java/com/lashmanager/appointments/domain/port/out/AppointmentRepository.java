@@ -13,17 +13,17 @@ import java.util.UUID;
  * (Update, ChangeStatus) precisam do agregado completo.
  */
 public interface AppointmentRepository {
-  Appointment save(Appointment appointment);
+    Appointment save(Appointment appointment);
 
-  Optional<Appointment> findById(UUID id);
+    Optional<Appointment> findById(UUID id);
 
-  List<Appointment> findActiveByDate(LocalDate date);
+    List<Appointment> findActiveByDate(LocalDate date);
 
-  List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from);
+    List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from);
 
-  void deleteFutureAppointmentsByClientId(UUID clientId, LocalDate from);
+    void deleteFutureAppointmentsByClientId(UUID clientId, LocalDate from);
 
-  void unlinkClientFromPastAppointments(UUID clientId, LocalDate from);
+    void unlinkClientFromPastAppointments(UUID clientId, LocalDate from);
 
-  boolean hasActiveAppointmentsByServiceId(UUID serviceId, LocalDate from);
+    boolean hasActiveAppointmentsByServiceId(UUID serviceId, LocalDate from);
 }

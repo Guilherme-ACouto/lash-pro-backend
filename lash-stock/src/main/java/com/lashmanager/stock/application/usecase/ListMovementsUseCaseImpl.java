@@ -13,13 +13,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ListMovementsUseCaseImpl implements ListMovementsUseCase {
 
-  private final InventoryMovementQueryRepository movementQueryRepository;
+    private final InventoryMovementQueryRepository movementQueryRepository;
 
-  @Override
-  public Page<RegisterPurchaseUseCase.InventoryMovementResult> execute(
-      UUID itemId, Pageable pageable) {
-    return movementQueryRepository
-        .findByItemId(itemId, pageable)
-        .map(InventoryUseCaseMapper::toMovementResult);
-  }
+    @Override
+    public Page<RegisterPurchaseUseCase.InventoryMovementResult> execute(UUID itemId, Pageable pageable) {
+        return movementQueryRepository.findByItemId(itemId, pageable).map(InventoryUseCaseMapper::toMovementResult);
+    }
 }

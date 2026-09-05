@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NoShowAppointmentCommand extends AbstractCommand {
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 }

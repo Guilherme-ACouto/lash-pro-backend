@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record RegisterManualExitRequest(
-    @NotNull @DecimalMin("0.001") BigDecimal quantity,
-    @NotBlank String reason,
-    @NotNull LocalDate exitDate,
-    String notes) {}
+        @NotNull @DecimalMin("0.001") BigDecimal quantity,
+        @NotBlank String reason,
+        @NotNull LocalDate exitDate,
+        String notes) {}

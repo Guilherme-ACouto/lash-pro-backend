@@ -30,48 +30,44 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class FinancialController {
 
-  private final CreateFinancialEntryApplicationService createApplicationService;
-  private final UpdateFinancialEntryApplicationService updateApplicationService;
-  private final DeleteFinancialEntryApplicationService deleteApplicationService;
-  private final ToggleFinancialEntryPaidApplicationService toggleApplicationService;
-  private final ListFinancialEntriesUseCase listUseCase;
-  private final GetFinancialSummaryUseCase summaryUseCase;
+    private final CreateFinancialEntryApplicationService createApplicationService;
+    private final UpdateFinancialEntryApplicationService updateApplicationService;
+    private final DeleteFinancialEntryApplicationService deleteApplicationService;
+    private final ToggleFinancialEntryPaidApplicationService toggleApplicationService;
+    private final ListFinancialEntriesUseCase listUseCase;
+    private final GetFinancialSummaryUseCase summaryUseCase;
 
-  @GetMapping("/summary")
-  public ResponseEntity<FinancialSummaryResponse> summary() {
-    return ResponseEntity.ok(FinancialSummaryResponse.from(summaryUseCase.execute()));
-  }
+    @GetMapping("/summary")
+    public ResponseEntity<FinancialSummaryResponse> summary() {
+        return ResponseEntity.ok(FinancialSummaryResponse.from(summaryUseCase.execute()));
+    }
 
-  @GetMapping
-  public ResponseEntity<Page<FinancialEntryResponse>> list(
-      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
-      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
-      @RequestParam(required = false) String category,
-      @RequestParam(required = false) String expenseType,
-      @RequestParam(required = false) String type,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "20") int size) {
-    LocalDate start = from != null ? from : LocalDate.now().withDayOfMonth(1);
-    LocalDate end = to != null ? to : LocalDate.now().withDayOfMonth(1).plusMonths(1).minusDays(1);
-    return ResponseEntity.ok(
-        listUseCase
-            .execute(
-                new ListFinancialEntriesUseCase.ListQuery(
-                    start, end, category, expenseType, type, page, size))
-            .map(FinancialEntryResponse::from));
-  }
+    @GetMapping
+    public ResponseEntity<Page<FinancialEntryResponse>> list(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String expenseType,
+            @RequestParam(required = false) String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        LocalDate start = from != null ? from : LocalDate.now().withDayOfMonth(1);
+        LocalDate end = to != null
+                ? to
+                : LocalDate.now().withDayOfMonth(1).plusMonths(1).minusDays(1);
+        return ResponseEntity.ok(listUseCase
+                .execute(new ListFinancialEntriesUseCase.ListQuery(start, end, category, expenseType, type, page, size))
+                .map(FinancialEntryResponse::from));
+    }
 
-  @GetMapping("/categories")
-  public ResponseEntity<List<String>> categories() {
-    return ResponseEntity.ok(listUseCase.findDistinctCategories());
-  }
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> categories() {
+        return ResponseEntity.ok(listUseCase.findDistinctCategories());
+    }
 
-  @PostMapping
-  public ResponseEntity<FinancialEntryResponse> create(
-      @Valid @RequestBody CreateFinancialEntryRequest req) {
-    var result =
-        createApplicationService.when(
-            new CreateFinancialEntryCommand(
+    @PostMapping
+    public ResponseEntity<FinancialEntryResponse> create(@Valid @RequestBody CreateFinancialEntryRequest req) {
+        var result = createApplicationService.when(new CreateFinancialEntryCommand(
                 req.type(),
                 req.expenseType(),
                 req.description(),
@@ -82,16 +78,14 @@ public class FinancialController {
                 req.paymentMethod(),
                 req.receivedFrom(),
                 req.notes()));
-    return ResponseEntity.created(URI.create("/api/financial/" + result.id()))
-        .body(FinancialEntryResponse.from(result));
-  }
+        return ResponseEntity.created(URI.create("/api/financial/" + result.id()))
+                .body(FinancialEntryResponse.from(result));
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<FinancialEntryResponse> update(
-      @PathVariable UUID id, @Valid @RequestBody UpdateFinancialEntryRequest req) {
-    var result =
-        updateApplicationService.when(
-            new UpdateFinancialEntryCommand(
+    @PutMapping("/{id}")
+    public ResponseEntity<FinancialEntryResponse> update(
+            @PathVariable UUID id, @Valid @RequestBody UpdateFinancialEntryRequest req) {
+        var result = updateApplicationService.when(new UpdateFinancialEntryCommand(
                 id,
                 req.type(),
                 req.expenseType(),
@@ -103,19 +97,18 @@ public class FinancialController {
                 req.paymentMethod(),
                 req.receivedFrom(),
                 req.notes()));
-    return ResponseEntity.ok(FinancialEntryResponse.from(result));
-  }
+        return ResponseEntity.ok(FinancialEntryResponse.from(result));
+    }
 
-  @PatchMapping("/{id}/toggle-paid")
-  public ResponseEntity<FinancialEntryResponse> togglePaid(@PathVariable UUID id) {
-    return ResponseEntity.ok(
-        FinancialEntryResponse.from(
-            toggleApplicationService.when(new ToggleFinancialEntryPaidCommand(id))));
-  }
+    @PatchMapping("/{id}/toggle-paid")
+    public ResponseEntity<FinancialEntryResponse> togglePaid(@PathVariable UUID id) {
+        return ResponseEntity.ok(
+                FinancialEntryResponse.from(toggleApplicationService.when(new ToggleFinancialEntryPaidCommand(id))));
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable UUID id) {
-    deleteApplicationService.when(new DeleteFinancialEntryCommand(id));
-    return ResponseEntity.noContent().build();
-  }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        deleteApplicationService.when(new DeleteFinancialEntryCommand(id));
+        return ResponseEntity.noContent().build();
+    }
 }

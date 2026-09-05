@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ListLashMappingsUseCaseImpl implements ListLashMappingsUseCase {
 
-  private final LashMappingQueryRepository mappingQueryRepository;
+    private final LashMappingQueryRepository mappingQueryRepository;
 
-  @Override
-  public Page<CreateLashMappingUseCase.LashMappingResult> execute(UUID fichaId, Pageable pageable) {
-    return mappingQueryRepository
-        .findByFichaId(fichaId, pageable)
-        .map(FichaUseCaseMapper::toMappingResult);
-  }
+    @Override
+    public Page<CreateLashMappingUseCase.LashMappingResult> execute(UUID fichaId, Pageable pageable) {
+        return mappingQueryRepository.findByFichaId(fichaId, pageable).map(FichaUseCaseMapper::toMappingResult);
+    }
 }

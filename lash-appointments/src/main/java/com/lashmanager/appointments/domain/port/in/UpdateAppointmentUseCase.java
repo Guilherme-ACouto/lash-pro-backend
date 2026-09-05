@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public interface UpdateAppointmentUseCase {
 
-  record UpdateAppointmentCommand(
-      UUID clientId,
-      UUID serviceId,
-      LocalDate scheduledDate,
-      LocalTime scheduledTime,
-      int durationMinutes,
-      String notes) {}
+    record UpdateAppointmentCommand(
+            UUID clientId,
+            UUID serviceId,
+            LocalDate scheduledDate,
+            LocalTime scheduledTime,
+            int durationMinutes,
+            String notes) {}
 
-  CreateAppointmentUseCase.AppointmentResult execute(UUID id, UpdateAppointmentCommand command);
+    CreateAppointmentUseCase.AppointmentResult execute(UUID id, UpdateAppointmentCommand command);
 }

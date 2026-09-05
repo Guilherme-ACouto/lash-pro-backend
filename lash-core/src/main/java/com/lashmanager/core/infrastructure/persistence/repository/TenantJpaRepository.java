@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TenantJpaRepository extends JpaRepository<TenantEntity, UUID> {
-  boolean existsBySchemaName(String schemaName);
+    boolean existsBySchemaName(String schemaName);
 }

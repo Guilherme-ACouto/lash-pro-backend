@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
  * são append-only (só `save`); listagem é o único caso de leitura, daí a porta ficar bem enxuta.
  */
 public interface InventoryMovementQueryRepository {
-  Page<InventoryMovement> findByItemId(UUID itemId, Pageable pageable);
+    Page<InventoryMovement> findByItemId(UUID itemId, Pageable pageable);
 }

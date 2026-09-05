@@ -16,23 +16,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateAppointmentCommand extends AbstractCommand {
 
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  private UUID clientId;
+    private UUID clientId;
 
-  @NotNull private UUID serviceId;
+    @NotNull
+    private UUID serviceId;
 
-  @NotNull private LocalDate scheduledDate;
+    @NotNull
+    private LocalDate scheduledDate;
 
-  @NotNull private LocalTime scheduledTime;
+    @NotNull
+    private LocalTime scheduledTime;
 
-  @Min(1)
-  private int durationMinutes;
+    @Min(1)
+    private int durationMinutes;
 
-  private String notes;
+    private String notes;
 
-  public UpdateAppointmentUseCase.UpdateAppointmentCommand toDomainCommand() {
-    return new UpdateAppointmentUseCase.UpdateAppointmentCommand(
-        clientId, serviceId, scheduledDate, scheduledTime, durationMinutes, notes);
-  }
+    public UpdateAppointmentUseCase.UpdateAppointmentCommand toDomainCommand() {
+        return new UpdateAppointmentUseCase.UpdateAppointmentCommand(
+                clientId, serviceId, scheduledDate, scheduledTime, durationMinutes, notes);
+    }
 }

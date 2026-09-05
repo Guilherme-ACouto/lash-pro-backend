@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteClientApplicationService {
 
-  private final DeleteClientUseCase deleteClientUseCase;
+    private final DeleteClientUseCase deleteClientUseCase;
 
-  public void when(DeleteClientCommand command) {
-    deleteClientUseCase.execute(command.getId());
-  }
+    public void when(DeleteClientCommand command) {
+        deleteClientUseCase.execute(command.getId());
+    }
 }

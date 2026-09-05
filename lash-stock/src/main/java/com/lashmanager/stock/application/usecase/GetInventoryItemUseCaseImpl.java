@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetInventoryItemUseCaseImpl implements GetInventoryItemUseCase {
 
-  private final InventoryItemQueryRepository itemQueryRepository;
+    private final InventoryItemQueryRepository itemQueryRepository;
 
-  @Override
-  public CreateInventoryItemUseCase.InventoryItemResult execute(UUID id) {
-    return itemQueryRepository
-        .findById(id)
-        .map(InventoryUseCaseMapper::toItemResult)
-        .orElseThrow(() -> new InventoryItemNotFoundException(id));
-  }
+    @Override
+    public CreateInventoryItemUseCase.InventoryItemResult execute(UUID id) {
+        return itemQueryRepository
+                .findById(id)
+                .map(InventoryUseCaseMapper::toItemResult)
+                .orElseThrow(() -> new InventoryItemNotFoundException(id));
+    }
 }

@@ -30,58 +30,60 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @DisplayName("Fluxo de registro e ativação — integração")
 class RegistrationFlowITest extends AbstractIntegrationTest {
 
-  @Autowired private RegisterApplicationService registerApplicationService;
+    @Autowired
+    private RegisterApplicationService registerApplicationService;
 
-  @Autowired private ActivateAccountApplicationService activateAccountApplicationService;
+    @Autowired
+    private ActivateAccountApplicationService activateAccountApplicationService;
 
-  @Autowired private LoginUseCase loginUseCase;
+    @Autowired
+    private LoginUseCase loginUseCase;
 
-  @Autowired private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  @Autowired private TenantRepository tenantRepository;
+    @Autowired
+    private TenantRepository tenantRepository;
 
-  @MockBean private SchemaProvisionerPort schemaProvisionerPort;
+    @MockBean
+    private SchemaProvisionerPort schemaProvisionerPort;
 
-  @Test
-  @DisplayName(
-      "deve registrar, ativar (chamando o provisionamento) e permitir login no tenant recém-criado")
-  void registerActivateAndLogin_fullFlow() {
-    String email = "nova" + UUID.randomUUID() + "@teste.com";
+    @Test
+    @DisplayName("deve registrar, ativar (chamando o provisionamento) e permitir login no tenant recém-criado")
+    void registerActivateAndLogin_fullFlow() {
+        String email = "nova" + UUID.randomUUID() + "@teste.com";
 
-    registerApplicationService.when(new RegisterCommand("Nova Usuária", email, "senha123"));
+        registerApplicationService.when(new RegisterCommand("Nova Usuária", email, "senha123"));
 
-    User pending = userRepository.findByEmail(email).orElseThrow();
-    assertThat(pending.isActive()).isFalse();
-    assertThat(pending.getActivationKey()).isNotBlank();
-    assertThat(pending.getTenantId()).isNotNull();
+        User pending = userRepository.findByEmail(email).orElseThrow();
+        assertThat(pending.isActive()).isFalse();
+        assertThat(pending.getActivationKey()).isNotBlank();
+        assertThat(pending.getTenantId()).isNotNull();
 
-    ActivateAccountUseCase.ActivationResult activationResult =
-        activateAccountApplicationService.when(
-            new ActivateAccountCommand(pending.getActivationKey()));
+        ActivateAccountUseCase.ActivationResult activationResult =
+                activateAccountApplicationService.when(new ActivateAccountCommand(pending.getActivationKey()));
 
-    assertThat(activationResult.email()).isEqualTo(email);
-    assertThat(activationResult.tenantId()).isEqualTo(pending.getTenantId());
-    assertThat(tenantRepository.findById(activationResult.tenantId())).isPresent();
-    Mockito.verify(schemaProvisionerPort).provision(activationResult.tenantId());
+        assertThat(activationResult.email()).isEqualTo(email);
+        assertThat(activationResult.tenantId()).isEqualTo(pending.getTenantId());
+        assertThat(tenantRepository.findById(activationResult.tenantId())).isPresent();
+        Mockito.verify(schemaProvisionerPort).provision(activationResult.tenantId());
 
-    User activated = userRepository.findByEmail(email).orElseThrow();
-    assertThat(activated.isActive()).isTrue();
-    assertThat(activated.getActivationKey()).isNull();
+        User activated = userRepository.findByEmail(email).orElseThrow();
+        assertThat(activated.isActive()).isTrue();
+        assertThat(activated.getActivationKey()).isNull();
 
-    LoginUseCase.LoginResponse loginResponse =
-        loginUseCase.execute(new LoginUseCase.LoginCommand(email, "senha123"));
+        LoginUseCase.LoginResponse loginResponse =
+                loginUseCase.execute(new LoginUseCase.LoginCommand(email, "senha123"));
 
-    assertThat(loginResponse.email()).isEqualTo(email);
-    assertThat(loginResponse.accessToken()).isNotBlank();
-  }
+        assertThat(loginResponse.email()).isEqualTo(email);
+        assertThat(loginResponse.accessToken()).isNotBlank();
+    }
 
-  @Test
-  @DisplayName("deve rejeitar ativação com chave inexistente")
-  void activate_withInvalidKey_throwsActivationKeyInvalidException() {
-    assertThatThrownBy(
-            () ->
-                activateAccountApplicationService.when(
-                    new ActivateAccountCommand("chave-que-nao-existe")))
-        .isInstanceOf(ActivationKeyInvalidException.class);
-  }
+    @Test
+    @DisplayName("deve rejeitar ativação com chave inexistente")
+    void activate_withInvalidKey_throwsActivationKeyInvalidException() {
+        assertThatThrownBy(() ->
+                        activateAccountApplicationService.when(new ActivateAccountCommand("chave-que-nao-existe")))
+                .isInstanceOf(ActivationKeyInvalidException.class);
+    }
 }

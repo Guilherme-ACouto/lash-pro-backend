@@ -5,10 +5,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public interface AppointmentFinancialPort {
-  UUID createIncomeEntry(
-      UUID appointmentId,
-      String description,
-      BigDecimal amount,
-      LocalDate date,
-      String paymentMethod);
+    UUID createIncomeEntry(
+            UUID appointmentId, String description, BigDecimal amount, LocalDate date, String paymentMethod);
 }

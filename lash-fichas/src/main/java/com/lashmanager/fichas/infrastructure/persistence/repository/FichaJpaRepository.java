@@ -11,16 +11,15 @@ import org.springframework.data.repository.query.Param;
 
 public interface FichaJpaRepository extends JpaRepository<FichaEntity, UUID> {
 
-  Optional<FichaEntity> findByClientId(UUID clientId);
+    Optional<FichaEntity> findByClientId(UUID clientId);
 
-  boolean existsByClientId(UUID clientId);
+    boolean existsByClientId(UUID clientId);
 
-  @Query(
-      """
+    @Query("""
         SELECT f FROM FichaEntity f
         WHERE :search = ''
            OR LOWER(f.clientName) LIKE LOWER(CONCAT('%', :search, '%'))
         ORDER BY f.clientName
     """)
-  Page<FichaEntity> findAllFiltered(@Param("search") String search, Pageable pageable);
+    Page<FichaEntity> findAllFiltered(@Param("search") String search, Pageable pageable);
 }

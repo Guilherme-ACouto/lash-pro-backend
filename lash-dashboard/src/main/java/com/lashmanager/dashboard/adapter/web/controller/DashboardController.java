@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("isAuthenticated()")
 public class DashboardController {
 
-  private final GetDashboardSummaryUseCase getDashboardSummaryUseCase;
-  private final GetTodayScheduleUseCase getTodayScheduleUseCase;
+    private final GetDashboardSummaryUseCase getDashboardSummaryUseCase;
+    private final GetTodayScheduleUseCase getTodayScheduleUseCase;
 
-  @GetMapping("/summary")
-  public ResponseEntity<GetDashboardSummaryUseCase.DashboardSummary> summary() {
-    return ResponseEntity.ok(getDashboardSummaryUseCase.execute());
-  }
+    @GetMapping("/summary")
+    public ResponseEntity<GetDashboardSummaryUseCase.DashboardSummary> summary() {
+        return ResponseEntity.ok(getDashboardSummaryUseCase.execute());
+    }
 
-  @GetMapping("/today")
-  public ResponseEntity<List<GetTodayScheduleUseCase.ScheduleEntry>> today() {
-    return ResponseEntity.ok(getTodayScheduleUseCase.execute());
-  }
+    @GetMapping("/today")
+    public ResponseEntity<List<GetTodayScheduleUseCase.ScheduleEntry>> today() {
+        return ResponseEntity.ok(getTodayScheduleUseCase.execute());
+    }
 }

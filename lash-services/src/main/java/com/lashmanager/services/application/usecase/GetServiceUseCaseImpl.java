@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetServiceUseCaseImpl implements GetServiceUseCase {
 
-  private final ServiceQueryRepository serviceQueryRepository;
+    private final ServiceQueryRepository serviceQueryRepository;
 
-  @Override
-  public CreateServiceUseCase.ServiceResult execute(UUID id) {
-    return serviceQueryRepository
-        .findById(id)
-        .map(ServiceUseCaseMapper::toResult)
-        .orElseThrow(() -> new ServiceNotFoundException(id));
-  }
+    @Override
+    public CreateServiceUseCase.ServiceResult execute(UUID id) {
+        return serviceQueryRepository
+                .findById(id)
+                .map(ServiceUseCaseMapper::toResult)
+                .orElseThrow(() -> new ServiceNotFoundException(id));
+    }
 }

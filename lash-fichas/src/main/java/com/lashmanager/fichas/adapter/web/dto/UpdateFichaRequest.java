@@ -4,13 +4,13 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record UpdateFichaRequest(
-    @NotNull LocalDate date,
-    String skinType,
-    String eyeShape,
-    boolean hasAllergies,
-    String allergiesDescription,
-    boolean hasMedications,
-    String medicationsDescription,
-    boolean hasSensitivities,
-    String sensitivitiesDescription,
-    String observations) {}
+        @NotNull LocalDate date,
+        String skinType,
+        String eyeShape,
+        boolean hasAllergies,
+        String allergiesDescription,
+        boolean hasMedications,
+        String medicationsDescription,
+        boolean hasSensitivities,
+        String sensitivitiesDescription,
+        String observations) {}

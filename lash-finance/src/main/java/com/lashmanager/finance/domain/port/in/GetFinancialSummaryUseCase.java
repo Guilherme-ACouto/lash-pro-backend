@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface GetFinancialSummaryUseCase {
 
-  record SummaryResult(
-      BigDecimal predictedMonthResult,
-      BigDecimal currentBalance,
-      BigDecimal incomeReceived,
-      BigDecimal incomePredicted,
-      BigDecimal expensePaid,
-      BigDecimal expensePredicted,
-      List<MonthlyFinancialStat> last6Months) {}
+    record SummaryResult(
+            BigDecimal predictedMonthResult,
+            BigDecimal currentBalance,
+            BigDecimal incomeReceived,
+            BigDecimal incomePredicted,
+            BigDecimal expensePaid,
+            BigDecimal expensePredicted,
+            List<MonthlyFinancialStat> last6Months) {}
 
-  SummaryResult execute();
+    SummaryResult execute();
 }

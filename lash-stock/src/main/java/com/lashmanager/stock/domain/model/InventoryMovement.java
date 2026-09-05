@@ -14,19 +14,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InventoryMovement {
-  private UUID id;
-  private UUID itemId;
-  private String itemName;
-  private MovementType type;
-  private MovementReason reason;
-  private BigDecimal quantity;
-  private BigDecimal unitCost;
-  private BigDecimal totalCost;
-  private String supplier;
-  private LocalDate purchaseDate;
-  private PurchasePaymentType paymentType;
-  private LocalDate dueDate;
-  private UUID financialEntryId;
-  private String notes;
-  private LocalDateTime createdAt;
+    private UUID id;
+    private UUID itemId;
+    private String itemName;
+    private MovementType type;
+    private MovementReason reason;
+    private BigDecimal quantity;
+    private BigDecimal unitCost;
+    private BigDecimal totalCost;
+    private String supplier;
+    private LocalDate purchaseDate;
+    private PurchasePaymentType paymentType;
+    private LocalDate dueDate;
+    private UUID financialEntryId;
+    private String notes;
+    private LocalDateTime createdAt;
 }

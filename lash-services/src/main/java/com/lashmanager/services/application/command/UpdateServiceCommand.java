@@ -18,23 +18,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateServiceCommand extends AbstractCommand {
 
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 
-  @NotBlank
-  @Size(min = 2, max = 100)
-  private String name;
+    @NotBlank
+    @Size(min = 2, max = 100)
+    private String name;
 
-  @Size(max = 500)
-  private String description;
+    @Size(max = 500)
+    private String description;
 
-  @NotNull
-  @DecimalMin("0.01")
-  private BigDecimal price;
+    @NotNull
+    @DecimalMin("0.01")
+    private BigDecimal price;
 
-  @Min(1)
-  private int durationMinutes;
+    @Min(1)
+    private int durationMinutes;
 
-  public UpdateServiceUseCase.UpdateServiceCommand toDomainCommand() {
-    return new UpdateServiceUseCase.UpdateServiceCommand(name, description, price, durationMinutes);
-  }
+    public UpdateServiceUseCase.UpdateServiceCommand toDomainCommand() {
+        return new UpdateServiceUseCase.UpdateServiceCommand(name, description, price, durationMinutes);
+    }
 }

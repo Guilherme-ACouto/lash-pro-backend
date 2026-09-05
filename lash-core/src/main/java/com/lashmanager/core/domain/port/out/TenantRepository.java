@@ -7,11 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TenantRepository {
-  Tenant save(Tenant tenant);
+    Tenant save(Tenant tenant);
 
-  Optional<Tenant> findById(UUID id);
+    Optional<Tenant> findById(UUID id);
 
-  boolean existsBySchemaName(String schemaName);
+    boolean existsBySchemaName(String schemaName);
 
-  Page<Tenant> findAll(Pageable pageable);
+    Page<Tenant> findAll(Pageable pageable);
 }

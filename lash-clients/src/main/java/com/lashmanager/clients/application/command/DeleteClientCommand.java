@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteClientCommand extends AbstractCommand {
 
-  @NotNull private UUID id;
+    @NotNull
+    private UUID id;
 }

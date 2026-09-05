@@ -15,36 +15,32 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterManualExitUseCaseImpl implements RegisterManualExitUseCase {
 
-  private final InventoryItemRepository itemRepository;
-  private final InventoryMovementRepository movementRepository;
+    private final InventoryItemRepository itemRepository;
+    private final InventoryMovementRepository movementRepository;
 
-  @Override
-  public RegisterPurchaseUseCase.InventoryMovementResult execute(
-      RegisterManualExitCommand command) {
-    InventoryItem existing =
-        itemRepository
-            .findById(command.itemId())
-            .orElseThrow(() -> new InventoryItemNotFoundException(command.itemId()));
+    @Override
+    public RegisterPurchaseUseCase.InventoryMovementResult execute(RegisterManualExitCommand command) {
+        InventoryItem existing = itemRepository
+                .findById(command.itemId())
+                .orElseThrow(() -> new InventoryItemNotFoundException(command.itemId()));
 
-    itemRepository.save(
-        existing.toBuilder()
-            .currentQuantity(existing.getCurrentQuantity().subtract(command.quantity()))
-            .updatedAt(LocalDateTime.now())
-            .build());
+        itemRepository.save(existing.toBuilder()
+                .currentQuantity(existing.getCurrentQuantity().subtract(command.quantity()))
+                .updatedAt(LocalDateTime.now())
+                .build());
 
-    InventoryMovement movement =
-        InventoryMovement.builder()
-            .id(UUID.randomUUID())
-            .itemId(existing.getId())
-            .itemName(existing.getName())
-            .type(MovementType.OUT)
-            .reason(MovementReason.valueOf(command.reason()))
-            .quantity(command.quantity())
-            .purchaseDate(command.exitDate())
-            .notes(command.notes())
-            .createdAt(LocalDateTime.now())
-            .build();
+        InventoryMovement movement = InventoryMovement.builder()
+                .id(UUID.randomUUID())
+                .itemId(existing.getId())
+                .itemName(existing.getName())
+                .type(MovementType.OUT)
+                .reason(MovementReason.valueOf(command.reason()))
+                .quantity(command.quantity())
+                .purchaseDate(command.exitDate())
+                .notes(command.notes())
+                .createdAt(LocalDateTime.now())
+                .build();
 
-    return InventoryUseCaseMapper.toMovementResult(movementRepository.save(movement));
-  }
+        return InventoryUseCaseMapper.toMovementResult(movementRepository.save(movement));
+    }
 }

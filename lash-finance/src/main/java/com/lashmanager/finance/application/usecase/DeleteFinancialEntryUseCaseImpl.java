@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteFinancialEntryUseCaseImpl implements DeleteFinancialEntryUseCase {
 
-  private final FinancialEntryRepository repository;
+    private final FinancialEntryRepository repository;
 
-  @Override
-  public void execute(UUID id) {
-    if (repository.findById(id).isEmpty()) {
-      throw new FinancialEntryNotFoundException(id);
+    @Override
+    public void execute(UUID id) {
+        if (repository.findById(id).isEmpty()) {
+            throw new FinancialEntryNotFoundException(id);
+        }
+        if (!repository.existsByIdAndAppointmentIdIsNull(id)) {
+            throw new FinancialEntryLinkedToAppointmentException();
+        }
+        repository.delete(id);
     }
-    if (!repository.existsByIdAndAppointmentIdIsNull(id)) {
-      throw new FinancialEntryLinkedToAppointmentException();
-    }
-    repository.delete(id);
-  }
 }

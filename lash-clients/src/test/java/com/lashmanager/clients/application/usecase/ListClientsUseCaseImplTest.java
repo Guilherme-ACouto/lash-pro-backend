@@ -27,58 +27,56 @@ import org.springframework.data.domain.PageRequest;
 @DisplayName("Listar clientes")
 class ListClientsUseCaseImplTest {
 
-  @Mock private ClientQueryRepository clientQueryRepository;
+    @Mock
+    private ClientQueryRepository clientQueryRepository;
 
-  private ListClientsUseCaseImpl useCase;
+    private ListClientsUseCaseImpl useCase;
 
-  @BeforeEach
-  void setUp() {
-    useCase = new ListClientsUseCaseImpl(clientQueryRepository);
-  }
+    @BeforeEach
+    void setUp() {
+        useCase = new ListClientsUseCaseImpl(clientQueryRepository);
+    }
 
-  @Test
-  @DisplayName("deve passar string vazia ao repositório quando a busca é nula")
-  void execute_withNullSearch_passesEmptyStringToRepository() {
-    ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
-    given(clientQueryRepository.findAll(any(), any(), any())).willReturn(Page.empty());
+    @Test
+    @DisplayName("deve passar string vazia ao repositório quando a busca é nula")
+    void execute_withNullSearch_passesEmptyStringToRepository() {
+        ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
+        given(clientQueryRepository.findAll(any(), any(), any())).willReturn(Page.empty());
 
-    useCase.execute(null, null, PageRequest.of(0, 10));
+        useCase.execute(null, null, PageRequest.of(0, 10));
 
-    verify(clientQueryRepository).findAll(searchCaptor.capture(), isNull(), any());
-    assertThat(searchCaptor.getValue()).isEqualTo("");
-  }
+        verify(clientQueryRepository).findAll(searchCaptor.capture(), isNull(), any());
+        assertThat(searchCaptor.getValue()).isEqualTo("");
+    }
 
-  @Test
-  @DisplayName("deve remover espaços em branco da busca antes de repassar ao repositório")
-  void execute_withWhitespaceSearch_trimsBeforePassing() {
-    ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
-    given(clientQueryRepository.findAll(any(), any(), any())).willReturn(Page.empty());
+    @Test
+    @DisplayName("deve remover espaços em branco da busca antes de repassar ao repositório")
+    void execute_withWhitespaceSearch_trimsBeforePassing() {
+        ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
+        given(clientQueryRepository.findAll(any(), any(), any())).willReturn(Page.empty());
 
-    useCase.execute("  Ana  ", null, PageRequest.of(0, 10));
+        useCase.execute("  Ana  ", null, PageRequest.of(0, 10));
 
-    verify(clientQueryRepository).findAll(searchCaptor.capture(), isNull(), any());
-    assertThat(searchCaptor.getValue()).isEqualTo("Ana");
-  }
+        verify(clientQueryRepository).findAll(searchCaptor.capture(), isNull(), any());
+        assertThat(searchCaptor.getValue()).isEqualTo("Ana");
+    }
 
-  @Test
-  @DisplayName("deve delegar ao repositório e mapear o resultado corretamente")
-  void execute_withValidParams_delegatesAndMapsResult() {
-    Client client =
-        Client.builder()
-            .id(UUID.randomUUID())
-            .name("Ana Lima")
-            .phone("11999999999")
-            .active(true)
-            .createdAt(LocalDateTime.now())
-            .build();
+    @Test
+    @DisplayName("deve delegar ao repositório e mapear o resultado corretamente")
+    void execute_withValidParams_delegatesAndMapsResult() {
+        Client client = Client.builder()
+                .id(UUID.randomUUID())
+                .name("Ana Lima")
+                .phone("11999999999")
+                .active(true)
+                .createdAt(LocalDateTime.now())
+                .build();
 
-    given(clientQueryRepository.findAll(any(), any(), any()))
-        .willReturn(new PageImpl<>(List.of(client)));
+        given(clientQueryRepository.findAll(any(), any(), any())).willReturn(new PageImpl<>(List.of(client)));
 
-    Page<CreateClientUseCase.ClientResult> result =
-        useCase.execute("Ana", null, PageRequest.of(0, 10));
+        Page<CreateClientUseCase.ClientResult> result = useCase.execute("Ana", null, PageRequest.of(0, 10));
 
-    assertThat(result.getTotalElements()).isEqualTo(1);
-    assertThat(result.getContent().get(0).name()).isEqualTo("Ana Lima");
-  }
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).name()).isEqualTo("Ana Lima");
+    }
 }

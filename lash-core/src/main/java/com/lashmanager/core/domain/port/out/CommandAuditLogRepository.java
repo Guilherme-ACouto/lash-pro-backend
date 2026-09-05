@@ -4,9 +4,9 @@ import com.lashmanager.core.domain.model.CommandAuditLog;
 import java.util.Optional;
 
 public interface CommandAuditLogRepository {
-  CommandAuditLog save(CommandAuditLog commandAuditLog);
+    CommandAuditLog save(CommandAuditLog commandAuditLog);
 
-  boolean existsByCommandClass(String commandClass);
+    boolean existsByCommandClass(String commandClass);
 
-  Optional<CommandAuditLog> findLatestByCommandClass(String commandClass);
+    Optional<CommandAuditLog> findLatestByCommandClass(String commandClass);
 }

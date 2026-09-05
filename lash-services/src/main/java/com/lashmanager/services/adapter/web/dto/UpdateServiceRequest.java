@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 
 public record UpdateServiceRequest(
-    @NotBlank @Size(min = 2, max = 100) String name,
-    @Size(max = 500) String description,
-    @NotNull @DecimalMin("0.01") BigDecimal price,
-    @Min(1) int durationMinutes) {}
+        @NotBlank @Size(min = 2, max = 100) String name,
+        @Size(max = 500) String description,
+        @NotNull @DecimalMin("0.01") BigDecimal price,
+        @Min(1) int durationMinutes) {}

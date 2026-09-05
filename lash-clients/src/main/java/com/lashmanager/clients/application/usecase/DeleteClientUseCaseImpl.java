@@ -16,23 +16,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeleteClientUseCaseImpl implements DeleteClientUseCase {
 
-  private final ClientRepository clientRepository;
-  private final ClientAppointmentPort clientAppointmentPort;
+    private final ClientRepository clientRepository;
+    private final ClientAppointmentPort clientAppointmentPort;
 
-  @Override
-  public void execute(UUID id) {
-    if (!clientRepository.findById(id).isPresent()) {
-      throw new ClientNotFoundException(id);
+    @Override
+    public void execute(UUID id) {
+        if (!clientRepository.findById(id).isPresent()) {
+            throw new ClientNotFoundException(id);
+        }
+
+        List<AppointmentSummary> futureAppointments =
+                clientAppointmentPort.findFutureActiveByClientId(id, LocalDate.now());
+
+        if (!futureAppointments.isEmpty()) {
+            throw new HasFutureAppointmentsException("cliente", futureAppointments);
+        }
+
+        clientAppointmentPort.unlinkClientFromPastAppointments(id, LocalDate.now());
+        clientRepository.deleteById(id);
     }
-
-    List<AppointmentSummary> futureAppointments =
-        clientAppointmentPort.findFutureActiveByClientId(id, LocalDate.now());
-
-    if (!futureAppointments.isEmpty()) {
-      throw new HasFutureAppointmentsException("cliente", futureAppointments);
-    }
-
-    clientAppointmentPort.unlinkClientFromPastAppointments(id, LocalDate.now());
-    clientRepository.deleteById(id);
-  }
 }

@@ -17,43 +17,42 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ResendActivationUseCaseImpl implements ResendActivationUseCase {
 
-  private final UserRepository userRepository;
-  private final EmailPort emailPort;
+    private final UserRepository userRepository;
+    private final EmailPort emailPort;
 
-  @Value("${app.activation.key-expiration-hours:48}")
-  private long activationKeyExpirationHours;
+    @Value("${app.activation.key-expiration-hours:48}")
+    private long activationKeyExpirationHours;
 
-  @Override
-  public void execute(String email) {
-    Optional<User> userOpt = userRepository.findByEmail(email);
+    @Override
+    public void execute(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
 
-    if (userOpt.isEmpty() || userOpt.get().isActive()) {
-      log.info("Reenvio de ativação ignorado (e-mail inexistente ou já ativo): {}", email);
-      return;
+        if (userOpt.isEmpty() || userOpt.get().isActive()) {
+            log.info("Reenvio de ativação ignorado (e-mail inexistente ou já ativo): {}", email);
+            return;
+        }
+
+        User user = userOpt.get();
+        String activationKey = UUID.randomUUID().toString();
+
+        User updated = User.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .active(false)
+                .passwordResetToken(user.getPasswordResetToken())
+                .passwordResetTokenExpiry(user.getPasswordResetTokenExpiry())
+                .tenantId(user.getTenantId())
+                .activationKey(activationKey)
+                .activationKeyExpiry(LocalDateTime.now().plusHours(activationKeyExpirationHours))
+                .createdAt(user.getCreatedAt())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        userRepository.save(updated);
+        emailPort.sendActivationEmail(user.getEmail(), user.getName(), activationKey);
+        log.info("Ativação reenviada para: {}", email);
     }
-
-    User user = userOpt.get();
-    String activationKey = UUID.randomUUID().toString();
-
-    User updated =
-        User.builder()
-            .id(user.getId())
-            .name(user.getName())
-            .email(user.getEmail())
-            .password(user.getPassword())
-            .role(user.getRole())
-            .active(false)
-            .passwordResetToken(user.getPasswordResetToken())
-            .passwordResetTokenExpiry(user.getPasswordResetTokenExpiry())
-            .tenantId(user.getTenantId())
-            .activationKey(activationKey)
-            .activationKeyExpiry(LocalDateTime.now().plusHours(activationKeyExpirationHours))
-            .createdAt(user.getCreatedAt())
-            .updatedAt(LocalDateTime.now())
-            .build();
-
-    userRepository.save(updated);
-    emailPort.sendActivationEmail(user.getEmail(), user.getName(), activationKey);
-    log.info("Ativação reenviada para: {}", email);
-  }
 }

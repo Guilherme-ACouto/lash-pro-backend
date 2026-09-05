@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 /** Porta de leitura — separada de LashMappingRepository (escrita) conforme RBK-27. */
 public interface LashMappingQueryRepository {
-  Page<LashMapping> findByFichaId(UUID fichaId, Pageable pageable);
+    Page<LashMapping> findByFichaId(UUID fichaId, Pageable pageable);
 }

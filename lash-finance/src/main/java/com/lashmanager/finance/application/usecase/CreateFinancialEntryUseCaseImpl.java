@@ -16,35 +16,32 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateFinancialEntryUseCaseImpl implements CreateFinancialEntryUseCase {
 
-  private final FinancialEntryRepository repository;
+    private final FinancialEntryRepository repository;
 
-  @Override
-  public ListFinancialEntriesUseCase.EntryResult execute(CreateCommand command) {
-    FinancialEntryStatus status =
-        command.paymentDate() != null ? FinancialEntryStatus.PAID : FinancialEntryStatus.PENDING;
+    @Override
+    public ListFinancialEntriesUseCase.EntryResult execute(CreateCommand command) {
+        FinancialEntryStatus status =
+                command.paymentDate() != null ? FinancialEntryStatus.PAID : FinancialEntryStatus.PENDING;
 
-    FinancialEntry entry =
-        FinancialEntry.builder()
-            .id(UUID.randomUUID())
-            .type(FinancialEntryType.valueOf(command.type()))
-            .expenseType(
-                command.expenseType() != null
-                    ? FinancialEntryExpenseType.valueOf(command.expenseType())
-                    : null)
-            .description(command.description())
-            .amount(command.amount())
-            .dueDate(command.dueDate())
-            .paymentDate(command.paymentDate())
-            .status(status)
-            .category(command.category())
-            .paymentMethod(command.paymentMethod())
-            .receivedFrom(command.receivedFrom())
-            .notes(command.notes())
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build();
+        FinancialEntry entry = FinancialEntry.builder()
+                .id(UUID.randomUUID())
+                .type(FinancialEntryType.valueOf(command.type()))
+                .expenseType(
+                        command.expenseType() != null ? FinancialEntryExpenseType.valueOf(command.expenseType()) : null)
+                .description(command.description())
+                .amount(command.amount())
+                .dueDate(command.dueDate())
+                .paymentDate(command.paymentDate())
+                .status(status)
+                .category(command.category())
+                .paymentMethod(command.paymentMethod())
+                .receivedFrom(command.receivedFrom())
+                .notes(command.notes())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
 
-    FinancialEntry saved = repository.save(entry);
-    return FinancialEntryMapper.toResult(saved, command.receivedFrom());
-  }
+        FinancialEntry saved = repository.save(entry);
+        return FinancialEntryMapper.toResult(saved, command.receivedFrom());
+    }
 }

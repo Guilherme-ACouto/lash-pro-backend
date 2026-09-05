@@ -8,7 +8,7 @@ import java.util.UUID;
  * (RBK-27).
  */
 public interface InventoryMovementRepository {
-  InventoryMovement save(InventoryMovement movement);
+    InventoryMovement save(InventoryMovement movement);
 
-  boolean existsByItemId(UUID itemId);
+    boolean existsByItemId(UUID itemId);
 }

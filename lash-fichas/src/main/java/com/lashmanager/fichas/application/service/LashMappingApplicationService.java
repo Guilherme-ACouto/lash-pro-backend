@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LashMappingApplicationService {
 
-  private final CreateLashMappingUseCase createLashMappingUseCase;
-  private final UpdateLashMappingUseCase updateLashMappingUseCase;
-  private final DeleteLashMappingUseCase deleteLashMappingUseCase;
+    private final CreateLashMappingUseCase createLashMappingUseCase;
+    private final UpdateLashMappingUseCase updateLashMappingUseCase;
+    private final DeleteLashMappingUseCase deleteLashMappingUseCase;
 
-  public CreateLashMappingUseCase.LashMappingResult when(CreateLashMappingCommand command) {
-    return createLashMappingUseCase.execute(command.toDomainCommand());
-  }
+    public CreateLashMappingUseCase.LashMappingResult when(CreateLashMappingCommand command) {
+        return createLashMappingUseCase.execute(command.toDomainCommand());
+    }
 
-  public CreateLashMappingUseCase.LashMappingResult when(UpdateLashMappingCommand command) {
-    return updateLashMappingUseCase.execute(command.toDomainCommand());
-  }
+    public CreateLashMappingUseCase.LashMappingResult when(UpdateLashMappingCommand command) {
+        return updateLashMappingUseCase.execute(command.toDomainCommand());
+    }
 
-  public void when(DeleteLashMappingCommand command) {
-    deleteLashMappingUseCase.execute(command.getId());
-  }
+    public void when(DeleteLashMappingCommand command) {
+        deleteLashMappingUseCase.execute(command.getId());
+    }
 }

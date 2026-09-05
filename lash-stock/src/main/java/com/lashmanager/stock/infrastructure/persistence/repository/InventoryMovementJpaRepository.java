@@ -8,12 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface InventoryMovementJpaRepository
-    extends JpaRepository<InventoryMovementEntity, UUID> {
+public interface InventoryMovementJpaRepository extends JpaRepository<InventoryMovementEntity, UUID> {
 
-  boolean existsByItemId(UUID itemId);
+    boolean existsByItemId(UUID itemId);
 
-  @Query(
-      "SELECT m FROM InventoryMovementEntity m LEFT JOIN FETCH m.item WHERE m.item.id = :itemId ORDER BY m.createdAt DESC")
-  Page<InventoryMovementEntity> findByItemId(@Param("itemId") UUID itemId, Pageable pageable);
+    @Query(
+            "SELECT m FROM InventoryMovementEntity m LEFT JOIN FETCH m.item WHERE m.item.id = :itemId ORDER BY m.createdAt DESC")
+    Page<InventoryMovementEntity> findByItemId(@Param("itemId") UUID itemId, Pageable pageable);
 }

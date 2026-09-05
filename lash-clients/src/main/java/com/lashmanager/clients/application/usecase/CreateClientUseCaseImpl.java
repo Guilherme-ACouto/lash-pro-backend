@@ -13,27 +13,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateClientUseCaseImpl implements CreateClientUseCase {
 
-  private final ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-  @Override
-  public ClientResult execute(CreateClientCommand command) {
-    if (clientRepository.existsByPhone(command.phone())) {
-      throw new ClientAlreadyExistsException(command.phone());
+    @Override
+    public ClientResult execute(CreateClientCommand command) {
+        if (clientRepository.existsByPhone(command.phone())) {
+            throw new ClientAlreadyExistsException(command.phone());
+        }
+
+        Client client = Client.builder()
+                .id(UUID.randomUUID())
+                .name(command.name())
+                .phone(command.phone())
+                .email(command.email())
+                .birthDate(command.birthDate())
+                .notes(command.notes())
+                .active(true)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        return ClientUseCaseMapper.toResult(clientRepository.save(client));
     }
-
-    Client client =
-        Client.builder()
-            .id(UUID.randomUUID())
-            .name(command.name())
-            .phone(command.phone())
-            .email(command.email())
-            .birthDate(command.birthDate())
-            .notes(command.notes())
-            .active(true)
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build();
-
-    return ClientUseCaseMapper.toResult(clientRepository.save(client));
-  }
 }

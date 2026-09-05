@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tenant {
-  private UUID id;
-  private String name;
-  private String schemaName;
-  private boolean active;
-  private LocalDateTime createdAt;
+    private UUID id;
+    private String name;
+    private String schemaName;
+    private boolean active;
+    private LocalDateTime createdAt;
 }
