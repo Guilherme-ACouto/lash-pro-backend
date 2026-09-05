@@ -3,7 +3,7 @@ package com.lashmanager.clients.application.usecase;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 
-public class ClientUseCaseMapper {
+public final class ClientUseCaseMapper {
 
   private ClientUseCaseMapper() {}
 

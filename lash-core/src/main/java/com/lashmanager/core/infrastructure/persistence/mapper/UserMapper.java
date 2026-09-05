@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
   public User toDomain(UserEntity entity) {
-    if (entity == null) return null;
+    if (entity == null) {
+      return null;
+    }
     return User.builder()
         .id(entity.getId())
         .name(entity.getName())
@@ -28,7 +30,9 @@ public class UserMapper {
   }
 
   public UserEntity toEntity(User domain) {
-    if (domain == null) return null;
+    if (domain == null) {
+      return null;
+    }
     return UserEntity.builder()
         .id(domain.getId())
         .name(domain.getName())

@@ -77,7 +77,9 @@ public class JwtService implements TokenPort {
       boolean isAccess = "ACCESS".equals(claims.get("type", String.class));
       return notExpired && isAccess;
     } catch (JwtException | IllegalArgumentException e) {
-      log.debug("Token inválido: {}", e.getMessage());
+      if (log.isDebugEnabled()) {
+        log.debug("Token inválido: {}", e.getMessage());
+      }
       return false;
     }
   }
@@ -90,7 +92,9 @@ public class JwtService implements TokenPort {
       boolean isRefresh = "REFRESH".equals(claims.get("type", String.class));
       return notExpired && isRefresh;
     } catch (JwtException | IllegalArgumentException e) {
-      log.debug("Refresh token inválido: {}", e.getMessage());
+      if (log.isDebugEnabled()) {
+        log.debug("Refresh token inválido: {}", e.getMessage());
+      }
       return false;
     }
   }

@@ -26,8 +26,9 @@ public class ListInventoryItemsUseCaseImpl implements ListInventoryItemsUseCase 
   }
 
   private Boolean resolveActive(String status) {
-    if ("ACTIVE".equalsIgnoreCase(status)) return true;
-    if ("INACTIVE".equalsIgnoreCase(status)) return false;
-    return null;
+    if ("ACTIVE".equalsIgnoreCase(status)) {
+      return true;
+    }
+    return "INACTIVE".equalsIgnoreCase(status) ? false : null;
   }
 }

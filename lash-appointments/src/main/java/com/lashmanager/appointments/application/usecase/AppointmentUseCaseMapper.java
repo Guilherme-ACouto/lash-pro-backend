@@ -4,7 +4,7 @@ import com.lashmanager.appointments.domain.model.Appointment;
 import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
 import java.math.BigDecimal;
 
-public class AppointmentUseCaseMapper {
+public final class AppointmentUseCaseMapper {
 
   private AppointmentUseCaseMapper() {}
 

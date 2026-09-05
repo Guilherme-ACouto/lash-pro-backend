@@ -6,8 +6,10 @@ import com.lashmanager.appointments.domain.model.AppointmentStatus;
 import com.lashmanager.appointments.domain.port.in.ChangeAppointmentStatusUseCase;
 import com.lashmanager.appointments.domain.port.out.AppointmentFinancialPort;
 import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
+import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
+import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -52,18 +54,18 @@ public class ChangeAppointmentStatusUseCaseImpl implements ChangeAppointmentStat
         appointment.getClientId() != null
             ? clientRepository
                 .findById(appointment.getClientId())
-                .map(c -> c.getName())
+                .map(Client::getName)
                 .orElse("Cliente")
             : "Cliente";
     String serviceName =
         serviceRepository
             .findById(appointment.getServiceId())
-            .map(s -> s.getName())
+            .map(ServiceOffering::getName)
             .orElse("Serviço");
     var servicePrice =
         serviceRepository
             .findById(appointment.getServiceId())
-            .map(s -> s.getPrice())
+            .map(ServiceOffering::getPrice)
             .orElseThrow(() -> new BusinessException("Serviço não encontrado"));
 
     UUID financialEntryId =

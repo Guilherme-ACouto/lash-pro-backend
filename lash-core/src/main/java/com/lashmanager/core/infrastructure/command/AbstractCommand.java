@@ -11,7 +11,11 @@ import lombok.Getter;
  * cada Command manualmente.
  */
 @Getter
-public abstract class AbstractCommand {
+public class AbstractCommand {
+
+  protected AbstractCommand() {
+    // vazio: apenas restringe a instanciação direta, use uma subclasse concreta
+  }
 
   @JsonIgnore private final UUID commandId = UUID.randomUUID();
 

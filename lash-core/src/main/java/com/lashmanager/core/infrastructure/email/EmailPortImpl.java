@@ -43,7 +43,9 @@ public class EmailPortImpl implements EmailPort {
               + "Equipe Lash Manager");
       mailSender.send(message);
     } catch (Exception e) {
-      log.warn("Falha ao enviar email de recuperação para {}: {}", to, e.getMessage());
+      if (log.isWarnEnabled()) {
+        log.warn("Falha ao enviar email de recuperação para {}: {}", to, e.getMessage());
+      }
     }
   }
 
@@ -69,7 +71,9 @@ public class EmailPortImpl implements EmailPort {
               + "Equipe Lash Manager");
       mailSender.send(message);
     } catch (Exception e) {
-      log.warn("Falha ao enviar email de ativação para {}: {}", to, e.getMessage());
+      if (log.isWarnEnabled()) {
+        log.warn("Falha ao enviar email de ativação para {}: {}", to, e.getMessage());
+      }
     }
   }
 }

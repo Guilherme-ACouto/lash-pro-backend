@@ -117,8 +117,11 @@ public class FinancialSummaryRepositoryImpl implements FinancialSummaryRepositor
       BigDecimal amount = toBigDecimal(row[3]);
       String key = year + "-" + month;
       map.putIfAbsent(key, new BigDecimal[] {BigDecimal.ZERO, BigDecimal.ZERO});
-      if ("INCOME".equals(type)) map.get(key)[0] = amount;
-      else map.get(key)[1] = amount;
+      if ("INCOME".equals(type)) {
+        map.get(key)[0] = amount;
+      } else {
+        map.get(key)[1] = amount;
+      }
     }
 
     List<MonthlyFinancialStat> stats = new ArrayList<>();
@@ -132,9 +135,15 @@ public class FinancialSummaryRepositoryImpl implements FinancialSummaryRepositor
   }
 
   private BigDecimal toBigDecimal(Object value) {
-    if (value == null) return BigDecimal.ZERO;
-    if (value instanceof BigDecimal bd) return bd;
-    if (value instanceof Number n) return BigDecimal.valueOf(n.doubleValue());
+    if (value == null) {
+      return BigDecimal.ZERO;
+    }
+    if (value instanceof BigDecimal bd) {
+      return bd;
+    }
+    if (value instanceof Number n) {
+      return BigDecimal.valueOf(n.doubleValue());
+    }
     return BigDecimal.ZERO;
   }
 }

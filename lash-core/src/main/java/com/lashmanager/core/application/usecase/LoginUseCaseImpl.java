@@ -49,7 +49,9 @@ public class LoginUseCaseImpl implements LoginUseCase {
         tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
     String refreshToken = tokenPort.generateRefreshToken(user.getEmail());
 
-    log.info("Login realizado: {}", user.getEmail());
+    if (log.isInfoEnabled()) {
+      log.info("Login realizado: {}", user.getEmail());
+    }
     return new LoginResponse(
         accessToken, refreshToken, user.getName(), user.getEmail(), user.getRole().name());
   }

@@ -60,7 +60,9 @@ public class TenantResolvingFilter extends OncePerRequestFilter {
         TenantContext.setCurrentTenant(schemaName);
       }
     } catch (Exception e) {
-      log.debug("Falha ao resolver tenant do token: {}", e.getMessage());
+      if (log.isDebugEnabled()) {
+        log.debug("Falha ao resolver tenant do token: {}", e.getMessage());
+      }
     }
   }
 }

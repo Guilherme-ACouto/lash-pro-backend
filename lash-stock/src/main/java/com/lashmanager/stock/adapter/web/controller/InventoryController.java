@@ -13,8 +13,8 @@ import com.lashmanager.stock.application.service.RegisterManualExitApplicationSe
 import com.lashmanager.stock.application.service.RegisterPurchaseApplicationService;
 import com.lashmanager.stock.application.service.UpdateInventoryItemApplicationService;
 import com.lashmanager.stock.domain.port.in.*;
-import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase.*;
-import com.lashmanager.stock.domain.port.in.RegisterPurchaseUseCase.*;
+import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase.InventoryItemResult;
+import com.lashmanager.stock.domain.port.in.RegisterPurchaseUseCase.InventoryMovementResult;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

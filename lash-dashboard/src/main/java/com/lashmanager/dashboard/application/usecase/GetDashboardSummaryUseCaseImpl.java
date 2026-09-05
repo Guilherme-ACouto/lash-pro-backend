@@ -3,6 +3,7 @@ package com.lashmanager.dashboard.application.usecase;
 import com.lashmanager.appointments.infrastructure.persistence.repository.AppointmentJpaRepository;
 import com.lashmanager.clients.infrastructure.persistence.repository.ClientJpaRepository;
 import com.lashmanager.dashboard.domain.port.in.GetDashboardSummaryUseCase;
+import com.lashmanager.finance.infrastructure.persistence.entity.FinancialEntryEntity;
 import com.lashmanager.finance.infrastructure.persistence.repository.FinancialEntryJpaRepository;
 import com.lashmanager.stock.infrastructure.persistence.repository.InventoryItemJpaRepository;
 import java.math.BigDecimal;
@@ -29,7 +30,6 @@ public class GetDashboardSummaryUseCaseImpl implements GetDashboardSummaryUseCas
     LocalDate endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
     LocalDate startOfMonth = today.withDayOfMonth(1);
     LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
-    LocalDate startOfLastMonth = startOfMonth.minusMonths(1);
 
     long totalClients = clientJpaRepository.count();
     long newClientsThisMonth =
@@ -56,12 +56,12 @@ public class GetDashboardSummaryUseCaseImpl implements GetDashboardSummaryUseCas
     BigDecimal revenueThisMonth =
         monthEntries.stream()
             .filter(e -> "INCOME".equals(e.getType()))
-            .map(e -> e.getAmount())
+            .map(FinancialEntryEntity::getAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     BigDecimal expenseThisMonth =
         monthEntries.stream()
             .filter(e -> "EXPENSE".equals(e.getType()))
-            .map(e -> e.getAmount())
+            .map(FinancialEntryEntity::getAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     long lowStockItems =
@@ -106,12 +106,12 @@ public class GetDashboardSummaryUseCaseImpl implements GetDashboardSummaryUseCas
       BigDecimal revenue =
           entries.stream()
               .filter(e -> "INCOME".equals(e.getType()))
-              .map(e -> e.getAmount())
+              .map(FinancialEntryEntity::getAmount)
               .reduce(BigDecimal.ZERO, BigDecimal::add);
       BigDecimal expense =
           entries.stream()
               .filter(e -> "EXPENSE".equals(e.getType()))
-              .map(e -> e.getAmount())
+              .map(FinancialEntryEntity::getAmount)
               .reduce(BigDecimal.ZERO, BigDecimal::add);
 
       result.add(new MonthlyRevenueStat(ref.getYear(), ref.getMonthValue(), revenue, expense));

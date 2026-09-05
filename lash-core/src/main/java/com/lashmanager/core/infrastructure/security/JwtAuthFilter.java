@@ -53,7 +53,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
       }
     } catch (Exception e) {
-      log.debug("Falha na autenticação JWT: {}", e.getMessage());
+      if (log.isDebugEnabled()) {
+        log.debug("Falha na autenticação JWT: {}", e.getMessage());
+      }
     }
 
     filterChain.doFilter(request, response);

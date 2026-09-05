@@ -54,7 +54,9 @@ public class ActivateAccountUseCaseImpl implements ActivateAccountUseCase {
 
     schemaProvisionerPort.provision(tenantId);
 
-    log.info("Conta ativada: {} (tenant {})", user.getEmail(), tenantId);
+    if (log.isInfoEnabled()) {
+      log.info("Conta ativada: {} (tenant {})", user.getEmail(), tenantId);
+    }
     return new ActivationResult(user.getEmail(), tenantId);
   }
 

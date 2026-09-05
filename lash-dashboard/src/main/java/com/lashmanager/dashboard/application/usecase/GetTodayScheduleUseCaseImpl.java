@@ -2,6 +2,7 @@ package com.lashmanager.dashboard.application.usecase;
 
 import com.lashmanager.appointments.infrastructure.persistence.entity.AppointmentEntity;
 import com.lashmanager.appointments.infrastructure.persistence.repository.AppointmentJpaRepository;
+import com.lashmanager.clients.infrastructure.persistence.entity.ClientEntity;
 import com.lashmanager.clients.infrastructure.persistence.repository.ClientJpaRepository;
 import com.lashmanager.dashboard.domain.port.in.GetTodayScheduleUseCase;
 import com.lashmanager.services.infrastructure.persistence.repository.ServiceJpaRepository;
@@ -37,7 +38,7 @@ public class GetTodayScheduleUseCaseImpl implements GetTodayScheduleUseCase {
                     id ->
                         clientJpaRepository
                             .findById(id)
-                            .map(c -> c.getName())
+                            .map(ClientEntity::getName)
                             .orElse("Cliente removido")));
 
     record SvcInfo(String name, BigDecimal price) {}

@@ -4,6 +4,7 @@ import com.lashmanager.appointments.domain.model.Appointment;
 import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
 import com.lashmanager.appointments.infrastructure.persistence.mapper.AppointmentMapper;
 import com.lashmanager.clients.domain.model.AppointmentSummary;
+import com.lashmanager.services.infrastructure.persistence.entity.ServiceEntity;
 import com.lashmanager.services.infrastructure.persistence.repository.ServiceJpaRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -41,7 +42,10 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         .map(
             a -> {
               String serviceName =
-                  serviceJpaRepository.findById(a.getServiceId()).map(s -> s.getName()).orElse("—");
+                  serviceJpaRepository
+                      .findById(a.getServiceId())
+                      .map(ServiceEntity::getName)
+                      .orElse("—");
               return new AppointmentSummary(
                   a.getId().toString(), a.getScheduledDate(), a.getScheduledTime(), serviceName);
             })

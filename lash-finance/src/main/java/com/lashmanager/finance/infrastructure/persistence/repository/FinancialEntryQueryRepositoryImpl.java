@@ -1,6 +1,7 @@
 package com.lashmanager.finance.infrastructure.persistence.repository;
 
 import com.lashmanager.appointments.infrastructure.persistence.repository.AppointmentJpaRepository;
+import com.lashmanager.clients.infrastructure.persistence.entity.ClientEntity;
 import com.lashmanager.clients.infrastructure.persistence.repository.ClientJpaRepository;
 import com.lashmanager.finance.domain.port.out.FinancialEntryQueryRepository;
 import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
@@ -52,7 +53,7 @@ public class FinancialEntryQueryRepositoryImpl implements FinancialEntryQueryRep
           .flatMap(
               a ->
                   a.getClientId() != null
-                      ? clientJpaRepository.findById(a.getClientId()).map(c -> c.getName())
+                      ? clientJpaRepository.findById(a.getClientId()).map(ClientEntity::getName)
                       : Optional.empty())
           .orElse(null);
     }

@@ -32,6 +32,8 @@ public class TenantEntity {
 
   @PrePersist
   void prePersist() {
-    if (createdAt == null) createdAt = LocalDateTime.now();
+    if (createdAt == null) {
+      createdAt = LocalDateTime.now();
+    }
   }
 }

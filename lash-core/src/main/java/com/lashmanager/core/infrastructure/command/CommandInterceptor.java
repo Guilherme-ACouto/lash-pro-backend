@@ -45,14 +45,18 @@ public class CommandInterceptor {
     try {
       Object result = joinPoint.proceed();
       audit(command, true);
-      log.info(
-          "Command {} executado em {}ms",
-          command.getClass().getSimpleName(),
-          System.currentTimeMillis() - start);
+      if (log.isInfoEnabled()) {
+        log.info(
+            "Command {} executado em {}ms",
+            command.getClass().getSimpleName(),
+            System.currentTimeMillis() - start);
+      }
       return result;
     } catch (Exception e) {
       audit(command, false);
-      log.warn("Command {} falhou: {}", command.getClass().getSimpleName(), e.getMessage());
+      if (log.isWarnEnabled()) {
+        log.warn("Command {} falhou: {}", command.getClass().getSimpleName(), e.getMessage());
+      }
       throw e;
     }
   }
@@ -91,10 +95,12 @@ public class CommandInterceptor {
               .success(success)
               .build());
     } catch (Exception e) {
-      log.error(
-          "Falha ao gravar auditoria do command {}: {}",
-          command.getClass().getSimpleName(),
-          e.getMessage());
+      if (log.isErrorEnabled()) {
+        log.error(
+            "Falha ao gravar auditoria do command {}: {}",
+            command.getClass().getSimpleName(),
+            e.getMessage());
+      }
     }
   }
 

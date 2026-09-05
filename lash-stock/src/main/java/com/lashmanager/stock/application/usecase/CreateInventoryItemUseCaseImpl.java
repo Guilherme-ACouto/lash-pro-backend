@@ -42,7 +42,9 @@ public class CreateInventoryItemUseCaseImpl implements CreateInventoryItemUseCas
   }
 
   private String resolveCode(String requested) {
-    if (requested != null && !requested.isBlank()) return requested.trim();
+    if (requested != null && !requested.isBlank()) {
+      return requested.trim();
+    }
     String generated;
     do {
       generated =

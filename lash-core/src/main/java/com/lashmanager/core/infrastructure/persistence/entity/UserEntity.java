@@ -58,8 +58,12 @@ public class UserEntity {
   @PrePersist
   void prePersist() {
     LocalDateTime now = LocalDateTime.now();
-    if (createdAt == null) createdAt = now;
-    if (updatedAt == null) updatedAt = now;
+    if (createdAt == null) {
+      createdAt = now;
+    }
+    if (updatedAt == null) {
+      updatedAt = now;
+    }
   }
 
   @PreUpdate

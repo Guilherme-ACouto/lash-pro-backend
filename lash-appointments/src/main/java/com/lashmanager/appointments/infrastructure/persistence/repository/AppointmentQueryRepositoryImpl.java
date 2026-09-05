@@ -5,7 +5,9 @@ import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
 import com.lashmanager.appointments.domain.port.out.AppointmentQueryRepository;
 import com.lashmanager.appointments.infrastructure.persistence.entity.AppointmentEntity;
 import com.lashmanager.appointments.infrastructure.persistence.mapper.AppointmentMapper;
+import com.lashmanager.clients.infrastructure.persistence.entity.ClientEntity;
 import com.lashmanager.clients.infrastructure.persistence.repository.ClientJpaRepository;
+import com.lashmanager.services.infrastructure.persistence.entity.ServiceEntity;
 import com.lashmanager.services.infrastructure.persistence.repository.ServiceJpaRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,14 +45,14 @@ public class AppointmentQueryRepositoryImpl implements AppointmentQueryRepositor
   private CreateAppointmentUseCase.AppointmentResult toResult(AppointmentEntity a) {
     String clientName =
         a.getClientId() != null
-            ? clientJpaRepository.findById(a.getClientId()).map(c -> c.getName()).orElse("—")
+            ? clientJpaRepository.findById(a.getClientId()).map(ClientEntity::getName).orElse("—")
             : "—";
     String serviceName =
-        serviceJpaRepository.findById(a.getServiceId()).map(s -> s.getName()).orElse("—");
+        serviceJpaRepository.findById(a.getServiceId()).map(ServiceEntity::getName).orElse("—");
     BigDecimal servicePrice =
         serviceJpaRepository
             .findById(a.getServiceId())
-            .map(s -> s.getPrice())
+            .map(ServiceEntity::getPrice)
             .orElse(BigDecimal.ZERO);
 
     return new CreateAppointmentUseCase.AppointmentResult(

@@ -86,7 +86,9 @@ public class RegisterUseCaseImpl implements RegisterUseCase {
 
     User saved = userRepository.save(user);
     emailPort.sendActivationEmail(saved.getEmail(), saved.getName(), activationKey);
-    log.info("Cadastro criado, aguardando ativação: {}", saved.getEmail());
+    if (log.isInfoEnabled()) {
+      log.info("Cadastro criado, aguardando ativação: {}", saved.getEmail());
+    }
 
     return new RegisterResult(saved.getId(), saved.getEmail());
   }

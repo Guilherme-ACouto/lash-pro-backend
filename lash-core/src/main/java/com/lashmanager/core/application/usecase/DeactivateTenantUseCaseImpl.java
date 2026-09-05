@@ -32,6 +32,8 @@ public class DeactivateTenantUseCaseImpl implements DeactivateTenantUseCase {
             .createdAt(tenant.getCreatedAt())
             .build());
 
-    log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());
+    if (log.isInfoEnabled()) {
+      log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());
+    }
   }
 }

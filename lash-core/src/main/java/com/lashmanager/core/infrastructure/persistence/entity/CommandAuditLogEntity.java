@@ -35,6 +35,8 @@ public class CommandAuditLogEntity {
 
   @PrePersist
   void prePersist() {
-    if (executedAt == null) executedAt = LocalDateTime.now();
+    if (executedAt == null) {
+      executedAt = LocalDateTime.now();
+    }
   }
 }
