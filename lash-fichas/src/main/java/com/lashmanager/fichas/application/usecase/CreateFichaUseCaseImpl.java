@@ -1,6 +1,6 @@
 package com.lashmanager.fichas.application.usecase;
 
-import com.lashmanager.clients.domain.port.in.GetClientUseCase;
+import com.lashmanager.clients.domain.port.in.ClientQueryService;
 import com.lashmanager.fichas.domain.exception.ClientAlreadyHasFichaException;
 import com.lashmanager.fichas.domain.model.Ficha;
 import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class CreateFichaUseCaseImpl implements CreateFichaUseCase {
 
     private final FichaRepository fichaRepository;
-    private final GetClientUseCase getClientUseCase;
+    private final ClientQueryService clientQueryService;
 
     @Override
     public FichaResult execute(CreateFichaCommand command) {
@@ -23,12 +23,12 @@ public class CreateFichaUseCaseImpl implements CreateFichaUseCase {
             throw new ClientAlreadyHasFichaException(command.clientId());
         }
 
-        var clientResult = getClientUseCase.execute(command.clientId());
+        var client = clientQueryService.getById(command.clientId());
 
         Ficha ficha = Ficha.builder()
                 .id(UUID.randomUUID())
                 .clientId(command.clientId())
-                .clientName(clientResult.name())
+                .clientName(client.getName())
                 .date(command.date())
                 .skinType(command.skinType())
                 .eyeShape(command.eyeShape())

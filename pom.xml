@@ -107,6 +107,10 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
+                        <!-- Necessário pro Jackson desserializar os *Command (Lombok, sem record —
+                             record não pode estender AbstractCommand) direto via @RequestBody,
+                             usando os nomes reais dos parâmetros do construtor (ParameterNamesModule). -->
+                        <parameters>true</parameters>
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>org.projectlombok</groupId>

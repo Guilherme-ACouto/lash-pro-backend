@@ -1,7 +1,7 @@
 package com.lashmanager.appointments.infrastructure.persistence.repository;
 
 import com.lashmanager.appointments.domain.model.Appointment;
-import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
+import com.lashmanager.appointments.domain.model.AppointmentDetails;
 import com.lashmanager.appointments.domain.port.out.AppointmentQueryRepository;
 import com.lashmanager.appointments.infrastructure.persistence.entity.AppointmentEntity;
 import com.lashmanager.appointments.infrastructure.persistence.mapper.AppointmentMapper;
@@ -32,19 +32,19 @@ public class AppointmentQueryRepositoryImpl implements AppointmentQueryRepositor
     }
 
     @Override
-    public List<CreateAppointmentUseCase.AppointmentResult> findByDateWithDetails(LocalDate date) {
+    public List<AppointmentDetails> findByDateWithDetails(LocalDate date) {
         return jpaRepository.findByDate(date).stream().map(this::toResult).toList();
     }
 
     @Override
-    public List<CreateAppointmentUseCase.AppointmentResult> findByDateRangeWithDetails(
+    public List<AppointmentDetails> findByDateRangeWithDetails(
             LocalDate startDate, LocalDate endDate) {
         return jpaRepository.findByDateRange(startDate, endDate).stream()
                 .map(this::toResult)
                 .toList();
     }
 
-    private CreateAppointmentUseCase.AppointmentResult toResult(AppointmentEntity a) {
+    private AppointmentDetails toResult(AppointmentEntity a) {
         String clientName = a.getClientId() != null
                 ? clientJpaRepository
                         .findById(a.getClientId())
@@ -60,7 +60,7 @@ public class AppointmentQueryRepositoryImpl implements AppointmentQueryRepositor
                 .map(ServiceEntity::getPrice)
                 .orElse(BigDecimal.ZERO);
 
-        return new CreateAppointmentUseCase.AppointmentResult(
+        return new AppointmentDetails(
                 a.getId(),
                 a.getClientId(),
                 clientName,

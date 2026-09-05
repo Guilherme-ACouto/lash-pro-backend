@@ -6,14 +6,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.lashmanager.clients.AbstractIntegrationTest;
+import com.lashmanager.clients.application.command.CreateClientCommand;
+import com.lashmanager.clients.application.command.DeactivateClientCommand;
+import com.lashmanager.clients.application.command.DeleteClientCommand;
+import com.lashmanager.clients.application.command.ReactivateClientCommand;
+import com.lashmanager.clients.application.command.UpdateClientCommand;
+import com.lashmanager.clients.application.service.ClientApplicationService;
 import com.lashmanager.clients.domain.exception.ClientAlreadyExistsException;
 import com.lashmanager.clients.domain.exception.ClientNotFoundException;
-import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
-import com.lashmanager.clients.domain.port.in.DeactivateClientUseCase;
-import com.lashmanager.clients.domain.port.in.DeleteClientUseCase;
-import com.lashmanager.clients.domain.port.in.GetClientUseCase;
-import com.lashmanager.clients.domain.port.in.ListClientsUseCase;
-import com.lashmanager.clients.domain.port.in.UpdateClientUseCase;
+import com.lashmanager.clients.domain.model.Client;
+import com.lashmanager.clients.domain.port.in.ClientQueryService;
 import com.lashmanager.clients.domain.port.out.ClientAppointmentPort;
 import java.util.Collections;
 import java.util.UUID;
@@ -29,22 +31,10 @@ import org.springframework.data.domain.PageRequest;
 class ClientITest extends AbstractIntegrationTest {
 
     @Autowired
-    CreateClientUseCase createClientUseCase;
+    ClientApplicationService clientApplicationService;
 
     @Autowired
-    UpdateClientUseCase updateClientUseCase;
-
-    @Autowired
-    GetClientUseCase getClientUseCase;
-
-    @Autowired
-    ListClientsUseCase listClientsUseCase;
-
-    @Autowired
-    DeleteClientUseCase deleteClientUseCase;
-
-    @Autowired
-    DeactivateClientUseCase deactivateClientUseCase;
+    ClientQueryService clientQueryService;
 
     @MockBean
     ClientAppointmentPort clientAppointmentPort;
@@ -54,8 +44,8 @@ class ClientITest extends AbstractIntegrationTest {
         given(clientAppointmentPort.findFutureActiveByClientId(any(), any())).willReturn(Collections.emptyList());
     }
 
-    private CreateClientUseCase.ClientResult createClient(String name, String phone) {
-        return createClientUseCase.execute(new CreateClientUseCase.CreateClientCommand(name, phone, null, null, null));
+    private Client createClient(String name, String phone) {
+        return clientApplicationService.when(new CreateClientCommand(name, phone, null, null, null));
     }
 
     @Test
@@ -63,25 +53,25 @@ class ClientITest extends AbstractIntegrationTest {
     void createFindUpdateDelete_fullCrudFlow() {
         String phone = uniquePhone();
 
-        CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
-        UUID id = created.id();
+        Client created = createClient("Ana Lima", phone);
+        UUID id = created.getId();
 
-        assertThat(created.name()).isEqualTo("Ana Lima");
-        assertThat(created.active()).isTrue();
+        assertThat(created.getName()).isEqualTo("Ana Lima");
+        assertThat(created.isActive()).isTrue();
 
-        CreateClientUseCase.ClientResult found = getClientUseCase.execute(id);
-        assertThat(found.name()).isEqualTo("Ana Lima");
-        assertThat(found.phone()).isEqualTo(phone);
+        Client found = clientQueryService.getById(id);
+        assertThat(found.getName()).isEqualTo("Ana Lima");
+        assertThat(found.getPhone()).isEqualTo(phone);
 
-        updateClientUseCase.execute(
-                id, new UpdateClientUseCase.UpdateClientCommand("Ana Costa", phone, null, null, null));
+        clientApplicationService.when(
+                new UpdateClientCommand(id, "Ana Costa", phone, null, null, null));
 
-        CreateClientUseCase.ClientResult updated = getClientUseCase.execute(id);
-        assertThat(updated.name()).isEqualTo("Ana Costa");
+        Client updated = clientQueryService.getById(id);
+        assertThat(updated.getName()).isEqualTo("Ana Costa");
 
-        deleteClientUseCase.execute(id);
+        clientApplicationService.when(new DeleteClientCommand(id));
 
-        assertThatThrownBy(() -> getClientUseCase.execute(id)).isInstanceOf(ClientNotFoundException.class);
+        assertThatThrownBy(() -> clientQueryService.getById(id)).isInstanceOf(ClientNotFoundException.class);
     }
 
     @Test
@@ -97,27 +87,27 @@ class ClientITest extends AbstractIntegrationTest {
     @DisplayName("deve persistir active=false no banco após desativar o cliente")
     void deactivate_persistsActiveFalseInDatabase() {
         String phone = uniquePhone();
-        CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
-        UUID id = created.id();
+        Client created = createClient("Ana Lima", phone);
+        UUID id = created.getId();
 
-        deactivateClientUseCase.deactivate(id, false);
+        clientApplicationService.when(new DeactivateClientCommand(id, false));
 
-        CreateClientUseCase.ClientResult result = getClientUseCase.execute(id);
-        assertThat(result.active()).isFalse();
+        Client result = clientQueryService.getById(id);
+        assertThat(result.isActive()).isFalse();
     }
 
     @Test
     @DisplayName("deve persistir active=true no banco após reativar o cliente")
     void reactivate_persistsActiveTrueInDatabase() {
         String phone = uniquePhone();
-        CreateClientUseCase.ClientResult created = createClient("Ana Lima", phone);
-        UUID id = created.id();
+        Client created = createClient("Ana Lima", phone);
+        UUID id = created.getId();
 
-        deactivateClientUseCase.deactivate(id, false);
-        deactivateClientUseCase.reactivate(id);
+        clientApplicationService.when(new DeactivateClientCommand(id, false));
+        clientApplicationService.when(new ReactivateClientCommand(id));
 
-        CreateClientUseCase.ClientResult result = getClientUseCase.execute(id);
-        assertThat(result.active()).isTrue();
+        Client result = clientQueryService.getById(id);
+        assertThat(result.isActive()).isTrue();
     }
 
     @Test
@@ -128,12 +118,11 @@ class ClientITest extends AbstractIntegrationTest {
         createClient("Ana Lima", phoneAna);
         createClient("Beatriz Costa", phoneBea);
 
-        Page<CreateClientUseCase.ClientResult> page =
-                listClientsUseCase.execute("Ana Lima", null, PageRequest.of(0, 10));
+        Page<Client> page = clientQueryService.list("Ana Lima", null, PageRequest.of(0, 10));
 
         assertThat(page.getContent())
                 .isNotEmpty()
-                .allSatisfy(c -> assertThat(c.name()).containsIgnoringCase("Ana Lima"));
+                .allSatisfy(c -> assertThat(c.getName()).containsIgnoringCase("Ana Lima"));
     }
 
     @Test
@@ -142,16 +131,16 @@ class ClientITest extends AbstractIntegrationTest {
         String phoneAtivo = uniquePhone();
         String phoneInativo = uniquePhone();
 
-        CreateClientUseCase.ClientResult ativo = createClient("Cliente Ativo", phoneAtivo);
-        CreateClientUseCase.ClientResult inativo = createClient("Cliente Inativo", phoneInativo);
-        deactivateClientUseCase.deactivate(inativo.id(), false);
+        Client ativo = createClient("Cliente Ativo", phoneAtivo);
+        Client inativo = createClient("Cliente Inativo", phoneInativo);
+        clientApplicationService.when(new DeactivateClientCommand(inativo.getId(), false));
 
-        Page<CreateClientUseCase.ClientResult> page = listClientsUseCase.execute("", false, PageRequest.of(0, 50));
+        Page<Client> page = clientQueryService.list("", false, PageRequest.of(0, 50));
 
         assertThat(page.getContent())
-                .extracting(CreateClientUseCase.ClientResult::id)
-                .contains(inativo.id())
-                .doesNotContain(ativo.id());
+                .extracting(Client::getId)
+                .contains(inativo.getId())
+                .doesNotContain(ativo.getId());
     }
 
     private String uniquePhone() {
