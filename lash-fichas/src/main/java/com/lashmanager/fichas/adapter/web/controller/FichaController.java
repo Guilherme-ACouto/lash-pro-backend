@@ -10,6 +10,8 @@ import com.lashmanager.fichas.application.service.CreateFichaApplicationService;
 import com.lashmanager.fichas.application.service.LashMappingApplicationService;
 import com.lashmanager.fichas.application.service.UpdateFichaApplicationService;
 import com.lashmanager.fichas.domain.port.in.*;
+import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase.FichaResult;
+import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase.LashMappingResult;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
