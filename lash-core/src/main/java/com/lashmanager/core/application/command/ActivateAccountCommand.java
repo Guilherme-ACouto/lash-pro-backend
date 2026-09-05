@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ActivateAccountCommand extends AbstractCommand {
 
-    @NotBlank(message = "Chave de ativação é obrigatória")
-    private String activationKey;
+  @NotBlank(message = "Chave de ativação é obrigatória")
+  private String activationKey;
 }

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateAppointmentApplicationService {
 
-    private final UpdateAppointmentUseCase updateAppointmentUseCase;
+  private final UpdateAppointmentUseCase updateAppointmentUseCase;
 
-    public CreateAppointmentUseCase.AppointmentResult when(UpdateAppointmentCommand command) {
-        return updateAppointmentUseCase.execute(command.getId(), command.toDomainCommand());
-    }
+  public CreateAppointmentUseCase.AppointmentResult when(UpdateAppointmentCommand command) {
+    return updateAppointmentUseCase.execute(command.getId(), command.toDomainCommand());
+  }
 }

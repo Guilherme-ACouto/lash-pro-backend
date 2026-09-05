@@ -131,5 +131,45 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <!-- Lint/formatação automática de código Java.
+                 mvn spotless:check -> falha se algo estiver desformatado
+                 mvn spotless:apply -> formata tudo automaticamente -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.22.0</version>
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                        <removeUnusedImports/>
+                        <importOrder/>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                    </java>
+                </configuration>
+            </plugin>
+
+            <!-- Lint de qualidade de código Java.
+                 mvn pmd:check -> falha se encontrar violação (método longo, código morto, etc)
+                 mvn pmd:pmd   -> gera o relatório em target/site/pmd.html -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.25.0</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>rulesets/java/quickstart.xml</ruleset>
+                    </rulesets>
+                    <linkXRef>false</linkXRef>
+                    <failOnViolation>true</failOnViolation>
+                    <printFailingErrors>true</printFailingErrors>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

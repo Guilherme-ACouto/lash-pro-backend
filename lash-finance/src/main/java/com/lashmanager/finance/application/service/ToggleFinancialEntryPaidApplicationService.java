@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ToggleFinancialEntryPaidApplicationService {
 
-    private final ToggleFinancialEntryPaidUseCase toggleFinancialEntryPaidUseCase;
+  private final ToggleFinancialEntryPaidUseCase toggleFinancialEntryPaidUseCase;
 
-    public ListFinancialEntriesUseCase.EntryResult when(ToggleFinancialEntryPaidCommand command) {
-        return toggleFinancialEntryPaidUseCase.execute(command.getId());
-    }
+  public ListFinancialEntriesUseCase.EntryResult when(ToggleFinancialEntryPaidCommand command) {
+    return toggleFinancialEntryPaidUseCase.execute(command.getId());
+  }
 }

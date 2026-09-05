@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterManualExitApplicationService {
 
-    private final RegisterManualExitUseCase registerManualExitUseCase;
+  private final RegisterManualExitUseCase registerManualExitUseCase;
 
-    public RegisterPurchaseUseCase.InventoryMovementResult when(RegisterManualExitCommand command) {
-        return registerManualExitUseCase.execute(command.toDomainCommand());
-    }
+  public RegisterPurchaseUseCase.InventoryMovementResult when(RegisterManualExitCommand command) {
+    return registerManualExitUseCase.execute(command.toDomainCommand());
+  }
 }

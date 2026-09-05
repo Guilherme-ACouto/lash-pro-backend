@@ -4,8 +4,4 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record AppointmentSummary(
-        String id,
-        LocalDate scheduledDate,
-        LocalTime scheduledTime,
-        String serviceName
-) {}
+    String id, LocalDate scheduledDate, LocalTime scheduledTime, String serviceName) {}

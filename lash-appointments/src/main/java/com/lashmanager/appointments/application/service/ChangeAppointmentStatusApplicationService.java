@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChangeAppointmentStatusApplicationService {
 
-    private final ChangeAppointmentStatusUseCase changeAppointmentStatusUseCase;
+  private final ChangeAppointmentStatusUseCase changeAppointmentStatusUseCase;
 
-    public void when(ConfirmAppointmentCommand command) {
-        changeAppointmentStatusUseCase.confirm(command.getId());
-    }
+  public void when(ConfirmAppointmentCommand command) {
+    changeAppointmentStatusUseCase.confirm(command.getId());
+  }
 
-    public void when(CompleteAppointmentCommand command) {
-        changeAppointmentStatusUseCase.complete(command.getId(), command.getPaymentMethod());
-    }
+  public void when(CompleteAppointmentCommand command) {
+    changeAppointmentStatusUseCase.complete(command.getId(), command.getPaymentMethod());
+  }
 
-    public void when(CancelAppointmentCommand command) {
-        changeAppointmentStatusUseCase.cancel(command.getId());
-    }
+  public void when(CancelAppointmentCommand command) {
+    changeAppointmentStatusUseCase.cancel(command.getId());
+  }
 
-    public void when(NoShowAppointmentCommand command) {
-        changeAppointmentStatusUseCase.noShow(command.getId());
-    }
+  public void when(NoShowAppointmentCommand command) {
+    changeAppointmentStatusUseCase.noShow(command.getId());
+  }
 }

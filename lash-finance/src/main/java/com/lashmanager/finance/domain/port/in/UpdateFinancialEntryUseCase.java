@@ -6,18 +6,17 @@ import java.util.UUID;
 
 public interface UpdateFinancialEntryUseCase {
 
-    record UpdateCommand(
-            String type,
-            String expenseType,
-            String description,
-            BigDecimal amount,
-            LocalDate dueDate,
-            LocalDate paymentDate,
-            String category,
-            String paymentMethod,
-            String receivedFrom,
-            String notes
-    ) {}
+  record UpdateCommand(
+      String type,
+      String expenseType,
+      String description,
+      BigDecimal amount,
+      LocalDate dueDate,
+      LocalDate paymentDate,
+      String category,
+      String paymentMethod,
+      String receivedFrom,
+      String notes) {}
 
-    ListFinancialEntriesUseCase.EntryResult execute(UUID id, UpdateCommand command);
+  ListFinancialEntriesUseCase.EntryResult execute(UUID id, UpdateCommand command);
 }

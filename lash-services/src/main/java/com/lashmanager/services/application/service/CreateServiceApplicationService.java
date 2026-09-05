@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateServiceApplicationService {
 
-    private final CreateServiceUseCase createServiceUseCase;
+  private final CreateServiceUseCase createServiceUseCase;
 
-    public CreateServiceUseCase.ServiceResult when(CreateServiceCommand command) {
-        return createServiceUseCase.execute(command.toDomainCommand());
-    }
+  public CreateServiceUseCase.ServiceResult when(CreateServiceCommand command) {
+    return createServiceUseCase.execute(command.toDomainCommand());
+  }
 }

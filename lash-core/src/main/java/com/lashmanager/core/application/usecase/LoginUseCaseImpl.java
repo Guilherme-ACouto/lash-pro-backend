@@ -19,36 +19,38 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class LoginUseCaseImpl implements LoginUseCase {
 
-    private final UserRepository userRepository;
-    private final TenantRepository tenantRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenPort tokenPort;
+  private final UserRepository userRepository;
+  private final TenantRepository tenantRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final TokenPort tokenPort;
 
-    @Override
-    public LoginResponse execute(LoginCommand command) {
-        User user = userRepository.findByEmail(command.email())
-                .orElseThrow(InvalidCredentialsException::new);
+  @Override
+  public LoginResponse execute(LoginCommand command) {
+    User user =
+        userRepository.findByEmail(command.email()).orElseThrow(InvalidCredentialsException::new);
 
-        if (!passwordEncoder.matches(command.password(), user.getPassword())) {
-            throw new InvalidCredentialsException();
-        }
-
-        if (!user.isActive()) {
-            throw new AccountNotActivatedException();
-        }
-
-        if (user.getTenantId() != null) {
-            Tenant tenant = tenantRepository.findById(user.getTenantId()).orElse(null);
-            if (tenant != null && !tenant.isActive()) {
-                throw new TenantInactiveException();
-            }
-        }
-
-        String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
-        String accessToken = tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
-        String refreshToken = tokenPort.generateRefreshToken(user.getEmail());
-
-        log.info("Login realizado: {}", user.getEmail());
-        return new LoginResponse(accessToken, refreshToken, user.getName(), user.getEmail(), user.getRole().name());
+    if (!passwordEncoder.matches(command.password(), user.getPassword())) {
+      throw new InvalidCredentialsException();
     }
+
+    if (!user.isActive()) {
+      throw new AccountNotActivatedException();
+    }
+
+    if (user.getTenantId() != null) {
+      Tenant tenant = tenantRepository.findById(user.getTenantId()).orElse(null);
+      if (tenant != null && !tenant.isActive()) {
+        throw new TenantInactiveException();
+      }
+    }
+
+    String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
+    String accessToken =
+        tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
+    String refreshToken = tokenPort.generateRefreshToken(user.getEmail());
+
+    log.info("Login realizado: {}", user.getEmail());
+    return new LoginResponse(
+        accessToken, refreshToken, user.getName(), user.getEmail(), user.getRole().name());
+  }
 }

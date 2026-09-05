@@ -1,18 +1,16 @@
 package com.lashmanager.fichas.adapter.web.dto;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
 public record CreateLashMappingRequest(
-        UUID appointmentId,
-        @NotNull LocalDate date,
-        String technique,
-        String curvature,
-        String thickness,
-        String length,
-        String rightEyeNotes,
-        String leftEyeNotes,
-        String notes
-) {}
+    UUID appointmentId,
+    @NotNull LocalDate date,
+    String technique,
+    String curvature,
+    String thickness,
+    String length,
+    String rightEyeNotes,
+    String leftEyeNotes,
+    String notes) {}

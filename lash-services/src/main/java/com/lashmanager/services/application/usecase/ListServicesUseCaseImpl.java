@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ListServicesUseCaseImpl implements ListServicesUseCase {
 
-    private final ServiceQueryRepository serviceQueryRepository;
+  private final ServiceQueryRepository serviceQueryRepository;
 
-    @Override
-    public Page<CreateServiceUseCase.ServiceResult> execute(String search, Boolean active, Pageable pageable) {
-        return serviceQueryRepository.findAll(search, active, pageable)
-                .map(ServiceUseCaseMapper::toResult);
-    }
+  @Override
+  public Page<CreateServiceUseCase.ServiceResult> execute(
+      String search, Boolean active, Pageable pageable) {
+    return serviceQueryRepository
+        .findAll(search, active, pageable)
+        .map(ServiceUseCaseMapper::toResult);
+  }
 }

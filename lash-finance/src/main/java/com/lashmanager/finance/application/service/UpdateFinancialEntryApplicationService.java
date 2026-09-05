@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateFinancialEntryApplicationService {
 
-    private final UpdateFinancialEntryUseCase updateFinancialEntryUseCase;
+  private final UpdateFinancialEntryUseCase updateFinancialEntryUseCase;
 
-    public ListFinancialEntriesUseCase.EntryResult when(UpdateFinancialEntryCommand command) {
-        return updateFinancialEntryUseCase.execute(command.getId(), command.toDomainCommand());
-    }
+  public ListFinancialEntriesUseCase.EntryResult when(UpdateFinancialEntryCommand command) {
+    return updateFinancialEntryUseCase.execute(command.getId(), command.toDomainCommand());
+  }
 }

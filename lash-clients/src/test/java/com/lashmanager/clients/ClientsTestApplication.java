@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = {"com.lashmanager.clients", "com.lashmanager.core"})
 @EntityScan(basePackages = {"com.lashmanager.clients", "com.lashmanager.core"})
 public class ClientsTestApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ClientsTestApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(ClientsTestApplication.class, args);
+  }
 }

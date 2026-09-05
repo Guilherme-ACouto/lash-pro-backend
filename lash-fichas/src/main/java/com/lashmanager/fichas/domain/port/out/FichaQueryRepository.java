@@ -1,17 +1,16 @@
 package com.lashmanager.fichas.domain.port.out;
 
 import com.lashmanager.fichas.domain.model.Ficha;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-import java.util.UUID;
-
-/**
- * Porta de leitura — separada de FichaRepository (escrita) conforme RBK-27.
- */
+/** Porta de leitura — separada de FichaRepository (escrita) conforme RBK-27. */
 public interface FichaQueryRepository {
-    Optional<Ficha> findById(UUID id);
-    Optional<Ficha> findByClientId(UUID clientId);
-    Page<Ficha> listWithFilters(String search, Pageable pageable);
+  Optional<Ficha> findById(UUID id);
+
+  Optional<Ficha> findByClientId(UUID clientId);
+
+  Page<Ficha> listWithFilters(String search, Pageable pageable);
 }

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateFichaApplicationService {
 
-    private final CreateFichaUseCase createFichaUseCase;
+  private final CreateFichaUseCase createFichaUseCase;
 
-    public CreateFichaUseCase.FichaResult when(CreateFichaCommand command) {
-        return createFichaUseCase.execute(command.toDomainCommand());
-    }
+  public CreateFichaUseCase.FichaResult when(CreateFichaCommand command) {
+    return createFichaUseCase.execute(command.toDomainCommand());
+  }
 }

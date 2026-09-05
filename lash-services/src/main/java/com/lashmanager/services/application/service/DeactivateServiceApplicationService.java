@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeactivateServiceApplicationService {
 
-    private final DeactivateServiceUseCase deactivateServiceUseCase;
+  private final DeactivateServiceUseCase deactivateServiceUseCase;
 
-    public void when(DeactivateServiceCommand command) {
-        deactivateServiceUseCase.deactivate(command.getId(), command.isForce());
-    }
+  public void when(DeactivateServiceCommand command) {
+    deactivateServiceUseCase.deactivate(command.getId(), command.isForce());
+  }
 
-    public void when(ReactivateServiceCommand command) {
-        deactivateServiceUseCase.reactivate(command.getId());
-    }
+  public void when(ReactivateServiceCommand command) {
+    deactivateServiceUseCase.reactivate(command.getId());
+  }
 }

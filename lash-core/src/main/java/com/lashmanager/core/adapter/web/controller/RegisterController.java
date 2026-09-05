@@ -19,22 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RegisterController {
 
-    private final RegisterApplicationService registerApplicationService;
-    private final ResendActivationApplicationService resendActivationApplicationService;
+  private final RegisterApplicationService registerApplicationService;
+  private final ResendActivationApplicationService resendActivationApplicationService;
 
-    @PostMapping
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
-        RegisterUseCase.RegisterResult result = registerApplicationService.when(
-                new RegisterCommand(request.name(), request.email(), request.password())
-        );
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new RegisterResponse(result.userId(), result.email()));
-    }
+  @PostMapping
+  public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+    RegisterUseCase.RegisterResult result =
+        registerApplicationService.when(
+            new RegisterCommand(request.name(), request.email(), request.password()));
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(new RegisterResponse(result.userId(), result.email()));
+  }
 
-    @PostMapping("/resend")
-    public ResponseEntity<Void> resend(@Valid @RequestBody ResendActivationRequest request) {
-        resendActivationApplicationService.when(new ResendActivationCommand(request.email()));
-        return ResponseEntity.noContent().build();
-    }
+  @PostMapping("/resend")
+  public ResponseEntity<Void> resend(@Valid @RequestBody ResendActivationRequest request) {
+    resendActivationApplicationService.when(new ResendActivationCommand(request.email()));
+    return ResponseEntity.noContent().build();
+  }
 }

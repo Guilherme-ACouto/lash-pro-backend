@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateAppointmentApplicationService {
 
-    private final CreateAppointmentUseCase createAppointmentUseCase;
+  private final CreateAppointmentUseCase createAppointmentUseCase;
 
-    public CreateAppointmentUseCase.AppointmentResult when(CreateAppointmentCommand command) {
-        return createAppointmentUseCase.execute(command.toDomainCommand());
-    }
+  public CreateAppointmentUseCase.AppointmentResult when(CreateAppointmentCommand command) {
+    return createAppointmentUseCase.execute(command.toDomainCommand());
+  }
 }

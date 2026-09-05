@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateClientApplicationService {
 
-    private final UpdateClientUseCase updateClientUseCase;
+  private final UpdateClientUseCase updateClientUseCase;
 
-    public CreateClientUseCase.ClientResult when(UpdateClientCommand command) {
-        return updateClientUseCase.execute(command.getId(), command.toDomainCommand());
-    }
+  public CreateClientUseCase.ClientResult when(UpdateClientCommand command) {
+    return updateClientUseCase.execute(command.getId(), command.toDomainCommand());
+  }
 }

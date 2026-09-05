@@ -4,25 +4,24 @@ import com.lashmanager.finance.domain.exception.FinancialEntryLinkedToAppointmen
 import com.lashmanager.finance.domain.exception.FinancialEntryNotFoundException;
 import com.lashmanager.finance.domain.port.in.DeleteFinancialEntryUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class DeleteFinancialEntryUseCaseImpl implements DeleteFinancialEntryUseCase {
 
-    private final FinancialEntryRepository repository;
+  private final FinancialEntryRepository repository;
 
-    @Override
-    public void execute(UUID id) {
-        if (repository.findById(id).isEmpty()) {
-            throw new FinancialEntryNotFoundException(id);
-        }
-        if (!repository.existsByIdAndAppointmentIdIsNull(id)) {
-            throw new FinancialEntryLinkedToAppointmentException();
-        }
-        repository.delete(id);
+  @Override
+  public void execute(UUID id) {
+    if (repository.findById(id).isEmpty()) {
+      throw new FinancialEntryNotFoundException(id);
     }
+    if (!repository.existsByIdAndAppointmentIdIsNull(id)) {
+      throw new FinancialEntryLinkedToAppointmentException();
+    }
+    repository.delete(id);
+  }
 }

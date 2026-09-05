@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegisterCommand extends AbstractCommand {
 
-    @NotBlank(message = "Nome é obrigatório")
-    private String name;
+  @NotBlank(message = "Nome é obrigatório")
+  private String name;
 
-    @NotBlank(message = "Email é obrigatório")
-    @Email(message = "Email inválido")
-    private String email;
+  @NotBlank(message = "Email é obrigatório")
+  @Email(message = "Email inválido")
+  private String email;
 
-    @NotBlank(message = "Senha é obrigatória")
-    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
-    private String password;
+  @NotBlank(message = "Senha é obrigatória")
+  @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
+  private String password;
 
-    public RegisterUseCase.RegisterData toDomainCommand() {
-        return new RegisterUseCase.RegisterData(name, email, password);
-    }
+  public RegisterUseCase.RegisterData toDomainCommand() {
+    return new RegisterUseCase.RegisterData(name, email, password);
+  }
 }

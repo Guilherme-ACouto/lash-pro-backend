@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ActivationController {
 
-    private final ActivateAccountApplicationService activateAccountApplicationService;
+  private final ActivateAccountApplicationService activateAccountApplicationService;
 
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<ActivationResponse> activate(@RequestParam("key") String activationKey) {
-        ActivateAccountUseCase.ActivationResult result =
-                activateAccountApplicationService.when(new ActivateAccountCommand(activationKey));
-        return ResponseEntity.ok(new ActivationResponse(result.email(), result.tenantId()));
-    }
+  @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
+  public ResponseEntity<ActivationResponse> activate(@RequestParam("key") String activationKey) {
+    ActivateAccountUseCase.ActivationResult result =
+        activateAccountApplicationService.when(new ActivateAccountCommand(activationKey));
+    return ResponseEntity.ok(new ActivationResponse(result.email(), result.tenantId()));
+  }
 }

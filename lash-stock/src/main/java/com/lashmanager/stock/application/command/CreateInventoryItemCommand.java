@@ -5,39 +5,39 @@ import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateInventoryItemCommand extends AbstractCommand {
 
-    @NotBlank
-    private String name;
-    private String internalCode;
+  @NotBlank private String name;
+  private String internalCode;
 
-    @NotBlank
-    private String unit;
+  @NotBlank private String unit;
 
-    @NotNull @DecimalMin("0.00")
-    private BigDecimal costPrice;
+  @NotNull
+  @DecimalMin("0.00")
+  private BigDecimal costPrice;
 
-    private String supplier;
+  private String supplier;
 
-    @NotNull @DecimalMin("0")
-    private BigDecimal currentQuantity;
+  @NotNull
+  @DecimalMin("0")
+  private BigDecimal currentQuantity;
 
-    @NotNull @DecimalMin("0")
-    private BigDecimal minimumQuantity;
+  @NotNull
+  @DecimalMin("0")
+  private BigDecimal minimumQuantity;
 
-    private String notes;
+  private String notes;
 
-    public CreateInventoryItemUseCase.CreateInventoryItemCommand toDomainCommand() {
-        return new CreateInventoryItemUseCase.CreateInventoryItemCommand(
-                name, internalCode, unit, costPrice, supplier, currentQuantity, minimumQuantity, notes);
-    }
+  public CreateInventoryItemUseCase.CreateInventoryItemCommand toDomainCommand() {
+    return new CreateInventoryItemUseCase.CreateInventoryItemCommand(
+        name, internalCode, unit, costPrice, supplier, currentQuantity, minimumQuantity, notes);
+  }
 }

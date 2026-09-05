@@ -36,8 +36,14 @@ jobs:
           java-version: '21'
           cache: maven
 
+      - name: Verificar formatação (Spotless)
+        run: mvn -B spotless:check
+
       - name: Compilar
         run: mvn -B compile
+
+      - name: Lint de qualidade (PMD)
+        run: mvn -B pmd:check
 
       - name: Rodar testes
         run: mvn -B test

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterApplicationService {
 
-    private final RegisterUseCase registerUseCase;
+  private final RegisterUseCase registerUseCase;
 
-    public RegisterUseCase.RegisterResult when(RegisterCommand command) {
-        return registerUseCase.execute(command.toDomainCommand());
-    }
+  public RegisterUseCase.RegisterResult when(RegisterCommand command) {
+    return registerUseCase.execute(command.toDomainCommand());
+  }
 }

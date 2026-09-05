@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateFichaApplicationService {
 
-    private final UpdateFichaUseCase updateFichaUseCase;
+  private final UpdateFichaUseCase updateFichaUseCase;
 
-    public CreateFichaUseCase.FichaResult when(UpdateFichaCommand command) {
-        return updateFichaUseCase.execute(command.toDomainCommand());
-    }
+  public CreateFichaUseCase.FichaResult when(UpdateFichaCommand command) {
+    return updateFichaUseCase.execute(command.toDomainCommand());
+  }
 }
