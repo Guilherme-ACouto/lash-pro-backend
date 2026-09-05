@@ -36,6 +36,12 @@ jobs:
           java-version: '21'
           cache: maven
 
+      - name: Limpar artefatos internos do cache
+        # Módulos com.lashmanager.* nunca devem vir do cache do Maven — eles são
+        # resolvidos direto do reactor a cada build. Um cache restaurado com uma
+        # cópia velha/incompleta desses artefatos quebra a resolução de dependências.
+        run: rm -rf ~/.m2/repository/com/lashmanager
+
       - name: Verificar formatação (Spotless)
         run: mvn -B spotless:check
 
