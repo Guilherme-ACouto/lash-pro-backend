@@ -4,14 +4,13 @@ import com.lashmanager.core.domain.model.User;
 import com.lashmanager.core.domain.port.in.ResendActivationUseCase;
 import com.lashmanager.core.domain.port.out.EmailPort;
 import com.lashmanager.core.domain.port.out.UserRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

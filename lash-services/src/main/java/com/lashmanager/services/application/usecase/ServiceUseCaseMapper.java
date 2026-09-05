@@ -3,7 +3,7 @@ package com.lashmanager.services.application.usecase;
 import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 
-public class ServiceUseCaseMapper {
+public final class ServiceUseCaseMapper {
 
     private ServiceUseCaseMapper() {}
 
@@ -15,7 +15,6 @@ public class ServiceUseCaseMapper {
                 service.getPrice(),
                 service.getDurationMinutes(),
                 service.isActive(),
-                service.getCreatedAt() != null ? service.getCreatedAt().toString() : null
-        );
+                service.getCreatedAt() != null ? service.getCreatedAt().toString() : null);
     }
 }

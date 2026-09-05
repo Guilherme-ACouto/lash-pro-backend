@@ -11,24 +11,36 @@ public final class FichaUseCaseMapper {
 
     public static CreateFichaUseCase.FichaResult toFichaResult(Ficha f) {
         return new CreateFichaUseCase.FichaResult(
-                f.getId(), f.getClientId(), f.getClientName(),
+                f.getId(),
+                f.getClientId(),
+                f.getClientName(),
                 f.getDate() != null ? f.getDate().toString() : null,
-                f.getSkinType(), f.getEyeShape(),
-                f.isHasAllergies(), f.getAllergiesDescription(),
-                f.isHasMedications(), f.getMedicationsDescription(),
-                f.isHasSensitivities(), f.getSensitivitiesDescription(),
-                f.getObservations(), f.isActive(),
-                f.getCreatedAt() != null ? f.getCreatedAt().toString() : null
-        );
+                f.getSkinType(),
+                f.getEyeShape(),
+                f.isHasAllergies(),
+                f.getAllergiesDescription(),
+                f.isHasMedications(),
+                f.getMedicationsDescription(),
+                f.isHasSensitivities(),
+                f.getSensitivitiesDescription(),
+                f.getObservations(),
+                f.isActive(),
+                f.getCreatedAt() != null ? f.getCreatedAt().toString() : null);
     }
 
     public static CreateLashMappingUseCase.LashMappingResult toMappingResult(LashMapping m) {
         return new CreateLashMappingUseCase.LashMappingResult(
-                m.getId(), m.getFichaId(), m.getAppointmentId(),
+                m.getId(),
+                m.getFichaId(),
+                m.getAppointmentId(),
                 m.getDate() != null ? m.getDate().toString() : null,
-                m.getTechnique(), m.getCurvature(), m.getThickness(), m.getLength(),
-                m.getRightEyeNotes(), m.getLeftEyeNotes(), m.getNotes(),
-                m.getCreatedAt() != null ? m.getCreatedAt().toString() : null
-        );
+                m.getTechnique(),
+                m.getCurvature(),
+                m.getThickness(),
+                m.getLength(),
+                m.getRightEyeNotes(),
+                m.getLeftEyeNotes(),
+                m.getNotes(),
+                m.getCreatedAt() != null ? m.getCreatedAt().toString() : null);
     }
 }

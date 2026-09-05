@@ -16,8 +16,7 @@ public interface CreateFichaUseCase {
             String medicationsDescription,
             boolean hasSensitivities,
             String sensitivitiesDescription,
-            String observations
-    ) {}
+            String observations) {}
 
     record FichaResult(
             UUID id,
@@ -34,8 +33,7 @@ public interface CreateFichaUseCase {
             String sensitivitiesDescription,
             String observations,
             boolean active,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     FichaResult execute(CreateFichaCommand command);
 }

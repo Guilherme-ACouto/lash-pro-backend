@@ -25,11 +25,8 @@ public class RegisterController {
     @PostMapping
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         RegisterUseCase.RegisterResult result = registerApplicationService.when(
-                new RegisterCommand(request.name(), request.email(), request.password())
-        );
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new RegisterResponse(result.userId(), result.email()));
+                new RegisterCommand(request.name(), request.email(), request.password()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponse(result.userId(), result.email()));
     }
 
     @PostMapping("/resend")

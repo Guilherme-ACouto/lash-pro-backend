@@ -2,6 +2,11 @@ package com.lashmanager.core.infrastructure.multitenancy;
 
 import com.lashmanager.core.domain.exception.SchemaProvisioningException;
 import com.lashmanager.core.domain.port.out.SchemaProvisionerPort;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.UUID;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -11,18 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.UUID;
-
 /**
- * Provisiona o schema Postgres de um tenant novo: CREATE SCHEMA IF NOT EXISTS +
- * changelog Liquibase completo (master.xml). Roda em conexão JDBC própria,
- * fora do pool/transação gerenciados pelo Spring (ver design.md, RBK-15) — assim
- * uma falha aqui não deixa o rollback do Hibernate preso a uma conexão que já
- * rodou DDL. Idempotente: CREATE SCHEMA IF NOT EXISTS + Liquibase (que rastreia
+ * Provisiona o schema Postgres de um tenant novo: CREATE SCHEMA IF NOT EXISTS + changelog Liquibase
+ * completo (master.xml). Roda em conexão JDBC própria, fora do pool/transação gerenciados pelo
+ * Spring (ver design.md, RBK-15) — assim uma falha aqui não deixa o rollback do Hibernate preso a
+ * uma conexão que já rodou DDL. Idempotente: CREATE SCHEMA IF NOT EXISTS + Liquibase (que rastreia
  * changesets já aplicados via DATABASECHANGELOG) tornam o retry seguro.
  */
 @Component
@@ -40,8 +38,7 @@ public class SchemaProvisionerImpl implements SchemaProvisionerPort {
             @Value("${spring.datasource.url}") String url,
             @Value("${spring.datasource.username}") String username,
             @Value("${spring.datasource.password}") String password,
-            TenantSchemaNaming tenantSchemaNaming
-    ) {
+            TenantSchemaNaming tenantSchemaNaming) {
         this.url = url;
         this.username = username;
         this.password = password;
@@ -67,8 +64,8 @@ public class SchemaProvisionerImpl implements SchemaProvisionerPort {
     }
 
     private void runChangelog(Connection connection, String schemaName) throws Exception {
-        Database database = DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+        Database database =
+                DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
         database.setDefaultSchemaName(schemaName);
         try (Liquibase liquibase = new Liquibase(MASTER_CHANGELOG, new ClassLoaderResourceAccessor(), database)) {
             liquibase.update();

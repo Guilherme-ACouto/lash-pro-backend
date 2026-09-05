@@ -1,7 +1,6 @@
 package com.lashmanager.appointments.domain.exception;
 
 import com.lashmanager.core.domain.exception.BusinessException;
-
 import java.util.UUID;
 
 public class AppointmentNotFoundException extends BusinessException {

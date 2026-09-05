@@ -6,14 +6,13 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.SecretKey;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -26,8 +25,7 @@ public class JwtService implements TokenPort {
     public JwtService(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration}") long expiration,
-            @Value("${app.jwt.refresh-expiration}") long refreshExpiration
-    ) {
+            @Value("${app.jwt.refresh-expiration}") long refreshExpiration) {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         this.expiration = expiration;
         this.refreshExpiration = refreshExpiration;
@@ -79,7 +77,9 @@ public class JwtService implements TokenPort {
             boolean isAccess = "ACCESS".equals(claims.get("type", String.class));
             return notExpired && isAccess;
         } catch (JwtException | IllegalArgumentException e) {
-            log.debug("Token inválido: {}", e.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("Token inválido: {}", e.getMessage());
+            }
             return false;
         }
     }
@@ -92,16 +92,14 @@ public class JwtService implements TokenPort {
             boolean isRefresh = "REFRESH".equals(claims.get("type", String.class));
             return notExpired && isRefresh;
         } catch (JwtException | IllegalArgumentException e) {
-            log.debug("Refresh token inválido: {}", e.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("Refresh token inválido: {}", e.getMessage());
+            }
             return false;
         }
     }
 
     private Claims parseClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
 }

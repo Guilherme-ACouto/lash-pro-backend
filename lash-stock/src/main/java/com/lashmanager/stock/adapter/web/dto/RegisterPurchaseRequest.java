@@ -3,7 +3,6 @@ package com.lashmanager.stock.adapter.web.dto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -14,5 +13,4 @@ public record RegisterPurchaseRequest(
         @NotNull LocalDate purchaseDate,
         @NotBlank String paymentType,
         LocalDate dueDate,
-        String notes
-) {}
+        String notes) {}

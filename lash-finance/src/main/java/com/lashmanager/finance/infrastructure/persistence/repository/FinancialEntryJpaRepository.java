@@ -1,15 +1,14 @@
 package com.lashmanager.finance.infrastructure.persistence.repository;
 
 import com.lashmanager.finance.infrastructure.persistence.entity.FinancialEntryEntity;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
 
 public interface FinancialEntryJpaRepository extends JpaRepository<FinancialEntryEntity, UUID> {
 
@@ -27,8 +26,7 @@ public interface FinancialEntryJpaRepository extends JpaRepository<FinancialEntr
             @Param("category") String category,
             @Param("type") String type,
             @Param("expenseType") String expenseType,
-            Pageable pageable
-    );
+            Pageable pageable);
 
     boolean existsByIdAndAppointmentIdIsNull(UUID id);
 

@@ -1,7 +1,6 @@
 package com.lashmanager.fichas.adapter.web.dto;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -16,5 +15,4 @@ public record CreateFichaRequest(
         String medicationsDescription,
         boolean hasSensitivities,
         String sensitivitiesDescription,
-        String observations
-) {}
+        String observations) {}

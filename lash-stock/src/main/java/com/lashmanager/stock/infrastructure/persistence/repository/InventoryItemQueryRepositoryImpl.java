@@ -3,13 +3,12 @@ package com.lashmanager.stock.infrastructure.persistence.repository;
 import com.lashmanager.stock.domain.model.InventoryItem;
 import com.lashmanager.stock.domain.port.out.InventoryItemQueryRepository;
 import com.lashmanager.stock.infrastructure.persistence.mapper.InventoryItemMapper;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,6 +24,8 @@ public class InventoryItemQueryRepositoryImpl implements InventoryItemQueryRepos
 
     @Override
     public Page<InventoryItem> listWithFilters(String search, Boolean active, boolean onlyLowStock, Pageable pageable) {
-        return jpaRepository.findAllFiltered(search, active, onlyLowStock, pageable).map(mapper::toDomain);
+        return jpaRepository
+                .findAllFiltered(search, active, onlyLowStock, pageable)
+                .map(mapper::toDomain);
     }
 }

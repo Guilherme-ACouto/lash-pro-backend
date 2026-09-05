@@ -9,13 +9,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
- * Checagem de regra de negócio compartilhada pelos use cases de administração
- * de tenants: hoje o Lash não tem um papel "admin de plataforma" formal
- * (UserRole só tem OWNER/ASSISTANT, escopados a um tenant) — o sinal correto é
- * o próprio usuário não pertencer a tenant nenhum (tenantId nulo), que é
- * exatamente o caso do usuário de desenvolvimento (admin@lashmanager.com, ver
- * decisão registrada em STATE.md). Introduzir um UserRole novo só para isso
- * seria prematuro sem um segundo papel real no sistema.
+ * Checagem de regra de negócio compartilhada pelos use cases de administração de tenants: hoje o
+ * Lash não tem um papel "admin de plataforma" formal (UserRole só tem OWNER/ASSISTANT, escopados a
+ * um tenant) — o sinal correto é o próprio usuário não pertencer a tenant nenhum (tenantId nulo),
+ * que é exatamente o caso do usuário de desenvolvimento (admin@lashmanager.com, ver decisão
+ * registrada em STATE.md). Introduzir um UserRole novo só para isso seria prematuro sem um segundo
+ * papel real no sistema.
  */
 @Component
 @RequiredArgsConstructor

@@ -8,11 +8,10 @@ import com.lashmanager.core.domain.port.in.ForgotPasswordUseCase;
 import com.lashmanager.core.domain.port.in.LoginUseCase;
 import com.lashmanager.core.domain.port.in.RefreshTokenUseCase;
 import jakarta.validation.Valid;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -25,16 +24,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        LoginUseCase.LoginResponse result = loginUseCase.execute(
-                new LoginUseCase.LoginCommand(request.email(), request.password())
-        );
+        LoginUseCase.LoginResponse result =
+                loginUseCase.execute(new LoginUseCase.LoginCommand(request.email(), request.password()));
         return ResponseEntity.ok(new LoginResponse(
-                result.accessToken(),
-                result.refreshToken(),
-                result.name(),
-                result.email(),
-                result.role()
-        ));
+                result.accessToken(), result.refreshToken(), result.name(), result.email(), result.role()));
     }
 
     @PostMapping("/forgot-password")

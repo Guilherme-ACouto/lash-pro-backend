@@ -31,17 +31,20 @@ public class EmailPortImpl implements EmailPort {
             message.setFrom(fromEmail);
             message.setTo(to);
             message.setSubject("Recuperação de senha - Lash Manager");
-            message.setText(
-                    "Olá, " + name + "!\n\n" +
-                    "Recebemos uma solicitação para redefinir sua senha.\n\n" +
-                    "Clique no link abaixo para criar uma nova senha (válido por 1 hora):\n" +
-                    resetLink + "\n\n" +
-                    "Se não foi você, ignore este email.\n\n" +
-                    "Equipe Lash Manager"
-            );
+            message.setText("Olá, "
+                    + name
+                    + "!\n\n"
+                    + "Recebemos uma solicitação para redefinir sua senha.\n\n"
+                    + "Clique no link abaixo para criar uma nova senha (válido por 1 hora):\n"
+                    + resetLink
+                    + "\n\n"
+                    + "Se não foi você, ignore este email.\n\n"
+                    + "Equipe Lash Manager");
             mailSender.send(message);
         } catch (Exception e) {
-            log.warn("Falha ao enviar email de recuperação para {}: {}", to, e.getMessage());
+            if (log.isWarnEnabled()) {
+                log.warn("Falha ao enviar email de recuperação para {}: {}", to, e.getMessage());
+            }
         }
     }
 
@@ -55,17 +58,20 @@ public class EmailPortImpl implements EmailPort {
             message.setFrom(fromEmail);
             message.setTo(to);
             message.setSubject("Confirme seu cadastro - Lash Manager");
-            message.setText(
-                    "Seja bem-vindo, " + name + "!\n\n" +
-                    "Agora só precisamos que você confirme seu cadastro.\n\n" +
-                    "Clique no link abaixo para ativar sua conta:\n" +
-                    activationLink + "\n\n" +
-                    "Se não foi você, ignore este email.\n\n" +
-                    "Equipe Lash Manager"
-            );
+            message.setText("Seja bem-vindo, "
+                    + name
+                    + "!\n\n"
+                    + "Agora só precisamos que você confirme seu cadastro.\n\n"
+                    + "Clique no link abaixo para ativar sua conta:\n"
+                    + activationLink
+                    + "\n\n"
+                    + "Se não foi você, ignore este email.\n\n"
+                    + "Equipe Lash Manager");
             mailSender.send(message);
         } catch (Exception e) {
-            log.warn("Falha ao enviar email de ativação para {}: {}", to, e.getMessage());
+            if (log.isWarnEnabled()) {
+                log.warn("Falha ao enviar email de ativação para {}: {}", to, e.getMessage());
+            }
         }
     }
 }

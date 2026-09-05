@@ -5,13 +5,12 @@ import com.lashmanager.finance.domain.port.in.UpdateFinancialEntryUseCase;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -23,12 +22,14 @@ public class UpdateFinancialEntryCommand extends AbstractCommand {
 
     @NotBlank
     private String type;
+
     private String expenseType;
 
     @NotBlank
     private String description;
 
-    @NotNull @DecimalMin("0.01")
+    @NotNull
+    @DecimalMin("0.01")
     private BigDecimal amount;
 
     @NotNull
@@ -42,7 +43,15 @@ public class UpdateFinancialEntryCommand extends AbstractCommand {
 
     public UpdateFinancialEntryUseCase.UpdateCommand toDomainCommand() {
         return new UpdateFinancialEntryUseCase.UpdateCommand(
-                type, expenseType, description, amount, dueDate, paymentDate,
-                category, paymentMethod, receivedFrom, notes);
+                type,
+                expenseType,
+                description,
+                amount,
+                dueDate,
+                paymentDate,
+                category,
+                paymentMethod,
+                receivedFrom,
+                notes);
     }
 }

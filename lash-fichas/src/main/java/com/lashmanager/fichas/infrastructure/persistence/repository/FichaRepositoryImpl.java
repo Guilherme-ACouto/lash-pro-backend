@@ -3,11 +3,10 @@ package com.lashmanager.fichas.infrastructure.persistence.repository;
 import com.lashmanager.fichas.domain.model.Ficha;
 import com.lashmanager.fichas.domain.port.out.FichaRepository;
 import com.lashmanager.fichas.infrastructure.persistence.mapper.FichaMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor

@@ -6,11 +6,10 @@ import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 import com.lashmanager.clients.domain.port.in.UpdateClientUseCase;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +19,7 @@ public class UpdateClientUseCaseImpl implements UpdateClientUseCase {
 
     @Override
     public CreateClientUseCase.ClientResult execute(UUID id, UpdateClientCommand command) {
-        Client existing = clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+        Client existing = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
 
         if (clientRepository.existsByPhoneAndIdNot(command.phone(), id)) {
             throw new ClientAlreadyExistsException(command.phone());

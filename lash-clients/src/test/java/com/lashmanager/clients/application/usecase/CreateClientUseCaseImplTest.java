@@ -1,5 +1,12 @@
 package com.lashmanager.clients.application.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.never;
+import static org.mockito.BDDMockito.then;
+
 import com.lashmanager.clients.domain.exception.ClientAlreadyExistsException;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase.ClientResult;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase.CreateClientCommand;
@@ -10,13 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.never;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Criar cliente")
@@ -54,8 +54,7 @@ class CreateClientUseCaseImplTest {
 
         CreateClientCommand command = new CreateClientCommand("Ana Lima", "11999999999", null, null, null);
 
-        assertThatThrownBy(() -> useCase.execute(command))
-                .isInstanceOf(ClientAlreadyExistsException.class);
+        assertThatThrownBy(() -> useCase.execute(command)).isInstanceOf(ClientAlreadyExistsException.class);
 
         then(clientRepository).should(never()).save(any());
     }

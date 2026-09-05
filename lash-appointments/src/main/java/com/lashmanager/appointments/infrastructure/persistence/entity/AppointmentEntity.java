@@ -1,12 +1,11 @@
 package com.lashmanager.appointments.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "appointments")

@@ -3,11 +3,10 @@ package com.lashmanager.clients.infrastructure.persistence.repository;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.clients.infrastructure.persistence.mapper.ClientMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor

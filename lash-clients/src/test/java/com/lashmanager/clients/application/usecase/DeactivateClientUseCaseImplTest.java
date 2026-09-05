@@ -1,27 +1,5 @@
 package com.lashmanager.clients.application.usecase;
 
-import com.lashmanager.clients.domain.exception.ClientNotFoundException;
-import com.lashmanager.clients.domain.exception.HasFutureAppointmentsException;
-import com.lashmanager.clients.domain.model.AppointmentSummary;
-import com.lashmanager.clients.domain.model.Client;
-import com.lashmanager.clients.domain.port.out.ClientAppointmentPort;
-import com.lashmanager.clients.domain.port.out.ClientRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +8,27 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+
+import com.lashmanager.clients.domain.exception.ClientNotFoundException;
+import com.lashmanager.clients.domain.exception.HasFutureAppointmentsException;
+import com.lashmanager.clients.domain.model.AppointmentSummary;
+import com.lashmanager.clients.domain.model.Client;
+import com.lashmanager.clients.domain.port.out.ClientAppointmentPort;
+import com.lashmanager.clients.domain.port.out.ClientRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Desativar e reativar cliente")
@@ -77,11 +76,7 @@ class DeactivateClientUseCaseImplTest {
     @DisplayName("deve lançar HasFutureAppointmentsException quando há agendamentos futuros e force=false")
     void deactivate_withFutureAppointmentsAndForceFalse_throwsHasFutureAppointmentsException() {
         AppointmentSummary summary = new AppointmentSummary(
-                UUID.randomUUID().toString(),
-                LocalDate.now().plusDays(3),
-                LocalTime.of(10, 0),
-                "Extensão de cílios"
-        );
+                UUID.randomUUID().toString(), LocalDate.now().plusDays(3), LocalTime.of(10, 0), "Extensão de cílios");
         given(clientRepository.findById(clientId)).willReturn(Optional.of(activeClient));
         given(clientAppointmentPort.findFutureActiveByClientId(any(UUID.class), any(LocalDate.class)))
                 .willReturn(List.of(summary));
@@ -113,8 +108,7 @@ class DeactivateClientUseCaseImplTest {
     void deactivate_withUnknownId_throwsClientNotFoundException() {
         given(clientRepository.findById(clientId)).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> useCase.deactivate(clientId, false))
-                .isInstanceOf(ClientNotFoundException.class);
+        assertThatThrownBy(() -> useCase.deactivate(clientId, false)).isInstanceOf(ClientNotFoundException.class);
     }
 
     @Test
@@ -135,7 +129,6 @@ class DeactivateClientUseCaseImplTest {
     void reactivate_withUnknownId_throwsClientNotFoundException() {
         given(clientRepository.findById(clientId)).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> useCase.reactivate(clientId))
-                .isInstanceOf(ClientNotFoundException.class);
+        assertThatThrownBy(() -> useCase.reactivate(clientId)).isInstanceOf(ClientNotFoundException.class);
     }
 }

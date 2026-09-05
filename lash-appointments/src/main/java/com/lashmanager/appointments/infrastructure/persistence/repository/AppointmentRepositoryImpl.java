@@ -4,14 +4,14 @@ import com.lashmanager.appointments.domain.model.Appointment;
 import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
 import com.lashmanager.appointments.infrastructure.persistence.mapper.AppointmentMapper;
 import com.lashmanager.clients.domain.model.AppointmentSummary;
+import com.lashmanager.services.infrastructure.persistence.entity.ServiceEntity;
 import com.lashmanager.services.infrastructure.persistence.repository.ServiceJpaRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,21 +33,21 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
 
     @Override
     public List<Appointment> findActiveByDate(LocalDate date) {
-        return jpaRepository.findActiveByDate(date).stream().map(mapper::toDomain).toList();
+        return jpaRepository.findActiveByDate(date).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     @Override
     public List<AppointmentSummary> findFutureActiveByClientId(UUID clientId, LocalDate from) {
         return jpaRepository.findFutureActiveByClientId(clientId, from).stream()
                 .map(a -> {
-                    String serviceName = serviceJpaRepository.findById(a.getServiceId())
-                            .map(s -> s.getName()).orElse("—");
+                    String serviceName = serviceJpaRepository
+                            .findById(a.getServiceId())
+                            .map(ServiceEntity::getName)
+                            .orElse("—");
                     return new AppointmentSummary(
-                            a.getId().toString(),
-                            a.getScheduledDate(),
-                            a.getScheduledTime(),
-                            serviceName
-                    );
+                            a.getId().toString(), a.getScheduledDate(), a.getScheduledTime(), serviceName);
                 })
                 .toList();
     }

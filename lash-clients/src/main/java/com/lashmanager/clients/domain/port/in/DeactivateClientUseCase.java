@@ -4,5 +4,6 @@ import java.util.UUID;
 
 public interface DeactivateClientUseCase {
     void deactivate(UUID id, boolean force);
+
     void reactivate(UUID id);
 }

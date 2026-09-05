@@ -3,12 +3,11 @@ package com.lashmanager.fichas.application.command;
 import com.lashmanager.core.infrastructure.command.AbstractCommand;
 import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -33,10 +32,16 @@ public class CreateFichaCommand extends AbstractCommand {
 
     public CreateFichaUseCase.CreateFichaCommand toDomainCommand() {
         return new CreateFichaUseCase.CreateFichaCommand(
-                clientId, date, skinType, eyeShape,
-                hasAllergies, allergiesDescription,
-                hasMedications, medicationsDescription,
-                hasSensitivities, sensitivitiesDescription,
+                clientId,
+                date,
+                skinType,
+                eyeShape,
+                hasAllergies,
+                allergiesDescription,
+                hasMedications,
+                medicationsDescription,
+                hasSensitivities,
+                sensitivitiesDescription,
                 observations);
     }
 }

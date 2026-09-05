@@ -3,14 +3,13 @@ package com.lashmanager.core.adapter.web.controller;
 import com.lashmanager.core.adapter.web.dto.TenantResponse;
 import com.lashmanager.core.domain.port.in.DeactivateTenantUseCase;
 import com.lashmanager.core.domain.port.in.ListTenantsUseCase;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/admin/tenants")

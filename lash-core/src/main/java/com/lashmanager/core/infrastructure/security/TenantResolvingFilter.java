@@ -6,22 +6,20 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.UUID;
-
 /**
- * Resolve o tenant da requisição a partir do claim tenantId do JWT e popula o
- * TenantContext, que o Hibernate consulta (via CurrentTenantIdentifierResolverImpl)
- * para decidir o search_path da conexão. Roda antes do JwtAuthFilter — precisa
- * validar o token por conta própria, já que a autenticação ainda não existe neste
- * ponto da cadeia. Quando não há token/claim, o TenantContext fica vazio e o
- * resolver usa o default "public" (necessário para o login localizar o usuário).
+ * Resolve o tenant da requisição a partir do claim tenantId do JWT e popula o TenantContext, que o
+ * Hibernate consulta (via CurrentTenantIdentifierResolverImpl) para decidir o search_path da
+ * conexão. Roda antes do JwtAuthFilter — precisa validar o token por conta própria, já que a
+ * autenticação ainda não existe neste ponto da cadeia. Quando não há token/claim, o TenantContext
+ * fica vazio e o resolver usa o default "public" (necessário para o login localizar o usuário).
  */
 @Component
 @RequiredArgsConstructor
@@ -35,8 +33,8 @@ public class TenantResolvingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+            @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
         try {
             resolveTenant(request);
             filterChain.doFilter(request, response);
@@ -62,7 +60,9 @@ public class TenantResolvingFilter extends OncePerRequestFilter {
                 TenantContext.setCurrentTenant(schemaName);
             }
         } catch (Exception e) {
-            log.debug("Falha ao resolver tenant do token: {}", e.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("Falha ao resolver tenant do token: {}", e.getMessage());
+            }
         }
     }
 }

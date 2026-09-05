@@ -4,10 +4,9 @@ import com.lashmanager.finance.domain.exception.FinancialEntryLinkedToAppointmen
 import com.lashmanager.finance.domain.exception.FinancialEntryNotFoundException;
 import com.lashmanager.finance.domain.port.in.DeleteFinancialEntryUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

@@ -1,10 +1,9 @@
 package com.lashmanager.core.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "command_audit_log")
@@ -36,6 +35,8 @@ public class CommandAuditLogEntity {
 
     @PrePersist
     void prePersist() {
-        if (executedAt == null) executedAt = LocalDateTime.now();
+        if (executedAt == null) {
+            executedAt = LocalDateTime.now();
+        }
     }
 }

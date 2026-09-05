@@ -1,13 +1,12 @@
 package com.lashmanager.core.infrastructure.multitenancy;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 /**
- * Deriva o nome do schema Postgres de um tenant a partir do seu id — determinístico,
- * sem hífen (limite de identificador do Postgres e alinhado ao design.md).
+ * Deriva o nome do schema Postgres de um tenant a partir do seu id — determinístico, sem hífen
+ * (limite de identificador do Postgres e alinhado ao design.md).
  */
 @Component
 public class TenantSchemaNaming {

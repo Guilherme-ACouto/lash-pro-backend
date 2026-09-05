@@ -12,8 +12,7 @@ public interface UpdateAppointmentUseCase {
             LocalDate scheduledDate,
             LocalTime scheduledTime,
             int durationMinutes,
-            String notes
-    ) {}
+            String notes) {}
 
     CreateAppointmentUseCase.AppointmentResult execute(UUID id, UpdateAppointmentCommand command);
 }

@@ -6,12 +6,11 @@ import com.lashmanager.clients.domain.model.AppointmentSummary;
 import com.lashmanager.clients.domain.port.in.DeleteClientUseCase;
 import com.lashmanager.clients.domain.port.out.ClientAppointmentPort;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

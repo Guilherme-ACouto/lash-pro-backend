@@ -3,13 +3,12 @@ package com.lashmanager.clients.infrastructure.persistence.repository;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
 import com.lashmanager.clients.infrastructure.persistence.mapper.ClientMapper;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor

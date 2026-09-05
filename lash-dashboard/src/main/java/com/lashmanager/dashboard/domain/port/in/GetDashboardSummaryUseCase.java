@@ -10,19 +10,14 @@ public interface GetDashboardSummaryUseCase {
     record DashboardSummary(
             long totalClients,
             long newClientsThisMonth,
-
             long appointmentsToday,
             long appointmentsThisWeek,
             long appointmentsThisMonth,
-
             BigDecimal revenueThisMonth,
             BigDecimal expenseThisMonth,
-
             long lowStockItems,
             long outOfStockItems,
-
-            List<MonthlyRevenueStat> last6Months
-    ) {}
+            List<MonthlyRevenueStat> last6Months) {}
 
     DashboardSummary execute();
 }

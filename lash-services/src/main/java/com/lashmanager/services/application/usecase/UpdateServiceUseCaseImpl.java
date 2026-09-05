@@ -6,11 +6,10 @@ import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
 import com.lashmanager.services.domain.port.in.UpdateServiceUseCase;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +19,7 @@ public class UpdateServiceUseCaseImpl implements UpdateServiceUseCase {
 
     @Override
     public CreateServiceUseCase.ServiceResult execute(UUID id, UpdateServiceCommand command) {
-        ServiceOffering existing = serviceRepository.findById(id)
-                .orElseThrow(() -> new ServiceNotFoundException(id));
+        ServiceOffering existing = serviceRepository.findById(id).orElseThrow(() -> new ServiceNotFoundException(id));
 
         if (serviceRepository.existsByNameAndIdNot(command.name(), id)) {
             throw new ServiceAlreadyExistsException(command.name());

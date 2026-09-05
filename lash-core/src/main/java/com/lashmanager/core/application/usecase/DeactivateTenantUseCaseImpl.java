@@ -4,11 +4,10 @@ import com.lashmanager.core.domain.exception.TenantNotFoundException;
 import com.lashmanager.core.domain.model.Tenant;
 import com.lashmanager.core.domain.port.in.DeactivateTenantUseCase;
 import com.lashmanager.core.domain.port.out.TenantRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +21,7 @@ public class DeactivateTenantUseCaseImpl implements DeactivateTenantUseCase {
     public void execute(UUID tenantId) {
         platformAdminChecker.check();
 
-        Tenant tenant = tenantRepository.findById(tenantId)
-                .orElseThrow(TenantNotFoundException::new);
+        Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(TenantNotFoundException::new);
 
         tenantRepository.save(Tenant.builder()
                 .id(tenant.getId())
@@ -33,6 +31,8 @@ public class DeactivateTenantUseCaseImpl implements DeactivateTenantUseCase {
                 .createdAt(tenant.getCreatedAt())
                 .build());
 
-        log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());
+        if (log.isInfoEnabled()) {
+            log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());
+        }
     }
 }

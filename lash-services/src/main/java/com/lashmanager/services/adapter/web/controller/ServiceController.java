@@ -15,15 +15,14 @@ import com.lashmanager.services.application.service.UpdateServiceApplicationServ
 import com.lashmanager.services.domain.port.in.GetServiceUseCase;
 import com.lashmanager.services.domain.port.in.ListServicesUseCase;
 import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/services")
@@ -40,10 +39,8 @@ public class ServiceController {
     @PostMapping
     public ResponseEntity<ServiceResponse> create(@Valid @RequestBody CreateServiceRequest request) {
         var result = createServiceApplicationService.when(new CreateServiceCommand(
-                request.name(), request.description(), request.price(), request.durationMinutes()
-        ));
-        return ResponseEntity
-                .created(URI.create("/api/services/" + result.id()))
+                request.name(), request.description(), request.price(), request.durationMinutes()));
+        return ResponseEntity.created(URI.create("/api/services/" + result.id()))
                 .body(ServiceResponse.from(result));
     }
 
@@ -56,21 +53,16 @@ public class ServiceController {
     public ResponseEntity<Page<ServiceResponse>> list(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Boolean active,
-            @PageableDefault(size = 20) Pageable pageable
-    ) {
+            @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(
-                listServicesUseCase.execute(search, active, pageable).map(ServiceResponse::from)
-        );
+                listServicesUseCase.execute(search, active, pageable).map(ServiceResponse::from));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ServiceResponse> update(
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateServiceRequest request
-    ) {
+            @PathVariable UUID id, @Valid @RequestBody UpdateServiceRequest request) {
         var result = updateServiceApplicationService.when(new UpdateServiceCommand(
-                id, request.name(), request.description(), request.price(), request.durationMinutes()
-        ));
+                id, request.name(), request.description(), request.price(), request.durationMinutes()));
         return ResponseEntity.ok(ServiceResponse.from(result));
     }
 
@@ -81,10 +73,7 @@ public class ServiceController {
     }
 
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivate(
-            @PathVariable UUID id,
-            @RequestParam(defaultValue = "false") boolean force
-    ) {
+    public ResponseEntity<Void> deactivate(@PathVariable UUID id, @RequestParam(defaultValue = "false") boolean force) {
         deactivateServiceApplicationService.when(new DeactivateServiceCommand(id, force));
         return ResponseEntity.noContent().build();
     }

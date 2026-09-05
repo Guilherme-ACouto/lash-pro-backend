@@ -1,5 +1,8 @@
 package com.lashmanager.core;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.lashmanager.core.application.command.ActivateAccountCommand;
 import com.lashmanager.core.application.command.RegisterCommand;
 import com.lashmanager.core.application.service.ActivateAccountApplicationService;
@@ -11,23 +14,18 @@ import com.lashmanager.core.domain.port.in.LoginUseCase;
 import com.lashmanager.core.domain.port.out.SchemaProvisionerPort;
 import com.lashmanager.core.domain.port.out.TenantRepository;
 import com.lashmanager.core.domain.port.out.UserRepository;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 /**
- * Cobre o fluxo completo registro -> ativação -> login. SchemaProvisionerPort
- * é mockado (não roda CREATE SCHEMA/Liquibase de verdade) — mesma escolha da
- * Pontta: testar a orquestração (Tenant criado, usuário ativado, port chamado
- * com o tenantId certo) sem criar um schema Postgres real por execução, o que
- * evitaria acumular schemas no banco de teste a cada rodada.
+ * Cobre o fluxo completo registro -> ativação -> login. SchemaProvisionerPort é mockado (não roda
+ * CREATE SCHEMA/Liquibase de verdade) — mesma escolha da Pontta: testar a orquestração (Tenant
+ * criado, usuário ativado, port chamado com o tenantId certo) sem criar um schema Postgres real por
+ * execução, o que evitaria acumular schemas no banco de teste a cada rodada.
  */
 @DisplayName("Fluxo de registro e ativação — integração")
 class RegistrationFlowITest extends AbstractIntegrationTest {
@@ -85,7 +83,7 @@ class RegistrationFlowITest extends AbstractIntegrationTest {
     @DisplayName("deve rejeitar ativação com chave inexistente")
     void activate_withInvalidKey_throwsActivationKeyInvalidException() {
         assertThatThrownBy(() ->
-                activateAccountApplicationService.when(new ActivateAccountCommand("chave-que-nao-existe")))
+                        activateAccountApplicationService.when(new ActivateAccountCommand("chave-que-nao-existe")))
                 .isInstanceOf(ActivationKeyInvalidException.class);
     }
 }

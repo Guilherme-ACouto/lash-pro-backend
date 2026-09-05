@@ -1,7 +1,6 @@
 package com.lashmanager.core.adapter.web.dto;
 
 import com.lashmanager.core.domain.port.in.ListTenantsUseCase;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

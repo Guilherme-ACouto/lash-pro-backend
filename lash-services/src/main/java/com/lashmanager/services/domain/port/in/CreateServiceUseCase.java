@@ -5,12 +5,7 @@ import java.util.UUID;
 
 public interface CreateServiceUseCase {
 
-    record CreateServiceCommand(
-            String name,
-            String description,
-            BigDecimal price,
-            int durationMinutes
-    ) {}
+    record CreateServiceCommand(String name, String description, BigDecimal price, int durationMinutes) {}
 
     record ServiceResult(
             UUID id,
@@ -19,8 +14,7 @@ public interface CreateServiceUseCase {
             BigDecimal price,
             int durationMinutes,
             boolean active,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     ServiceResult execute(CreateServiceCommand command);
 }

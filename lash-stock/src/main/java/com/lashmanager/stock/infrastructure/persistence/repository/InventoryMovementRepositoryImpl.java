@@ -3,10 +3,9 @@ package com.lashmanager.stock.infrastructure.persistence.repository;
 import com.lashmanager.stock.domain.model.InventoryMovement;
 import com.lashmanager.stock.domain.port.out.InventoryMovementRepository;
 import com.lashmanager.stock.infrastructure.persistence.mapper.InventoryMovementMapper;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor

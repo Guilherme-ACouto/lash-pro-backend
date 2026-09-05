@@ -1,13 +1,12 @@
 package com.lashmanager.finance.domain.port.out;
 
 import com.lashmanager.finance.domain.model.FinancialEntry;
-
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Porta de escrita. Leitura (listagem/filtro, categorias distintas) foi
- * separada para FinancialEntryQueryRepository (RBK-27).
+ * Porta de escrita. Leitura (listagem/filtro, categorias distintas) foi separada para
+ * FinancialEntryQueryRepository (RBK-27).
  */
 public interface FinancialEntryRepository {
 

@@ -16,8 +16,7 @@ public interface UpdateFichaUseCase {
             String medicationsDescription,
             boolean hasSensitivities,
             String sensitivitiesDescription,
-            String observations
-    ) {}
+            String observations) {}
 
     CreateFichaUseCase.FichaResult execute(UpdateFichaCommand command);
 }

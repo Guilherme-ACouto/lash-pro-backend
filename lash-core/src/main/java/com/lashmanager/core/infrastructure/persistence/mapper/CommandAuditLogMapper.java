@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 public class CommandAuditLogMapper {
 
     public CommandAuditLog toDomain(CommandAuditLogEntity entity) {
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
         return CommandAuditLog.builder()
                 .id(entity.getId())
                 .commandClass(entity.getCommandClass())
@@ -20,7 +22,9 @@ public class CommandAuditLogMapper {
     }
 
     public CommandAuditLogEntity toEntity(CommandAuditLog domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         return CommandAuditLogEntity.builder()
                 .id(domain.getId())
                 .commandClass(domain.getCommandClass())

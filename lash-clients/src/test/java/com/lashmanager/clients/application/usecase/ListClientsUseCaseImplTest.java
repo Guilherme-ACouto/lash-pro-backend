@@ -1,8 +1,17 @@
 package com.lashmanager.clients.application.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,16 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Listar clientes")
@@ -73,11 +72,9 @@ class ListClientsUseCaseImplTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        given(clientQueryRepository.findAll(any(), any(), any()))
-                .willReturn(new PageImpl<>(List.of(client)));
+        given(clientQueryRepository.findAll(any(), any(), any())).willReturn(new PageImpl<>(List.of(client)));
 
-        Page<CreateClientUseCase.ClientResult> result =
-                useCase.execute("Ana", null, PageRequest.of(0, 10));
+        Page<CreateClientUseCase.ClientResult> result = useCase.execute("Ana", null, PageRequest.of(0, 10));
 
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getContent().get(0).name()).isEqualTo("Ana Lima");

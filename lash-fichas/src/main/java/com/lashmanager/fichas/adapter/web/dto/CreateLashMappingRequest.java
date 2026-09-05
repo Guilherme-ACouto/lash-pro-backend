@@ -1,7 +1,6 @@
 package com.lashmanager.fichas.adapter.web.dto;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -14,5 +13,4 @@ public record CreateLashMappingRequest(
         String length,
         String rightEyeNotes,
         String leftEyeNotes,
-        String notes
-) {}
+        String notes) {}

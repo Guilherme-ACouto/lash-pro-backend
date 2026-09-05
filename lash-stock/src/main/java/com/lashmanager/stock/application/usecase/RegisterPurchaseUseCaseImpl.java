@@ -10,12 +10,11 @@ import com.lashmanager.stock.domain.model.*;
 import com.lashmanager.stock.domain.port.in.RegisterPurchaseUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import com.lashmanager.stock.domain.port.out.InventoryMovementRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +26,14 @@ public class RegisterPurchaseUseCaseImpl implements RegisterPurchaseUseCase {
 
     @Override
     public RegisterPurchaseResult execute(RegisterPurchaseCommand command) {
-        InventoryItem existing = itemRepository.findById(command.itemId())
+        InventoryItem existing = itemRepository
+                .findById(command.itemId())
                 .orElseThrow(() -> new InventoryItemNotFoundException(command.itemId()));
 
-        String resolvedSupplier = (command.supplier() != null && !command.supplier().isBlank())
-                ? command.supplier() : existing.getSupplier();
+        String resolvedSupplier =
+                (command.supplier() != null && !command.supplier().isBlank())
+                        ? command.supplier()
+                        : existing.getSupplier();
 
         InventoryItem updatedItem = existing.toBuilder()
                 .costPrice(command.unitCost())
@@ -81,7 +83,6 @@ public class RegisterPurchaseUseCaseImpl implements RegisterPurchaseUseCase {
         return new RegisterPurchaseResult(
                 InventoryUseCaseMapper.toItemResult(savedItem),
                 InventoryUseCaseMapper.toMovementResult(savedMovement),
-                savedExpense.getId().toString()
-        );
+                savedExpense.getId().toString());
     }
 }

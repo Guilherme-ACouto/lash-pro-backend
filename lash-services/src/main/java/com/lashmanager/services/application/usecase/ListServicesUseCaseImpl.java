@@ -16,7 +16,6 @@ public class ListServicesUseCaseImpl implements ListServicesUseCase {
 
     @Override
     public Page<CreateServiceUseCase.ServiceResult> execute(String search, Boolean active, Pageable pageable) {
-        return serviceQueryRepository.findAll(search, active, pageable)
-                .map(ServiceUseCaseMapper::toResult);
+        return serviceQueryRepository.findAll(search, active, pageable).map(ServiceUseCaseMapper::toResult);
     }
 }

@@ -6,11 +6,10 @@ import com.lashmanager.stock.domain.port.in.RegisterManualExitUseCase;
 import com.lashmanager.stock.domain.port.in.RegisterPurchaseUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
 import com.lashmanager.stock.domain.port.out.InventoryMovementRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,8 @@ public class RegisterManualExitUseCaseImpl implements RegisterManualExitUseCase 
 
     @Override
     public RegisterPurchaseUseCase.InventoryMovementResult execute(RegisterManualExitCommand command) {
-        InventoryItem existing = itemRepository.findById(command.itemId())
+        InventoryItem existing = itemRepository
+                .findById(command.itemId())
                 .orElseThrow(() -> new InventoryItemNotFoundException(command.itemId()));
 
         itemRepository.save(existing.toBuilder()

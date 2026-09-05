@@ -3,12 +3,11 @@ package com.lashmanager.stock.infrastructure.persistence.repository;
 import com.lashmanager.stock.domain.model.InventoryMovement;
 import com.lashmanager.stock.domain.port.out.InventoryMovementQueryRepository;
 import com.lashmanager.stock.infrastructure.persistence.mapper.InventoryMovementMapper;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor

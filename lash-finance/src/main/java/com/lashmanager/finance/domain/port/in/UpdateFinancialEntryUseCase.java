@@ -16,8 +16,7 @@ public interface UpdateFinancialEntryUseCase {
             String category,
             String paymentMethod,
             String receivedFrom,
-            String notes
-    ) {}
+            String notes) {}
 
     ListFinancialEntriesUseCase.EntryResult execute(UUID id, UpdateCommand command);
 }

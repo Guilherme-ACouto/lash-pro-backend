@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 public class TenantMapper {
 
     public Tenant toDomain(TenantEntity entity) {
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
         return Tenant.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -19,7 +21,9 @@ public class TenantMapper {
     }
 
     public TenantEntity toEntity(Tenant domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         return TenantEntity.builder()
                 .id(domain.getId())
                 .name(domain.getName())

@@ -5,13 +5,12 @@ import com.lashmanager.stock.domain.port.in.RegisterManualExitUseCase;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -21,7 +20,8 @@ public class RegisterManualExitCommand extends AbstractCommand {
     @NotNull
     private UUID itemId;
 
-    @NotNull @DecimalMin("0.001")
+    @NotNull
+    @DecimalMin("0.001")
     private BigDecimal quantity;
 
     @NotBlank

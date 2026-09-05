@@ -4,11 +4,10 @@ import com.lashmanager.stock.domain.exception.InventoryItemCodeAlreadyExistsExce
 import com.lashmanager.stock.domain.model.InventoryItem;
 import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -42,11 +41,13 @@ public class CreateInventoryItemUseCaseImpl implements CreateInventoryItemUseCas
     }
 
     private String resolveCode(String requested) {
-        if (requested != null && !requested.isBlank()) return requested.trim();
+        if (requested != null && !requested.isBlank()) {
+            return requested.trim();
+        }
         String generated;
         do {
-            generated = "INS-" + String.format("%06d",
-                    Math.abs(UUID.randomUUID().getLeastSignificantBits() % 1_000_000));
+            generated =
+                    "INS-" + String.format("%06d", Math.abs(UUID.randomUUID().getLeastSignificantBits() % 1_000_000));
         } while (itemRepository.existsByInternalCode(generated));
         return generated;
     }

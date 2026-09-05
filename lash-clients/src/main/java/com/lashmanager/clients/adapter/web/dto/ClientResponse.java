@@ -1,7 +1,6 @@
 package com.lashmanager.clients.adapter.web.dto;
 
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
-
 import java.util.UUID;
 
 public record ClientResponse(
@@ -12,8 +11,7 @@ public record ClientResponse(
         String birthDate,
         String notes,
         boolean active,
-        String createdAt
-) {
+        String createdAt) {
     public static ClientResponse from(CreateClientUseCase.ClientResult result) {
         return new ClientResponse(
                 result.id(),
@@ -23,7 +21,6 @@ public record ClientResponse(
                 result.birthDate(),
                 result.notes(),
                 result.active(),
-                result.createdAt()
-        );
+                result.createdAt());
     }
 }

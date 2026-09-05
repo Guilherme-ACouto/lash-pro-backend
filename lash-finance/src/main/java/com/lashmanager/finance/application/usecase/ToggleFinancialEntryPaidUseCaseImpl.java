@@ -1,5 +1,6 @@
 package com.lashmanager.finance.application.usecase;
 
+import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.finance.domain.exception.FinancialEntryNotFoundException;
 import com.lashmanager.finance.domain.model.FinancialEntry;
 import com.lashmanager.finance.domain.model.FinancialEntryStatus;
@@ -7,13 +8,11 @@ import com.lashmanager.finance.domain.model.FinancialEntryType;
 import com.lashmanager.finance.domain.port.in.ListFinancialEntriesUseCase;
 import com.lashmanager.finance.domain.port.in.ToggleFinancialEntryPaidUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
-import com.lashmanager.core.domain.exception.BusinessException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +22,12 @@ public class ToggleFinancialEntryPaidUseCaseImpl implements ToggleFinancialEntry
 
     @Override
     public ListFinancialEntriesUseCase.EntryResult execute(UUID id) {
-        FinancialEntry existing = repository.findById(id)
-                .orElseThrow(() -> new FinancialEntryNotFoundException(id));
+        FinancialEntry existing = repository.findById(id).orElseThrow(() -> new FinancialEntryNotFoundException(id));
 
         if (existing.getStatus() == FinancialEntryStatus.OVERDUE) {
             throw new BusinessException("Lançamento vencido não pode ser alternado via toggle");
         }
-        if (existing.getType() == FinancialEntryType.INCOME
-                && existing.getStatus() == FinancialEntryStatus.PAID) {
+        if (existing.getType() == FinancialEntryType.INCOME && existing.getStatus() == FinancialEntryStatus.PAID) {
             throw new BusinessException("Receita já recebida não pode ser revertida para pendente");
         }
 

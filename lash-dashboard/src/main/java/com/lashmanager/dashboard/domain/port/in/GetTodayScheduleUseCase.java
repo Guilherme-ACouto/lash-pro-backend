@@ -12,8 +12,7 @@ public interface GetTodayScheduleUseCase {
             String serviceName,
             BigDecimal servicePrice,
             String scheduledTime,
-            String status
-    ) {}
+            String status) {}
 
     List<ScheduleEntry> execute();
 }

@@ -1,14 +1,12 @@
 package com.lashmanager.stock.infrastructure.persistence.repository;
 
 import com.lashmanager.stock.infrastructure.persistence.entity.InventoryItemEntity;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 public interface InventoryItemJpaRepository extends JpaRepository<InventoryItemEntity, UUID> {
 
@@ -28,6 +26,5 @@ public interface InventoryItemJpaRepository extends JpaRepository<InventoryItemE
             @Param("search") String search,
             @Param("active") Boolean active,
             @Param("onlyLowStock") boolean onlyLowStock,
-            Pageable pageable
-    );
+            Pageable pageable);
 }

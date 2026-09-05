@@ -3,12 +3,11 @@ package com.lashmanager.appointments.infrastructure.adapter;
 import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
 import com.lashmanager.clients.domain.model.AppointmentSummary;
 import com.lashmanager.clients.domain.port.out.ClientAppointmentPort;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

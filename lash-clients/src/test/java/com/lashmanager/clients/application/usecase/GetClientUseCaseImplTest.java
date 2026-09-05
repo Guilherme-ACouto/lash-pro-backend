@@ -1,23 +1,22 @@
 package com.lashmanager.clients.application.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+
 import com.lashmanager.clients.domain.exception.ClientNotFoundException;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase.ClientResult;
 import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Buscar cliente por id")
@@ -59,7 +58,6 @@ class GetClientUseCaseImplTest {
 
         given(clientQueryRepository.findById(unknownId)).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> useCase.execute(unknownId))
-                .isInstanceOf(ClientNotFoundException.class);
+        assertThatThrownBy(() -> useCase.execute(unknownId)).isInstanceOf(ClientNotFoundException.class);
     }
 }

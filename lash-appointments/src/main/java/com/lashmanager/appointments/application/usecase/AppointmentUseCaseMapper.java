@@ -2,16 +2,14 @@ package com.lashmanager.appointments.application.usecase;
 
 import com.lashmanager.appointments.domain.model.Appointment;
 import com.lashmanager.appointments.domain.port.in.CreateAppointmentUseCase;
-
 import java.math.BigDecimal;
 
-public class AppointmentUseCaseMapper {
+public final class AppointmentUseCaseMapper {
 
     private AppointmentUseCaseMapper() {}
 
     public static CreateAppointmentUseCase.AppointmentResult toResult(
-            Appointment a, String clientName, String serviceName, BigDecimal servicePrice
-    ) {
+            Appointment a, String clientName, String serviceName, BigDecimal servicePrice) {
         return new CreateAppointmentUseCase.AppointmentResult(
                 a.getId(),
                 a.getClientId(),
@@ -25,7 +23,6 @@ public class AppointmentUseCaseMapper {
                 a.getStatus().name(),
                 a.getNotes(),
                 a.getFinancialEntryId() != null ? a.getFinancialEntryId().toString() : null,
-                a.getCreatedAt().toString()
-        );
+                a.getCreatedAt().toString());
     }
 }

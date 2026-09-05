@@ -3,6 +3,7 @@ package com.lashmanager.clients;
 import com.lashmanager.core.domain.port.out.SchemaProvisionerPort;
 import com.lashmanager.core.infrastructure.multitenancy.TenantContext;
 import com.lashmanager.core.infrastructure.multitenancy.TenantSchemaNaming;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 /**
- * Mesma estratégia de lash-core/AbstractIntegrationTest: roda contra um schema
- * de tenant isolado, provisionado via Liquibase (SchemaProvisionerImpl) — os
- * testes de Clientes passam a validar também o changelog de tenant, não só o
- * schema public de dev.
+ * Mesma estratégia de lash-core/AbstractIntegrationTest: roda contra um schema de tenant isolado,
+ * provisionado via Liquibase (SchemaProvisionerImpl) — os testes de Clientes passam a validar
+ * também o changelog de tenant, não só o schema public de dev.
  */
 @SpringBootTest(classes = ClientsTestApplication.class)
 @Transactional

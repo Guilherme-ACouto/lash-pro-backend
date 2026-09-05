@@ -2,11 +2,10 @@ package com.lashmanager.finance.application.usecase;
 
 import com.lashmanager.finance.domain.port.in.GetFinancialSummaryUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialSummaryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +31,6 @@ public class GetFinancialSummaryUseCaseImpl implements GetFinancialSummaryUseCas
                 incomePredicted,
                 expensePaid,
                 expensePredicted,
-                summaryRepository.last6MonthsStats()
-        );
+                summaryRepository.last6MonthsStats());
     }
 }

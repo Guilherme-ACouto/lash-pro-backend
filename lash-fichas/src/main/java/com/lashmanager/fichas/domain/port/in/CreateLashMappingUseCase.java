@@ -15,8 +15,7 @@ public interface CreateLashMappingUseCase {
             String length,
             String rightEyeNotes,
             String leftEyeNotes,
-            String notes
-    ) {}
+            String notes) {}
 
     record LashMappingResult(
             UUID id,
@@ -30,8 +29,7 @@ public interface CreateLashMappingUseCase {
             String rightEyeNotes,
             String leftEyeNotes,
             String notes,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     LashMappingResult execute(CreateLashMappingCommand command);
 }

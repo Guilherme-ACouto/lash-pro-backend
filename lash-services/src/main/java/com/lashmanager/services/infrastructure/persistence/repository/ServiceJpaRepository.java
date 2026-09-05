@@ -1,13 +1,12 @@
 package com.lashmanager.services.infrastructure.persistence.repository;
 
 import com.lashmanager.services.infrastructure.persistence.entity.ServiceEntity;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.UUID;
 
 public interface ServiceJpaRepository extends JpaRepository<ServiceEntity, UUID> {
 
@@ -22,8 +21,5 @@ public interface ServiceJpaRepository extends JpaRepository<ServiceEntity, UUID>
             ORDER BY s.name ASC
             """)
     Page<ServiceEntity> findAllFiltered(
-            @Param("search") String search,
-            @Param("active") Boolean active,
-            Pageable pageable
-    );
+            @Param("search") String search, @Param("active") Boolean active, Pageable pageable);
 }

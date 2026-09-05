@@ -13,8 +13,7 @@ public interface CreateInventoryItemUseCase {
             String supplier,
             BigDecimal currentQuantity,
             BigDecimal minimumQuantity,
-            String notes
-    ) {}
+            String notes) {}
 
     record InventoryItemResult(
             UUID id,
@@ -29,8 +28,7 @@ public interface CreateInventoryItemUseCase {
             boolean belowMinimum,
             boolean outOfStock,
             String notes,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     InventoryItemResult execute(CreateInventoryItemCommand command);
 }

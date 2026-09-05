@@ -13,8 +13,7 @@ public interface CreateAppointmentUseCase {
             LocalDate scheduledDate,
             LocalTime scheduledTime,
             int durationMinutes,
-            String notes
-    ) {}
+            String notes) {}
 
     record AppointmentResult(
             UUID id,
@@ -29,8 +28,7 @@ public interface CreateAppointmentUseCase {
             String status,
             String notes,
             String financialEntryId,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     AppointmentResult execute(CreateAppointmentCommand command);
 }

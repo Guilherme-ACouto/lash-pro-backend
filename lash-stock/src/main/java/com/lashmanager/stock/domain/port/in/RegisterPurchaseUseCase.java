@@ -14,8 +14,7 @@ public interface RegisterPurchaseUseCase {
             LocalDate purchaseDate,
             String paymentType,
             LocalDate dueDate,
-            String notes
-    ) {}
+            String notes) {}
 
     record InventoryMovementResult(
             UUID id,
@@ -32,14 +31,12 @@ public interface RegisterPurchaseUseCase {
             String dueDate,
             String financialEntryId,
             String notes,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     record RegisterPurchaseResult(
             CreateInventoryItemUseCase.InventoryItemResult item,
             InventoryMovementResult movement,
-            String financialEntryId
-    ) {}
+            String financialEntryId) {}
 
     RegisterPurchaseResult execute(RegisterPurchaseCommand command);
 }

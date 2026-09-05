@@ -1,8 +1,7 @@
 package com.lashmanager.clients.domain.exception;
 
-import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.clients.domain.model.AppointmentSummary;
-
+import com.lashmanager.core.domain.exception.BusinessException;
 import java.util.List;
 
 public class HasFutureAppointmentsException extends BusinessException {

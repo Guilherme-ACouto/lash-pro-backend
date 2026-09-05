@@ -3,7 +3,6 @@ package com.lashmanager.finance.adapter.web.dto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,5 +16,4 @@ public record UpdateFinancialEntryRequest(
         String category,
         String paymentMethod,
         String receivedFrom,
-        String notes
-) {}
+        String notes) {}

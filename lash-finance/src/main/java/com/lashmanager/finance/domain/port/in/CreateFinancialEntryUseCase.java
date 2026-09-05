@@ -15,8 +15,7 @@ public interface CreateFinancialEntryUseCase {
             String category,
             String paymentMethod,
             String receivedFrom,
-            String notes
-    ) {}
+            String notes) {}
 
     ListFinancialEntriesUseCase.EntryResult execute(CreateCommand command);
 }

@@ -1,7 +1,6 @@
 package com.lashmanager.fichas.adapter.web.dto;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDate;
 
 public record UpdateLashMappingRequest(
@@ -12,5 +11,4 @@ public record UpdateLashMappingRequest(
         String length,
         String rightEyeNotes,
         String leftEyeNotes,
-        String notes
-) {}
+        String notes) {}

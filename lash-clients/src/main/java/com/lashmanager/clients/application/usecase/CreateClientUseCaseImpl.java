@@ -4,11 +4,10 @@ import com.lashmanager.clients.domain.exception.ClientAlreadyExistsException;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 import com.lashmanager.clients.domain.port.out.ClientRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

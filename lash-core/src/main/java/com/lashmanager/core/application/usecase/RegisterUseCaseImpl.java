@@ -10,16 +10,15 @@ import com.lashmanager.core.domain.port.out.EmailPort;
 import com.lashmanager.core.domain.port.out.TenantRepository;
 import com.lashmanager.core.domain.port.out.UserRepository;
 import com.lashmanager.core.infrastructure.multitenancy.TenantSchemaNaming;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -85,7 +84,9 @@ public class RegisterUseCaseImpl implements RegisterUseCase {
 
         User saved = userRepository.save(user);
         emailPort.sendActivationEmail(saved.getEmail(), saved.getName(), activationKey);
-        log.info("Cadastro criado, aguardando ativação: {}", saved.getEmail());
+        if (log.isInfoEnabled()) {
+            log.info("Cadastro criado, aguardando ativação: {}", saved.getEmail());
+        }
 
         return new RegisterResult(saved.getId(), saved.getEmail());
     }

@@ -5,10 +5,9 @@ import com.lashmanager.fichas.domain.model.Ficha;
 import com.lashmanager.fichas.domain.port.in.CreateFichaUseCase;
 import com.lashmanager.fichas.domain.port.in.UpdateFichaUseCase;
 import com.lashmanager.fichas.domain.port.out.FichaRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +17,8 @@ public class UpdateFichaUseCaseImpl implements UpdateFichaUseCase {
 
     @Override
     public CreateFichaUseCase.FichaResult execute(UpdateFichaCommand command) {
-        Ficha existing = fichaRepository.findById(command.id())
-                .orElseThrow(() -> new FichaNotFoundException(command.id()));
+        Ficha existing =
+                fichaRepository.findById(command.id()).orElseThrow(() -> new FichaNotFoundException(command.id()));
 
         Ficha updated = existing.toBuilder()
                 .date(command.date())

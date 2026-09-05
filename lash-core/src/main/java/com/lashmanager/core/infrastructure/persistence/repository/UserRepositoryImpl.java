@@ -3,10 +3,9 @@ package com.lashmanager.core.infrastructure.persistence.repository;
 import com.lashmanager.core.domain.model.User;
 import com.lashmanager.core.domain.port.out.UserRepository;
 import com.lashmanager.core.infrastructure.persistence.mapper.UserMapper;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

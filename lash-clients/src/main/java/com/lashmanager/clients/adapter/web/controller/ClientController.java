@@ -15,15 +15,14 @@ import com.lashmanager.clients.application.service.UpdateClientApplicationServic
 import com.lashmanager.clients.domain.port.in.GetClientUseCase;
 import com.lashmanager.clients.domain.port.in.ListClientsUseCase;
 import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/clients")
@@ -40,7 +39,7 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<ClientResponse> create(@Valid @RequestBody CreateClientRequest request) {
         var result = createClientApplicationService.when(new CreateClientCommand(
-            request.name(), request.phone(), request.email(), request.birthDate(), request.notes()));
+                request.name(), request.phone(), request.email(), request.birthDate(), request.notes()));
         return ResponseEntity.created(URI.create("/api/clients/" + result.id())).body(ClientResponse.from(result));
     }
 
@@ -50,15 +49,19 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ClientResponse>> list(@RequestParam(required = false) String search, @RequestParam(required = false) Boolean active,
+    public ResponseEntity<Page<ClientResponse>> list(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean active,
             @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(listClientsUseCase.execute(search, active, pageable).map(ClientResponse::from));
+        return ResponseEntity.ok(
+                listClientsUseCase.execute(search, active, pageable).map(ClientResponse::from));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientResponse> update(@PathVariable UUID id, @Valid @RequestBody UpdateClientRequest request) {
+    public ResponseEntity<ClientResponse> update(
+            @PathVariable UUID id, @Valid @RequestBody UpdateClientRequest request) {
         var result = updateClientApplicationService.when(new UpdateClientCommand(
-            id, request.name(), request.phone(), request.email(), request.birthDate(), request.notes()));
+                id, request.name(), request.phone(), request.email(), request.birthDate(), request.notes()));
         return ResponseEntity.ok(ClientResponse.from(result));
     }
 

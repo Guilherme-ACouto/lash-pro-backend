@@ -5,13 +5,7 @@ import java.util.UUID;
 
 public interface UpdateClientUseCase {
 
-    record UpdateClientCommand(
-            String name,
-            String phone,
-            String email,
-            LocalDate birthDate,
-            String notes
-    ) {}
+    record UpdateClientCommand(String name, String phone, String email, LocalDate birthDate, String notes) {}
 
     CreateClientUseCase.ClientResult execute(UUID id, UpdateClientCommand command);
 }

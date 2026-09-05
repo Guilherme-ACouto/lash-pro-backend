@@ -1,5 +1,8 @@
 package com.lashmanager.core;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.lashmanager.core.application.command.RegisterCommand;
 import com.lashmanager.core.application.service.RegisterApplicationService;
 import com.lashmanager.core.domain.exception.EmailAlreadyInUseException;
@@ -9,16 +12,12 @@ import com.lashmanager.core.domain.model.UserRole;
 import com.lashmanager.core.domain.port.out.CommandAuditLogRepository;
 import com.lashmanager.core.domain.port.out.UserRepository;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("CommandInterceptor — validação e auditoria")
 class CommandInterceptorITest extends AbstractIntegrationTest {
@@ -54,7 +53,8 @@ class CommandInterceptorITest extends AbstractIntegrationTest {
 
         registerApplicationService.when(new RegisterCommand("Usuária Auditoria", email, "senha123"));
 
-        CommandAuditLog latest = commandAuditLogRepository.findLatestByCommandClass("RegisterCommand")
+        CommandAuditLog latest = commandAuditLogRepository
+                .findLatestByCommandClass("RegisterCommand")
                 .orElseThrow();
 
         assertThat(latest.isSuccess()).isTrue();
@@ -80,10 +80,11 @@ class CommandInterceptorITest extends AbstractIntegrationTest {
                 .build());
 
         assertThatThrownBy(() ->
-                registerApplicationService.when(new RegisterCommand("Tentativa Duplicada", email, "senha123")))
+                        registerApplicationService.when(new RegisterCommand("Tentativa Duplicada", email, "senha123")))
                 .isInstanceOf(EmailAlreadyInUseException.class);
 
-        CommandAuditLog latest = commandAuditLogRepository.findLatestByCommandClass("RegisterCommand")
+        CommandAuditLog latest = commandAuditLogRepository
+                .findLatestByCommandClass("RegisterCommand")
                 .orElseThrow();
 
         assertThat(latest.isSuccess()).isFalse();

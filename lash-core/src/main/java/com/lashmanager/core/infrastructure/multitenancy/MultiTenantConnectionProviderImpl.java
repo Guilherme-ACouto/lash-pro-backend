@@ -1,20 +1,18 @@
 package com.lashmanager.core.infrastructure.multitenancy;
 
-import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.regex.Pattern;
+import javax.sql.DataSource;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
+import org.springframework.stereotype.Component;
 
 /**
- * Troca o search_path da conexão Postgres de acordo com o tenant atual.
- * Uma única conexão física é reaproveitada pelo pool (HikariCP) — o isolamento
- * entre tenants vem inteiramente do search_path, nenhuma tabela de negócio
- * ganha coluna tenant_id (ver design.md).
+ * Troca o search_path da conexão Postgres de acordo com o tenant atual. Uma única conexão física é
+ * reaproveitada pelo pool (HikariCP) — o isolamento entre tenants vem inteiramente do search_path,
+ * nenhuma tabela de negócio ganha coluna tenant_id (ver design.md).
  */
 @Component
 @RequiredArgsConstructor

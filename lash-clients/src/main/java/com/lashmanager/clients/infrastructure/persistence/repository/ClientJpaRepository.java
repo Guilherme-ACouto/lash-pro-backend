@@ -1,13 +1,12 @@
 package com.lashmanager.clients.infrastructure.persistence.repository;
 
 import com.lashmanager.clients.infrastructure.persistence.entity.ClientEntity;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.UUID;
 
 public interface ClientJpaRepository extends JpaRepository<ClientEntity, UUID> {
 
@@ -23,8 +22,5 @@ public interface ClientJpaRepository extends JpaRepository<ClientEntity, UUID> {
             ORDER BY c.name ASC
             """)
     Page<ClientEntity> findAllFiltered(
-            @Param("search") String search,
-            @Param("active") Boolean active,
-            Pageable pageable
-    );
+            @Param("search") String search, @Param("active") Boolean active, Pageable pageable);
 }

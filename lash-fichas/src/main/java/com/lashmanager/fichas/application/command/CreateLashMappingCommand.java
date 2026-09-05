@@ -3,12 +3,11 @@ package com.lashmanager.fichas.application.command;
 import com.lashmanager.core.infrastructure.command.AbstractCommand;
 import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -33,7 +32,15 @@ public class CreateLashMappingCommand extends AbstractCommand {
 
     public CreateLashMappingUseCase.CreateLashMappingCommand toDomainCommand() {
         return new CreateLashMappingUseCase.CreateLashMappingCommand(
-                fichaId, appointmentId, date, technique, curvature, thickness, length,
-                rightEyeNotes, leftEyeNotes, notes);
+                fichaId,
+                appointmentId,
+                date,
+                technique,
+                curvature,
+                thickness,
+                length,
+                rightEyeNotes,
+                leftEyeNotes,
+                notes);
     }
 }

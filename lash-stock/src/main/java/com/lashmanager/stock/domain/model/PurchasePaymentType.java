@@ -1,3 +1,6 @@
 package com.lashmanager.stock.domain.model;
 
-public enum PurchasePaymentType { CASH, INVOICE }
+public enum PurchasePaymentType {
+    CASH,
+    INVOICE
+}

@@ -5,11 +5,10 @@ import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor
@@ -18,20 +17,24 @@ public class CreateInventoryItemCommand extends AbstractCommand {
 
     @NotBlank
     private String name;
+
     private String internalCode;
 
     @NotBlank
     private String unit;
 
-    @NotNull @DecimalMin("0.00")
+    @NotNull
+    @DecimalMin("0.00")
     private BigDecimal costPrice;
 
     private String supplier;
 
-    @NotNull @DecimalMin("0")
+    @NotNull
+    @DecimalMin("0")
     private BigDecimal currentQuantity;
 
-    @NotNull @DecimalMin("0")
+    @NotNull
+    @DecimalMin("0")
     private BigDecimal minimumQuantity;
 
     private String notes;

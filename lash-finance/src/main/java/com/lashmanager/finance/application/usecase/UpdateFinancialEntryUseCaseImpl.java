@@ -9,11 +9,10 @@ import com.lashmanager.finance.domain.model.FinancialEntryType;
 import com.lashmanager.finance.domain.port.in.ListFinancialEntriesUseCase;
 import com.lashmanager.finance.domain.port.in.UpdateFinancialEntryUseCase;
 import com.lashmanager.finance.domain.port.out.FinancialEntryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -23,20 +22,19 @@ public class UpdateFinancialEntryUseCaseImpl implements UpdateFinancialEntryUseC
 
     @Override
     public ListFinancialEntriesUseCase.EntryResult execute(UUID id, UpdateCommand command) {
-        FinancialEntry existing = repository.findById(id)
-                .orElseThrow(() -> new FinancialEntryNotFoundException(id));
+        FinancialEntry existing = repository.findById(id).orElseThrow(() -> new FinancialEntryNotFoundException(id));
 
         if (existing.getAppointmentId() != null) {
             throw new FinancialEntryLinkedToAppointmentException();
         }
 
-        FinancialEntryStatus status = command.paymentDate() != null
-                ? FinancialEntryStatus.PAID : FinancialEntryStatus.PENDING;
+        FinancialEntryStatus status =
+                command.paymentDate() != null ? FinancialEntryStatus.PAID : FinancialEntryStatus.PENDING;
 
         FinancialEntry updated = existing.toBuilder()
                 .type(FinancialEntryType.valueOf(command.type()))
-                .expenseType(command.expenseType() != null
-                        ? FinancialEntryExpenseType.valueOf(command.expenseType()) : null)
+                .expenseType(
+                        command.expenseType() != null ? FinancialEntryExpenseType.valueOf(command.expenseType()) : null)
                 .description(command.description())
                 .amount(command.amount())
                 .dueDate(command.dueDate())

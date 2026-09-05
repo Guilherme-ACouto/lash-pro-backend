@@ -3,7 +3,7 @@ package com.lashmanager.finance.application.usecase;
 import com.lashmanager.finance.domain.model.FinancialEntry;
 import com.lashmanager.finance.domain.port.in.ListFinancialEntriesUseCase;
 
-public class FinancialEntryMapper {
+public final class FinancialEntryMapper {
 
     private FinancialEntryMapper() {}
 
@@ -22,7 +22,6 @@ public class FinancialEntryMapper {
                 counterpart,
                 e.getNotes(),
                 e.getAppointmentId() != null,
-                e.getAppointmentId()
-        );
+                e.getAppointmentId());
     }
 }

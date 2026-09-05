@@ -5,13 +5,7 @@ import java.util.UUID;
 
 public interface CreateClientUseCase {
 
-    record CreateClientCommand(
-            String name,
-            String phone,
-            String email,
-            LocalDate birthDate,
-            String notes
-    ) {}
+    record CreateClientCommand(String name, String phone, String email, LocalDate birthDate, String notes) {}
 
     record ClientResult(
             UUID id,
@@ -21,8 +15,7 @@ public interface CreateClientUseCase {
             String birthDate,
             String notes,
             boolean active,
-            String createdAt
-    ) {}
+            String createdAt) {}
 
     ClientResult execute(CreateClientCommand command);
 }

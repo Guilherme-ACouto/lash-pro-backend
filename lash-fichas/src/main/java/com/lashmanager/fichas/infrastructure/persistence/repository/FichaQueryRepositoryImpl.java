@@ -3,13 +3,12 @@ package com.lashmanager.fichas.infrastructure.persistence.repository;
 import com.lashmanager.fichas.domain.model.Ficha;
 import com.lashmanager.fichas.domain.port.out.FichaQueryRepository;
 import com.lashmanager.fichas.infrastructure.persistence.mapper.FichaMapper;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor

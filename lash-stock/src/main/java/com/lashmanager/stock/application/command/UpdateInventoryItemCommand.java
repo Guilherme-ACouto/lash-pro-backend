@@ -5,12 +5,11 @@ import com.lashmanager.stock.domain.port.in.UpdateInventoryItemUseCase;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -26,12 +25,14 @@ public class UpdateInventoryItemCommand extends AbstractCommand {
     @NotBlank
     private String unit;
 
-    @NotNull @DecimalMin("0.00")
+    @NotNull
+    @DecimalMin("0.00")
     private BigDecimal costPrice;
 
     private String supplier;
 
-    @NotNull @DecimalMin("0")
+    @NotNull
+    @DecimalMin("0")
     private BigDecimal minimumQuantity;
 
     private String notes;

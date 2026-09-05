@@ -1,15 +1,13 @@
 package com.lashmanager.stock.application.usecase;
 
-import com.lashmanager.stock.domain.exception.InventoryItemCodeAlreadyExistsException;
 import com.lashmanager.stock.domain.exception.InventoryItemNotFoundException;
 import com.lashmanager.stock.domain.model.InventoryItem;
 import com.lashmanager.stock.domain.port.in.CreateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.in.UpdateInventoryItemUseCase;
 import com.lashmanager.stock.domain.port.out.InventoryItemRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +17,8 @@ public class UpdateInventoryItemUseCaseImpl implements UpdateInventoryItemUseCas
 
     @Override
     public CreateInventoryItemUseCase.InventoryItemResult execute(UpdateInventoryItemCommand command) {
-        InventoryItem existing = itemRepository.findById(command.id())
+        InventoryItem existing = itemRepository
+                .findById(command.id())
                 .orElseThrow(() -> new InventoryItemNotFoundException(command.id()));
 
         InventoryItem updated = existing.toBuilder()

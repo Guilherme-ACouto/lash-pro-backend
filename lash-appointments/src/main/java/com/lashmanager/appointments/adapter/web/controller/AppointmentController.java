@@ -16,15 +16,14 @@ import com.lashmanager.appointments.application.service.UpdateAppointmentApplica
 import com.lashmanager.appointments.domain.port.in.GetAppointmentUseCase;
 import com.lashmanager.appointments.domain.port.in.ListAppointmentsByDateUseCase;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -40,29 +39,29 @@ public class AppointmentController {
     @GetMapping
     public ResponseEntity<List<AppointmentResponse>> listByDate(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-    ) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (endDate != null) {
             LocalDate startDate = date != null ? date : LocalDate.now();
-            return ResponseEntity.ok(
-                    listAppointmentsByDateUseCase.executeRange(startDate, endDate).stream()
-                            .map(AppointmentResponse::from).toList()
-            );
+            return ResponseEntity.ok(listAppointmentsByDateUseCase.executeRange(startDate, endDate).stream()
+                    .map(AppointmentResponse::from)
+                    .toList());
         }
         LocalDate targetDate = date != null ? date : LocalDate.now();
-        return ResponseEntity.ok(
-                listAppointmentsByDateUseCase.execute(targetDate).stream()
-                        .map(AppointmentResponse::from).toList()
-        );
+        return ResponseEntity.ok(listAppointmentsByDateUseCase.execute(targetDate).stream()
+                .map(AppointmentResponse::from)
+                .toList());
     }
 
     @PostMapping
     public ResponseEntity<AppointmentResponse> create(@Valid @RequestBody CreateAppointmentRequest req) {
         var result = createAppointmentApplicationService.when(new CreateAppointmentCommand(
-                req.clientId(), req.serviceId(), req.scheduledDate(), req.scheduledTime(), req.durationMinutes(), req.notes()
-        ));
-        return ResponseEntity
-                .created(URI.create("/api/appointments/" + result.id()))
+                req.clientId(),
+                req.serviceId(),
+                req.scheduledDate(),
+                req.scheduledTime(),
+                req.durationMinutes(),
+                req.notes()));
+        return ResponseEntity.created(URI.create("/api/appointments/" + result.id()))
                 .body(AppointmentResponse.from(result));
     }
 
@@ -73,12 +72,15 @@ public class AppointmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AppointmentResponse> update(
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateAppointmentRequest req
-    ) {
+            @PathVariable UUID id, @Valid @RequestBody UpdateAppointmentRequest req) {
         var result = updateAppointmentApplicationService.when(new UpdateAppointmentCommand(
-                id, req.clientId(), req.serviceId(), req.scheduledDate(), req.scheduledTime(), req.durationMinutes(), req.notes()
-        ));
+                id,
+                req.clientId(),
+                req.serviceId(),
+                req.scheduledDate(),
+                req.scheduledTime(),
+                req.durationMinutes(),
+                req.notes()));
         return ResponseEntity.ok(AppointmentResponse.from(result));
     }
 
@@ -90,9 +92,7 @@ public class AppointmentController {
 
     @PatchMapping("/{id}/complete")
     public ResponseEntity<Void> complete(
-            @PathVariable UUID id,
-            @RequestBody(required = false) CompleteAppointmentRequest req
-    ) {
+            @PathVariable UUID id, @RequestBody(required = false) CompleteAppointmentRequest req) {
         changeAppointmentStatusApplicationService.when(
                 new CompleteAppointmentCommand(id, req != null ? req.paymentMethod() : null));
         return ResponseEntity.noContent().build();

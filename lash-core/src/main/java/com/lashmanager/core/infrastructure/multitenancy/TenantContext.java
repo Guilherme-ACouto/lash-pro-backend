@@ -6,8 +6,7 @@ public final class TenantContext {
 
     private static final ThreadLocal<String> CURRENT_TENANT = new ThreadLocal<>();
 
-    private TenantContext() {
-    }
+    private TenantContext() {}
 
     public static void setCurrentTenant(String schemaName) {
         CURRENT_TENANT.set(schemaName);

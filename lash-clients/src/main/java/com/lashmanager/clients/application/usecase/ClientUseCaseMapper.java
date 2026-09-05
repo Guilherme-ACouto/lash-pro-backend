@@ -3,7 +3,7 @@ package com.lashmanager.clients.application.usecase;
 import com.lashmanager.clients.domain.model.Client;
 import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
 
-public class ClientUseCaseMapper {
+public final class ClientUseCaseMapper {
 
     private ClientUseCaseMapper() {}
 
@@ -16,7 +16,6 @@ public class ClientUseCaseMapper {
                 client.getBirthDate() != null ? client.getBirthDate().toString() : null,
                 client.getNotes(),
                 client.isActive(),
-                client.getCreatedAt() != null ? client.getCreatedAt().toString() : null
-        );
+                client.getCreatedAt() != null ? client.getCreatedAt().toString() : null);
     }
 }

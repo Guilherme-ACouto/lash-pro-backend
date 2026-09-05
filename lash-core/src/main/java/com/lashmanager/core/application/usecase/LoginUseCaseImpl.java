@@ -26,8 +26,7 @@ public class LoginUseCaseImpl implements LoginUseCase {
 
     @Override
     public LoginResponse execute(LoginCommand command) {
-        User user = userRepository.findByEmail(command.email())
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = userRepository.findByEmail(command.email()).orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {
             throw new InvalidCredentialsException();
@@ -45,10 +44,18 @@ public class LoginUseCaseImpl implements LoginUseCase {
         }
 
         String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
-        String accessToken = tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
+        String accessToken =
+                tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
         String refreshToken = tokenPort.generateRefreshToken(user.getEmail());
 
-        log.info("Login realizado: {}", user.getEmail());
-        return new LoginResponse(accessToken, refreshToken, user.getName(), user.getEmail(), user.getRole().name());
+        if (log.isInfoEnabled()) {
+            log.info("Login realizado: {}", user.getEmail());
+        }
+        return new LoginResponse(
+                accessToken,
+                refreshToken,
+                user.getName(),
+                user.getEmail(),
+                user.getRole().name());
     }
 }

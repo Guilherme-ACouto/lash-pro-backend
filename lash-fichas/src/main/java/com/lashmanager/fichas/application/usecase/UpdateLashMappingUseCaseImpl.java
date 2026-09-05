@@ -5,10 +5,9 @@ import com.lashmanager.fichas.domain.model.LashMapping;
 import com.lashmanager.fichas.domain.port.in.CreateLashMappingUseCase;
 import com.lashmanager.fichas.domain.port.in.UpdateLashMappingUseCase;
 import com.lashmanager.fichas.domain.port.out.LashMappingRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +17,8 @@ public class UpdateLashMappingUseCaseImpl implements UpdateLashMappingUseCase {
 
     @Override
     public CreateLashMappingUseCase.LashMappingResult execute(UpdateLashMappingCommand command) {
-        LashMapping existing = mappingRepository.findById(command.id())
+        LashMapping existing = mappingRepository
+                .findById(command.id())
                 .orElseThrow(() -> new LashMappingNotFoundException(command.id()));
 
         LashMapping updated = existing.toBuilder()

@@ -10,13 +10,12 @@ import com.lashmanager.clients.domain.port.out.ClientRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.out.ServiceRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +27,15 @@ public class CreateAppointmentUseCaseImpl implements CreateAppointmentUseCase {
 
     @Override
     public AppointmentResult execute(CreateAppointmentCommand command) {
-        Client client = clientRepository.findById(command.clientId())
+        Client client = clientRepository
+                .findById(command.clientId())
                 .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.clientId()));
         if (!client.isActive()) {
             throw new BusinessException("Cliente inativo");
         }
 
-        ServiceOffering service = serviceRepository.findById(command.serviceId())
+        ServiceOffering service = serviceRepository
+                .findById(command.serviceId())
                 .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.serviceId()));
         if (!service.isActive()) {
             throw new BusinessException("Serviço inativo");

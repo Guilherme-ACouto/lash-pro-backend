@@ -3,10 +3,9 @@ package com.lashmanager.fichas.application.usecase;
 import com.lashmanager.fichas.domain.exception.LashMappingNotFoundException;
 import com.lashmanager.fichas.domain.port.in.DeleteLashMappingUseCase;
 import com.lashmanager.fichas.domain.port.out.LashMappingRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

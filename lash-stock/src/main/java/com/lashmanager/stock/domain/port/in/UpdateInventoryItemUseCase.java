@@ -12,8 +12,7 @@ public interface UpdateInventoryItemUseCase {
             BigDecimal costPrice,
             String supplier,
             BigDecimal minimumQuantity,
-            String notes
-    ) {}
+            String notes) {}
 
     CreateInventoryItemUseCase.InventoryItemResult execute(UpdateInventoryItemCommand command);
 }

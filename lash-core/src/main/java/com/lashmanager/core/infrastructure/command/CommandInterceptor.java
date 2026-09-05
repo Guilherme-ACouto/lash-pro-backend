@@ -6,6 +6,10 @@ import com.lashmanager.core.domain.port.out.CommandAuditLogRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
+import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,17 +19,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 /**
- * Intercepta todo ApplicationService.when(AbstractCommand) por convenção de
- * assinatura: valida (Bean Validation), loga início/fim e grava auditoria —
- * sucesso ou falha. Ponto de extensão preparado, não implementado: leitura de
- * uma futura anotação @CommandPermission (ver RBK-D04, precisa de mais de um
- * UserRole pra fazer sentido). Falha ao gravar auditoria nunca derruba a
+ * Intercepta todo ApplicationService.when(AbstractCommand) por convenção de assinatura: valida
+ * (Bean Validation), loga início/fim e grava auditoria — sucesso ou falha. Ponto de extensão
+ * preparado, não implementado: leitura de uma futura anotação @CommandPermission (ver RBK-D04,
+ * precisa de mais de um UserRole pra fazer sentido). Falha ao gravar auditoria nunca derruba a
  * operação de negócio em si — é registrada em log e seguida.
  */
 @Aspect
@@ -47,11 +45,18 @@ public class CommandInterceptor {
         try {
             Object result = joinPoint.proceed();
             audit(command, true);
-            log.info("Command {} executado em {}ms", command.getClass().getSimpleName(), System.currentTimeMillis() - start);
+            if (log.isInfoEnabled()) {
+                log.info(
+                        "Command {} executado em {}ms",
+                        command.getClass().getSimpleName(),
+                        System.currentTimeMillis() - start);
+            }
             return result;
         } catch (Exception e) {
             audit(command, false);
-            log.warn("Command {} falhou: {}", command.getClass().getSimpleName(), e.getMessage());
+            if (log.isWarnEnabled()) {
+                log.warn("Command {} falhou: {}", command.getClass().getSimpleName(), e.getMessage());
+            }
             throw e;
         }
     }
@@ -61,8 +66,7 @@ public class CommandInterceptor {
         if (args.length == 0 || !(args[0] instanceof AbstractCommand command)) {
             throw new IllegalStateException(
                     "ApplicationService.when(...) deve receber um AbstractCommand como primeiro argumento: "
-                            + joinPoint.getSignature()
-            );
+                            + joinPoint.getSignature());
         }
         return command;
     }
@@ -89,7 +93,12 @@ public class CommandInterceptor {
                     .success(success)
                     .build());
         } catch (Exception e) {
-            log.error("Falha ao gravar auditoria do command {}: {}", command.getClass().getSimpleName(), e.getMessage());
+            if (log.isErrorEnabled()) {
+                log.error(
+                        "Falha ao gravar auditoria do command {}: {}",
+                        command.getClass().getSimpleName(),
+                        e.getMessage());
+            }
         }
     }
 

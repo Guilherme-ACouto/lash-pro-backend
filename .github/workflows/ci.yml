@@ -36,8 +36,14 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Compilar
-        run: mvn -B compile
+      - name: Limpar artefatos internos do cache
+        run: rm -rf ~/.m2/repository/com/lashmanager
+
+      - name: Build (instala módulos internos no repositório local)
+        run: mvn -B install -DskipTests
+
+      - name: Lint de qualidade (PMD)
+        run: mvn -B pmd:check
 
       - name: Rodar testes
         run: mvn -B test

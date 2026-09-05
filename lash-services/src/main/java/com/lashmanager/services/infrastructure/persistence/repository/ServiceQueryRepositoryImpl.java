@@ -3,13 +3,12 @@ package com.lashmanager.services.infrastructure.persistence.repository;
 import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.out.ServiceQueryRepository;
 import com.lashmanager.services.infrastructure.persistence.mapper.ServiceMapper;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor

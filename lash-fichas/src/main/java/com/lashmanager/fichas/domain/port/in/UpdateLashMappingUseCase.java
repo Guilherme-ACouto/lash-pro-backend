@@ -14,8 +14,7 @@ public interface UpdateLashMappingUseCase {
             String length,
             String rightEyeNotes,
             String leftEyeNotes,
-            String notes
-    ) {}
+            String notes) {}
 
     CreateLashMappingUseCase.LashMappingResult execute(UpdateLashMappingCommand command);
 }
