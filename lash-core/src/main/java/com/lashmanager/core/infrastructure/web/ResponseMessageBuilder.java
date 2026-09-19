@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 
 public class ResponseMessageBuilder {
 
@@ -24,22 +25,24 @@ public class ResponseMessageBuilder {
      * a entidade só pra devolver no response (padrão real do Pontta pra update/deactivate/etc.).
      */
     public ResponseEntity<Void> updated(String entityName, UUID id) {
-        HttpHeaders headers = HEADER_BUILDER.createAlert(AlertMessageType.UPDATED.format(entityName), id.toString());
+        MultiValueMap<String, String> headers =
+                HEADER_BUILDER.createAlert(AlertMessageType.UPDATED.format(entityName), id.toString());
         return ResponseEntity.status(AlertMessageType.UPDATED.status())
-                .headers(headers)
+                .headers(new HttpHeaders(headers))
                 .build();
     }
 
     public ResponseEntity<Void> deleted(String entityName, UUID id) {
-        HttpHeaders headers = HEADER_BUILDER.createAlert(AlertMessageType.DELETED.format(entityName), id.toString());
+        MultiValueMap<String, String> headers =
+                HEADER_BUILDER.createAlert(AlertMessageType.DELETED.format(entityName), id.toString());
         return ResponseEntity.status(AlertMessageType.DELETED.status())
-                .headers(headers)
+                .headers(new HttpHeaders(headers))
                 .build();
     }
 
     private ResponseEntity<Object> response(AlertMessageType type, String entityName, DomainEntity body) {
-        HttpHeaders headers =
+        MultiValueMap<String, String> headers =
                 HEADER_BUILDER.createAlert(type.format(entityName), body.getId().toString());
-        return ResponseEntity.status(type.status()).headers(headers).body(body);
+        return ResponseEntity.status(type.status()).headers(new HttpHeaders(headers)).body(body);
     }
 }
