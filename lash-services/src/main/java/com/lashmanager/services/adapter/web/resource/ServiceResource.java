@@ -8,18 +8,15 @@ import com.lashmanager.services.application.command.ReactivateServiceCommand;
 import com.lashmanager.services.application.command.UpdateServiceCommand;
 import com.lashmanager.services.application.service.ServiceApplicationService;
 import com.lashmanager.services.domain.model.ServiceOffering;
-import com.lashmanager.services.domain.port.in.ServiceQueryService;
 
 import java.util.UUID;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/** Só comando — leitura mora em {@link ServiceQueryResource} (mesma URL base). */
 @RestController
 @RequestMapping("/api/services")
 @RequiredArgsConstructor
@@ -28,25 +25,11 @@ public class ServiceResource {
     private static final String ENTITY_NAME = "service";
 
     private final ServiceApplicationService serviceApplicationService;
-    private final ServiceQueryService serviceQueryService;
 
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody CreateServiceCommand command) {
         ServiceOffering service = serviceApplicationService.when(command);
         return RestUtils.message().created(ENTITY_NAME, service);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ServiceOffering> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(serviceQueryService.getById(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<ServiceOffering>> list(
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) Boolean active,
-            @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(serviceQueryService.list(search, active, pageable));
     }
 
     @PutMapping("/{id}")

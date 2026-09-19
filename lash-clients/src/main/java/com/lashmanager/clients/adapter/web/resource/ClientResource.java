@@ -7,19 +7,20 @@ import com.lashmanager.clients.application.command.ReactivateClientCommand;
 import com.lashmanager.clients.application.command.UpdateClientCommand;
 import com.lashmanager.clients.application.service.ClientApplicationService;
 import com.lashmanager.clients.domain.model.Client;
-import com.lashmanager.clients.domain.port.in.ClientQueryService;
 import com.lashmanager.core.infrastructure.web.RestUtils;
 
 import java.util.UUID;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Só comando — leitura mora em {@link ClientQueryResource} (mesma URL base), separação confirmada
+ * no código real do Pontta: nenhum Resource de lá mistura {@code @GetMapping} de
+ * listagem/busca com {@code @PostMapping}/{@code @PutMapping}/{@code @DeleteMapping} de comando.
+ */
 @RestController
 @RequestMapping("/api/clients")
 @RequiredArgsConstructor
@@ -28,25 +29,11 @@ public class ClientResource {
     private static final String ENTITY_NAME = "client";
 
     private final ClientApplicationService clientApplicationService;
-    private final ClientQueryService clientQueryService;
 
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody CreateClientCommand command) {
         Client client = clientApplicationService.when(command);
         return RestUtils.message().created(ENTITY_NAME, client);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Client> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(clientQueryService.getById(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<Client>> list(
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) Boolean active,
-            @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(clientQueryService.list(search, active, pageable));
     }
 
     @PutMapping("/{id}")

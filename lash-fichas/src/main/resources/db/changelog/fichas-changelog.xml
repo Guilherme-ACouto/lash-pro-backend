@@ -11,4 +11,14 @@
                  splitStatements="true"
                  stripComments="true"/>
     </changeSet>
+
+    <!-- V700 (fichas/lash_mappings — skinType/eyeShape/technique) nunca teve consumidor real no
+         frontend. Substituído pelo domínio real (Anamnese + Mapeamento) que já existe e funciona
+         no frontend. Ver lash-docs/.specs/features/anamnese/spec.md. -->
+    <changeSet id="2" author="lash">
+        <sqlFile path="db/migration/V701__replace_fichas_with_anamnese_mapping.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
 </databaseChangeLog>

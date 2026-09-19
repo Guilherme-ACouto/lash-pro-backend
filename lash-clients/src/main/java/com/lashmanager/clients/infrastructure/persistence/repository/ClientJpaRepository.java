@@ -1,6 +1,7 @@
 package com.lashmanager.clients.infrastructure.persistence.repository;
 
 import com.lashmanager.clients.infrastructure.persistence.entity.ClientEntity;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,10 @@ public interface ClientJpaRepository extends JpaRepository<ClientEntity, UUID> {
     boolean existsByPhone(String phone);
 
     boolean existsByPhoneAndIdNot(String phone, UUID id);
+
+    long countByActive(boolean active);
+
+    long countByCreatedAtBetween(LocalDateTime from, LocalDateTime to);
 
     @Query("""
             SELECT c FROM ClientEntity c

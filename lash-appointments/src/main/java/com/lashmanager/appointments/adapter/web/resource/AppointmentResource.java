@@ -8,20 +8,16 @@ import com.lashmanager.appointments.application.command.NoShowAppointmentCommand
 import com.lashmanager.appointments.application.command.UpdateAppointmentCommand;
 import com.lashmanager.appointments.application.service.AppointmentApplicationService;
 import com.lashmanager.appointments.domain.model.Appointment;
-import com.lashmanager.appointments.domain.model.AppointmentDetails;
-import com.lashmanager.appointments.domain.port.in.AppointmentQueryService;
 import com.lashmanager.core.infrastructure.web.RestUtils;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/** Só comando — leitura mora em {@link AppointmentQueryResource} (mesma URL base). */
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
@@ -30,29 +26,11 @@ public class AppointmentResource {
     private static final String ENTITY_NAME = "appointment";
 
     private final AppointmentApplicationService appointmentApplicationService;
-    private final AppointmentQueryService appointmentQueryService;
-
-    @GetMapping
-    public ResponseEntity<List<AppointmentDetails>> listByDate(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        if (endDate != null) {
-            LocalDate startDate = date != null ? date : LocalDate.now();
-            return ResponseEntity.ok(appointmentQueryService.listByDateRange(startDate, endDate));
-        }
-        LocalDate targetDate = date != null ? date : LocalDate.now();
-        return ResponseEntity.ok(appointmentQueryService.listByDate(targetDate));
-    }
 
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody CreateAppointmentCommand command) {
         Appointment appointment = appointmentApplicationService.when(command);
         return RestUtils.message().created(ENTITY_NAME, appointment);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<AppointmentDetails> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(appointmentQueryService.getById(id));
     }
 
     @PutMapping("/{id}")

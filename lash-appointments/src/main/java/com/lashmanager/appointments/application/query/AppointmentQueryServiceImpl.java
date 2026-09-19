@@ -6,9 +6,9 @@ import com.lashmanager.appointments.domain.model.AppointmentDetails;
 import com.lashmanager.appointments.domain.port.in.AppointmentQueryService;
 import com.lashmanager.appointments.domain.port.out.AppointmentQueryRepository;
 import com.lashmanager.clients.domain.model.Client;
-import com.lashmanager.clients.domain.port.out.ClientRepository;
+import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
 import com.lashmanager.services.domain.model.ServiceOffering;
-import com.lashmanager.services.domain.port.out.ServiceRepository;
+import com.lashmanager.services.domain.port.out.ServiceQueryRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
 public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
     private final AppointmentQueryRepository appointmentQueryRepository;
-    private final ClientRepository clientRepository;
-    private final ServiceRepository serviceRepository;
+    private final ClientQueryRepository clientQueryRepository;
+    private final ServiceQueryRepository serviceQueryRepository;
 
     @Override
     public AppointmentDetails getById(UUID id) {
@@ -32,14 +32,14 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
                 appointmentQueryRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException(id));
 
         String clientName = appointment.getClientId() != null
-                ? clientRepository.findById(appointment.getClientId()).map(Client::getName).orElse("—")
+                ? clientQueryRepository.findById(appointment.getClientId()).map(Client::getName).orElse("—")
                 : "—";
 
-        BigDecimal servicePrice = serviceRepository
+        BigDecimal servicePrice = serviceQueryRepository
                 .findById(appointment.getServiceId())
                 .map(ServiceOffering::getPrice)
                 .orElse(BigDecimal.ZERO);
-        String serviceName = serviceRepository
+        String serviceName = serviceQueryRepository
                 .findById(appointment.getServiceId())
                 .map(ServiceOffering::getName)
                 .orElse("—");

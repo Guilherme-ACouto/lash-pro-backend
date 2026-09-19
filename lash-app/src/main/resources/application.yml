@@ -61,3 +61,5 @@ app:
     schema-prefix: ${TENANT_SCHEMA_PREFIX:tenant_}
   activation:
     key-expiration-hours: ${ACTIVATION_KEY_HOURS:48}
+  anamnese:
+    link-expiration-hours: ${ANAMNESE_LINK_HOURS:72}

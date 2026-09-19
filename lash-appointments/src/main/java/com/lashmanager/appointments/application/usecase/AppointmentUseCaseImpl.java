@@ -9,10 +9,10 @@ import com.lashmanager.appointments.domain.port.in.AppointmentUseCase;
 import com.lashmanager.appointments.domain.port.out.AppointmentFinancialPort;
 import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
 import com.lashmanager.clients.domain.model.Client;
-import com.lashmanager.clients.domain.port.out.ClientRepository;
+import com.lashmanager.clients.domain.port.out.ClientQueryRepository;
 import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.services.domain.model.ServiceOffering;
-import com.lashmanager.services.domain.port.out.ServiceRepository;
+import com.lashmanager.services.domain.port.out.ServiceQueryRepository;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,20 +27,20 @@ import org.springframework.stereotype.Service;
 public class AppointmentUseCaseImpl implements AppointmentUseCase {
 
     private final AppointmentRepository appointmentRepository;
-    private final ClientRepository clientRepository;
-    private final ServiceRepository serviceRepository;
+    private final ClientQueryRepository clientQueryRepository;
+    private final ServiceQueryRepository serviceQueryRepository;
     private final AppointmentFinancialPort financialPort;
 
     @Override
     public Appointment create(CreateAppointmentCommand command) {
-        Client client = clientRepository
+        Client client = clientQueryRepository
                 .findById(command.getClientId())
                 .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.getClientId()));
         if (!client.isActive()) {
             throw new BusinessException("Cliente inativo");
         }
 
-        ServiceOffering service = serviceRepository
+        ServiceOffering service = serviceQueryRepository
                 .findById(command.getServiceId())
                 .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.getServiceId()));
         if (!service.isActive()) {
@@ -82,11 +82,11 @@ public class AppointmentUseCaseImpl implements AppointmentUseCase {
 
     @Override
     public void update(Appointment appointment, UpdateAppointmentCommand command) {
-        clientRepository
+        clientQueryRepository
                 .findById(command.getClientId())
                 .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.getClientId()));
 
-        serviceRepository
+        serviceQueryRepository
                 .findById(command.getServiceId())
                 .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.getServiceId()));
 
@@ -103,9 +103,9 @@ public class AppointmentUseCaseImpl implements AppointmentUseCase {
     @Override
     public void complete(Appointment appointment, String paymentMethod) {
         String clientName = appointment.getClientId() != null
-                ? clientRepository.findById(appointment.getClientId()).map(Client::getName).orElse("Cliente")
+                ? clientQueryRepository.findById(appointment.getClientId()).map(Client::getName).orElse("Cliente")
                 : "Cliente";
-        ServiceOffering service = serviceRepository
+        ServiceOffering service = serviceQueryRepository
                 .findById(appointment.getServiceId())
                 .orElseThrow(() -> new BusinessException("Serviço não encontrado"));
 

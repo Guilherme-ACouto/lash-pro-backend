@@ -19,9 +19,10 @@ import com.lashmanager.core.domain.exception.TenantInactiveException;
 import com.lashmanager.core.domain.exception.TenantNotFoundException;
 import com.lashmanager.core.domain.exception.TokenExpiredException;
 import com.lashmanager.core.domain.exception.UserNotFoundException;
-import com.lashmanager.fichas.domain.exception.ClientAlreadyHasFichaException;
-import com.lashmanager.fichas.domain.exception.FichaNotFoundException;
-import com.lashmanager.fichas.domain.exception.LashMappingNotFoundException;
+import com.lashmanager.fichas.domain.exception.AnamneseLinkExpiredException;
+import com.lashmanager.fichas.domain.exception.AnamneseLinkInvalidException;
+import com.lashmanager.fichas.domain.exception.AnamneseNotFoundException;
+import com.lashmanager.fichas.domain.exception.MappingNotFoundException;
 import com.lashmanager.finance.domain.exception.FinancialEntryLinkedToAppointmentException;
 import com.lashmanager.finance.domain.exception.FinancialEntryNotFoundException;
 import com.lashmanager.services.domain.exception.ServiceAlreadyExistsException;
@@ -193,21 +194,26 @@ public class GlobalExceptionHandler {
         return err(HttpStatus.CONFLICT, "INVENTORY_ITEM_HAS_MOVEMENTS", ex.getMessage());
     }
 
-    // ── Fichas ────────────────────────────────────────────────────────────────
+    // ── Anamnese / Mapeamento ─────────────────────────────────────────────────
 
-    @ExceptionHandler(FichaNotFoundException.class)
-    public ResponseEntity<Error> handleFichaNotFound(FichaNotFoundException ex) {
-        return err(HttpStatus.NOT_FOUND, "FICHA_NOT_FOUND", ex.getMessage());
+    @ExceptionHandler(AnamneseNotFoundException.class)
+    public ResponseEntity<Error> handleAnamneseNotFound(AnamneseNotFoundException ex) {
+        return err(HttpStatus.NOT_FOUND, "ANAMNESE_NOT_FOUND", ex.getMessage());
     }
 
-    @ExceptionHandler(LashMappingNotFoundException.class)
-    public ResponseEntity<Error> handleLashMappingNotFound(LashMappingNotFoundException ex) {
-        return err(HttpStatus.NOT_FOUND, "LASH_MAPPING_NOT_FOUND", ex.getMessage());
+    @ExceptionHandler(AnamneseLinkInvalidException.class)
+    public ResponseEntity<Error> handleAnamneseLinkInvalid(AnamneseLinkInvalidException ex) {
+        return err(HttpStatus.NOT_FOUND, "ANAMNESE_LINK_INVALID", ex.getMessage());
     }
 
-    @ExceptionHandler(ClientAlreadyHasFichaException.class)
-    public ResponseEntity<Error> handleClientAlreadyHasFicha(ClientAlreadyHasFichaException ex) {
-        return err(HttpStatus.CONFLICT, "CLIENT_ALREADY_HAS_FICHA", ex.getMessage());
+    @ExceptionHandler(AnamneseLinkExpiredException.class)
+    public ResponseEntity<Error> handleAnamneseLinkExpired(AnamneseLinkExpiredException ex) {
+        return err(HttpStatus.GONE, "ANAMNESE_LINK_EXPIRED", ex.getMessage());
+    }
+
+    @ExceptionHandler(MappingNotFoundException.class)
+    public ResponseEntity<Error> handleMappingNotFound(MappingNotFoundException ex) {
+        return err(HttpStatus.NOT_FOUND, "MAPPING_NOT_FOUND", ex.getMessage());
     }
 
     // ── Genéricos ─────────────────────────────────────────────────────────────
