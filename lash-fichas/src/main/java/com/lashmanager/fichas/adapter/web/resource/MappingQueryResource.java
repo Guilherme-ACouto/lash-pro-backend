@@ -1,6 +1,6 @@
 package com.lashmanager.fichas.adapter.web.resource;
 
-import com.lashmanager.fichas.domain.model.Mapping;
+import com.lashmanager.fichas.adapter.web.dto.MappingResponse;
 import com.lashmanager.fichas.domain.model.MappingSummary;
 import com.lashmanager.fichas.domain.port.in.MappingQueryService;
 
@@ -27,12 +27,12 @@ public class MappingQueryResource {
     }
 
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<Page<Mapping>> listByClient(@PathVariable UUID clientId, Pageable pageable) {
-        return ResponseEntity.ok(mappingQueryService.listByClient(clientId, pageable));
+    public ResponseEntity<Page<MappingResponse>> listByClient(@PathVariable UUID clientId, Pageable pageable) {
+        return ResponseEntity.ok(mappingQueryService.listByClient(clientId, pageable).map(MappingResponse::from));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mapping> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(mappingQueryService.getById(id));
+    public ResponseEntity<MappingResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(MappingResponse.from(mappingQueryService.getById(id)));
     }
 }

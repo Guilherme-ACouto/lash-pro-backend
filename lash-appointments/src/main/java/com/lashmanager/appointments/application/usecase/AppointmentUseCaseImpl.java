@@ -4,7 +4,6 @@ import com.lashmanager.appointments.application.command.CreateAppointmentCommand
 import com.lashmanager.appointments.application.command.UpdateAppointmentCommand;
 import com.lashmanager.appointments.domain.exception.AppointmentConflictException;
 import com.lashmanager.appointments.domain.model.Appointment;
-import com.lashmanager.appointments.domain.model.AppointmentStatus;
 import com.lashmanager.appointments.domain.port.in.AppointmentUseCase;
 import com.lashmanager.appointments.domain.port.out.AppointmentFinancialPort;
 import com.lashmanager.appointments.domain.port.out.AppointmentRepository;
@@ -14,9 +13,6 @@ import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.services.domain.model.ServiceOffering;
 import com.lashmanager.services.domain.port.out.ServiceQueryRepository;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
@@ -33,63 +29,35 @@ public class AppointmentUseCaseImpl implements AppointmentUseCase {
 
     @Override
     public Appointment create(CreateAppointmentCommand command) {
-        Client client = clientQueryRepository
-                .findById(command.getClientId())
-                .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.getClientId()));
-        if (!client.isActive()) {
-            throw new BusinessException("Cliente inativo");
-        }
+        findClient(command.getClientId()).assertActive();
+        findService(command.getServiceId()).assertActive();
+        Appointment appointment = Appointment.schedule(command);
+        assertNoConflict(appointment);
+        return appointmentRepository.save(appointment);
+    }
 
-        ServiceOffering service = serviceQueryRepository
-                .findById(command.getServiceId())
-                .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.getServiceId()));
-        if (!service.isActive()) {
-            throw new BusinessException("Serviço inativo");
-        }
+    private Client findClient(UUID clientId) {
+        return clientQueryRepository.findById(clientId)
+                .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + clientId));
+    }
 
-        LocalTime start = command.getScheduledTime();
-        LocalTime end = start.plusMinutes(command.getDurationMinutes());
-        if (start.isBefore(LocalTime.of(6, 0)) || end.isAfter(LocalTime.of(20, 0))) {
-            throw new BusinessException("Horário fora do expediente (06:00–20:00)");
-        }
+    private ServiceOffering findService(UUID serviceId) {
+        return serviceQueryRepository.findById(serviceId)
+                .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + serviceId));
+    }
 
-        List<Appointment> existing = appointmentRepository.findActiveByDate(command.getScheduledDate());
-        boolean conflicts = existing.stream().anyMatch(a -> {
-            LocalTime aEnd = a.getScheduledTime().plusMinutes(a.getDurationMinutes());
-            LocalTime newEnd = command.getScheduledTime().plusMinutes(command.getDurationMinutes());
-            return a.getScheduledTime().isBefore(newEnd) && aEnd.isAfter(command.getScheduledTime());
-        });
+    private void assertNoConflict(Appointment appointment) {
+        boolean conflicts = appointmentRepository.findActiveByDate(appointment.getScheduledDate()).stream()
+                .anyMatch(appointment::overlaps);
         if (conflicts) {
             throw new AppointmentConflictException();
         }
-
-        LocalDateTime now = LocalDateTime.now();
-        Appointment appointment = Appointment.builder()
-                .id(UUID.randomUUID())
-                .clientId(command.getClientId())
-                .serviceId(command.getServiceId())
-                .scheduledDate(command.getScheduledDate())
-                .scheduledTime(command.getScheduledTime())
-                .durationMinutes(command.getDurationMinutes())
-                .status(AppointmentStatus.SCHEDULED)
-                .notes(command.getNotes())
-                .createdAt(now)
-                .updatedAt(now)
-                .build();
-
-        return appointmentRepository.save(appointment);
     }
 
     @Override
     public void update(Appointment appointment, UpdateAppointmentCommand command) {
-        clientQueryRepository
-                .findById(command.getClientId())
-                .orElseThrow(() -> new BusinessException("Cliente não encontrado: " + command.getClientId()));
-
-        serviceQueryRepository
-                .findById(command.getServiceId())
-                .orElseThrow(() -> new BusinessException("Serviço não encontrado: " + command.getServiceId()));
-
+        findClient(command.getClientId());
+        findService(command.getServiceId());
         appointment.update(command);
         appointmentRepository.save(appointment);
     }
@@ -102,22 +70,23 @@ public class AppointmentUseCaseImpl implements AppointmentUseCase {
 
     @Override
     public void complete(Appointment appointment, String paymentMethod) {
-        String clientName = appointment.getClientId() != null
-                ? clientQueryRepository.findById(appointment.getClientId()).map(Client::getName).orElse("Cliente")
-                : "Cliente";
-        ServiceOffering service = serviceQueryRepository
-                .findById(appointment.getServiceId())
-                .orElseThrow(() -> new BusinessException("Serviço não encontrado"));
-
+        String clientName = resolveClientName(appointment.getClientId());
+        ServiceOffering service = findService(appointment.getServiceId());
         UUID financialEntryId = financialPort.createIncomeEntry(
                 appointment.getId(),
                 service.getName() + " — " + clientName,
                 service.getPrice(),
                 appointment.getScheduledDate(),
                 paymentMethod);
-
         appointment.complete(financialEntryId);
         appointmentRepository.save(appointment);
+    }
+
+    private String resolveClientName(UUID clientId) {
+        if (clientId == null) {
+            return "Cliente";
+        }
+        return clientQueryRepository.findById(clientId).map(Client::getName).orElse("Cliente");
     }
 
     @Override
@@ -131,4 +100,5 @@ public class AppointmentUseCaseImpl implements AppointmentUseCase {
         appointment.noShow();
         appointmentRepository.save(appointment);
     }
+
 }

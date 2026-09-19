@@ -1,6 +1,6 @@
 package com.lashmanager.stock.adapter.web.resource;
 
-import com.lashmanager.stock.domain.model.InventoryMovement;
+import com.lashmanager.stock.adapter.web.dto.InventoryMovementResponse;
 import com.lashmanager.stock.domain.port.in.InventoryMovementQueryService;
 
 import java.util.UUID;
@@ -22,7 +22,8 @@ public class InventoryMovementQueryResource {
     private final InventoryMovementQueryService inventoryMovementQueryService;
 
     @GetMapping("/{id}/movements")
-    public ResponseEntity<Page<InventoryMovement>> listMovements(@PathVariable UUID id, Pageable pageable) {
-        return ResponseEntity.ok(inventoryMovementQueryService.listByItemId(id, pageable));
+    public ResponseEntity<Page<InventoryMovementResponse>> listMovements(@PathVariable UUID id, Pageable pageable) {
+        return ResponseEntity.ok(
+                inventoryMovementQueryService.listByItemId(id, pageable).map(InventoryMovementResponse::from));
     }
 }

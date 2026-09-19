@@ -1,6 +1,7 @@
 package com.lashmanager.clients.domain.model;
 
 import com.lashmanager.clients.application.command.UpdateClientCommand;
+import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.core.domain.model.DomainEntity;
 
 import java.time.LocalDate;
@@ -44,5 +45,11 @@ public class Client implements DomainEntity {
     public void reactivate() {
         this.active = true;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void assertActive() {
+        if (!active) {
+            throw new BusinessException("Cliente inativo");
+        }
     }
 }

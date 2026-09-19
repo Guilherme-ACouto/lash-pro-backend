@@ -1,6 +1,6 @@
 package com.lashmanager.fichas.adapter.web.resource;
 
-import com.lashmanager.fichas.domain.model.Anamnese;
+import com.lashmanager.fichas.adapter.web.dto.AnamneseResponse;
 import com.lashmanager.fichas.domain.model.AnamneseSummary;
 import com.lashmanager.fichas.domain.port.in.AnamneseQueryService;
 
@@ -21,8 +21,8 @@ public class AnamneseQueryResource {
     private final AnamneseQueryService anamneseQueryService;
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<Anamnese> getById(@PathVariable UUID clientId) {
-        return ResponseEntity.ok(anamneseQueryService.getById(clientId));
+    public ResponseEntity<AnamneseResponse> getById(@PathVariable UUID clientId) {
+        return ResponseEntity.ok(AnamneseResponse.from(anamneseQueryService.getById(clientId)));
     }
 
     @GetMapping

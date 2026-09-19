@@ -16,16 +16,12 @@ import lombok.Getter;
 public class CreateAppointmentCommand extends AbstractCommand {
 
     private final UUID clientId;
-
     @NotNull
     private final UUID serviceId;
-
     @NotNull
     private final LocalDate scheduledDate;
-
     @NotNull
     private final LocalTime scheduledTime;
-
     @Min(1)
     private final int durationMinutes;
 

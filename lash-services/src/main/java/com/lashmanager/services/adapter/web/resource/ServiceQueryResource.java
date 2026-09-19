@@ -1,6 +1,6 @@
 package com.lashmanager.services.adapter.web.resource;
 
-import com.lashmanager.services.domain.model.ServiceOffering;
+import com.lashmanager.services.adapter.web.dto.ServiceResponse;
 import com.lashmanager.services.domain.port.in.ServiceQueryService;
 
 import java.util.UUID;
@@ -21,15 +21,15 @@ public class ServiceQueryResource {
     private final ServiceQueryService serviceQueryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ServiceOffering> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(serviceQueryService.getById(id));
+    public ResponseEntity<ServiceResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ServiceResponse.from(serviceQueryService.getById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ServiceOffering>> list(
+    public ResponseEntity<Page<ServiceResponse>> list(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Boolean active,
             @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(serviceQueryService.list(search, active, pageable));
+        return ResponseEntity.ok(serviceQueryService.list(search, active, pageable).map(ServiceResponse::from));
     }
 }

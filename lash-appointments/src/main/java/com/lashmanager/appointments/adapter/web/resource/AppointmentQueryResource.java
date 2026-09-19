@@ -12,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/** Só leitura — comando mora em {@link AppointmentResource} (mesma URL base). */
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor

@@ -1,5 +1,6 @@
 package com.lashmanager.services.domain.model;
 
+import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.core.domain.model.DomainEntity;
 import com.lashmanager.services.application.command.UpdateServiceCommand;
 
@@ -42,5 +43,11 @@ public class ServiceOffering implements DomainEntity {
     public void reactivate() {
         this.active = true;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void assertActive() {
+        if (!active) {
+            throw new BusinessException("Serviço inativo");
+        }
     }
 }

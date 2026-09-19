@@ -1,6 +1,6 @@
 package com.lashmanager.clients.adapter.web.resource;
 
-import com.lashmanager.clients.domain.model.Client;
+import com.lashmanager.clients.adapter.web.dto.ClientResponse;
 import com.lashmanager.clients.domain.port.in.ClientQueryService;
 
 import java.util.UUID;
@@ -21,15 +21,15 @@ public class ClientQueryResource {
     private final ClientQueryService clientQueryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(clientQueryService.getById(id));
+    public ResponseEntity<ClientResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ClientResponse.from(clientQueryService.getById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<Page<Client>> list(
+    public ResponseEntity<Page<ClientResponse>> list(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Boolean active,
             @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(clientQueryService.list(search, active, pageable));
+        return ResponseEntity.ok(clientQueryService.list(search, active, pageable).map(ClientResponse::from));
     }
 }

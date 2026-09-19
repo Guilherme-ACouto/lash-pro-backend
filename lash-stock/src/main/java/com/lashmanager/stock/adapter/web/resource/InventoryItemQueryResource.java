@@ -1,6 +1,6 @@
 package com.lashmanager.stock.adapter.web.resource;
 
-import com.lashmanager.stock.domain.model.InventoryItem;
+import com.lashmanager.stock.adapter.web.dto.InventoryItemResponse;
 import com.lashmanager.stock.domain.port.in.InventoryItemQueryService;
 
 import java.util.UUID;
@@ -22,16 +22,17 @@ public class InventoryItemQueryResource {
     private final InventoryItemQueryService inventoryItemQueryService;
 
     @GetMapping
-    public ResponseEntity<Page<InventoryItem>> list(
+    public ResponseEntity<Page<InventoryItemResponse>> list(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String filter,
             Pageable pageable) {
-        return ResponseEntity.ok(inventoryItemQueryService.list(search, status, filter, pageable));
+        return ResponseEntity.ok(
+                inventoryItemQueryService.list(search, status, filter, pageable).map(InventoryItemResponse::from));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InventoryItem> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(inventoryItemQueryService.getById(id));
+    public ResponseEntity<InventoryItemResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(InventoryItemResponse.from(inventoryItemQueryService.getById(id)));
     }
 }

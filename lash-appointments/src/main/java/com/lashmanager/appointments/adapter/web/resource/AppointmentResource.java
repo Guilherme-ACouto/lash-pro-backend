@@ -46,8 +46,7 @@ public class AppointmentResource {
     }
 
     @PatchMapping("/{id}/complete")
-    public ResponseEntity<Void> complete(
-            @PathVariable UUID id, @RequestBody(required = false) CompleteAppointmentCommand command) {
+    public ResponseEntity<Void> complete(@PathVariable UUID id, @RequestBody(required = false) CompleteAppointmentCommand command) {
         CompleteAppointmentCommand toApply = command != null ? command : new CompleteAppointmentCommand(null, null);
         appointmentApplicationService.when(toApply.id(id));
         return RestUtils.message().updated(ENTITY_NAME, id);

@@ -1,5 +1,6 @@
 package com.lashmanager.appointments.domain.model;
 
+import com.lashmanager.appointments.application.command.CreateAppointmentCommand;
 import com.lashmanager.appointments.application.command.UpdateAppointmentCommand;
 import com.lashmanager.core.domain.exception.BusinessException;
 import com.lashmanager.core.domain.model.DomainEntity;
@@ -30,6 +31,37 @@ public class Appointment implements DomainEntity {
     private UUID financialEntryId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public static Appointment schedule(CreateAppointmentCommand command) {
+        assertBusinessHours(command.getScheduledTime(), command.getDurationMinutes());
+
+        LocalDateTime now = LocalDateTime.now();
+        return Appointment.builder()
+                .id(UUID.randomUUID())
+                .clientId(command.getClientId())
+                .serviceId(command.getServiceId())
+                .scheduledDate(command.getScheduledDate())
+                .scheduledTime(command.getScheduledTime())
+                .durationMinutes(command.getDurationMinutes())
+                .status(AppointmentStatus.SCHEDULED)
+                .notes(command.getNotes())
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+    }
+
+    private static void assertBusinessHours(LocalTime start, int durationMinutes) {
+        LocalTime end = start.plusMinutes(durationMinutes);
+        if (start.isBefore(LocalTime.of(6, 0)) || end.isAfter(LocalTime.of(20, 0))) {
+            throw new BusinessException("Horário fora do expediente (06:00–20:00)");
+        }
+    }
+
+    public boolean overlaps(Appointment other) {
+        LocalTime thisEnd = this.scheduledTime.plusMinutes(this.durationMinutes);
+        LocalTime otherEnd = other.scheduledTime.plusMinutes(other.durationMinutes);
+        return this.scheduledTime.isBefore(otherEnd) && thisEnd.isAfter(other.scheduledTime);
+    }
 
     public void update(UpdateAppointmentCommand command) {
         this.clientId = command.getClientId();
