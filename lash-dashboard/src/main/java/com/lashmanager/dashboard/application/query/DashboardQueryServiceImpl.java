@@ -120,7 +120,7 @@ public class DashboardQueryServiceImpl implements DashboardQueryService {
         if (previousCount == 0) {
             return currentCount > 0 ? 100.0 : 0.0;
         }
-        return ((currentCount - previousCount) / (double) previousCount) * 100.0;
+        return (currentCount - previousCount) / (double) previousCount * 100.0;
     }
 
     private long countNewClients(DateRange range) {
