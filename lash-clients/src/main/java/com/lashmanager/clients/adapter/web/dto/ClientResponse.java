@@ -1,6 +1,9 @@
 package com.lashmanager.clients.adapter.web.dto;
 
-import com.lashmanager.clients.domain.port.in.CreateClientUseCase;
+import com.lashmanager.clients.domain.model.Client;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ClientResponse(
@@ -8,19 +11,22 @@ public record ClientResponse(
         String name,
         String phone,
         String email,
-        String birthDate,
+        LocalDate birthDate,
         String notes,
         boolean active,
-        String createdAt) {
-    public static ClientResponse from(CreateClientUseCase.ClientResult result) {
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt) {
+
+    public static ClientResponse from(Client client) {
         return new ClientResponse(
-                result.id(),
-                result.name(),
-                result.phone(),
-                result.email(),
-                result.birthDate(),
-                result.notes(),
-                result.active(),
-                result.createdAt());
+                client.getId(),
+                client.getName(),
+                client.getPhone(),
+                client.getEmail(),
+                client.getBirthDate(),
+                client.getNotes(),
+                client.isActive(),
+                client.getCreatedAt(),
+                client.getUpdatedAt());
     }
 }

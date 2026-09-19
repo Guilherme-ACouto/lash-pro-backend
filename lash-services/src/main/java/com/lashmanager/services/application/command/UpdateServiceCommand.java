@@ -1,41 +1,45 @@
 package com.lashmanager.services.application.command;
 
 import com.lashmanager.core.infrastructure.command.AbstractCommand;
-import com.lashmanager.services.domain.port.in.UpdateServiceUseCase;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.math.BigDecimal;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+/**
+ * O {@code id} não vem no corpo do JSON — vem do {@code @PathVariable} da URL, setado via
+ * {@link #id(UUID)} pelo Resource antes de repassar pra ApplicationService (ver ClientResource
+ * como referência do mesmo padrão).
+ */
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class UpdateServiceCommand extends AbstractCommand {
 
-    @NotNull
     private UUID id;
 
     @NotBlank
     @Size(min = 2, max = 100)
-    private String name;
+    private final String name;
 
     @Size(max = 500)
-    private String description;
+    private final String description;
 
     @NotNull
     @DecimalMin("0.01")
-    private BigDecimal price;
+    private final BigDecimal price;
 
     @Min(1)
-    private int durationMinutes;
+    private final int durationMinutes;
 
-    public UpdateServiceUseCase.UpdateServiceCommand toDomainCommand() {
-        return new UpdateServiceUseCase.UpdateServiceCommand(name, description, price, durationMinutes);
+    public UpdateServiceCommand id(UUID id) {
+        this.id = id;
+        return this;
     }
 }

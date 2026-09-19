@@ -1,5 +1,7 @@
 package com.lashmanager.stock.domain.model;
 
+import com.lashmanager.core.domain.model.DomainEntity;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryMovement {
+public class InventoryMovement implements DomainEntity {
     private UUID id;
     private UUID itemId;
     private String itemName;

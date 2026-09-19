@@ -1,7 +1,9 @@
 package com.lashmanager.services.adapter.web.dto;
 
-import com.lashmanager.services.domain.port.in.CreateServiceUseCase;
+import com.lashmanager.services.domain.model.ServiceOffering;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ServiceResponse(
@@ -11,15 +13,18 @@ public record ServiceResponse(
         BigDecimal price,
         int durationMinutes,
         boolean active,
-        String createdAt) {
-    public static ServiceResponse from(CreateServiceUseCase.ServiceResult result) {
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt) {
+
+    public static ServiceResponse from(ServiceOffering service) {
         return new ServiceResponse(
-                result.id(),
-                result.name(),
-                result.description(),
-                result.price(),
-                result.durationMinutes(),
-                result.active(),
-                result.createdAt());
+                service.getId(),
+                service.getName(),
+                service.getDescription(),
+                service.getPrice(),
+                service.getDurationMinutes(),
+                service.isActive(),
+                service.getCreatedAt(),
+                service.getUpdatedAt());
     }
 }

@@ -1,44 +1,46 @@
 package com.lashmanager.stock.application.command;
 
 import com.lashmanager.core.infrastructure.command.AbstractCommand;
-import com.lashmanager.stock.domain.port.in.UpdateInventoryItemUseCase;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+/**
+ * O {@code id} não vem no corpo do JSON — vem do {@code @PathVariable} da URL, setado via
+ * {@link #id(UUID)} pelo Resource antes de repassar pra ApplicationService.
+ */
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class UpdateInventoryItemCommand extends AbstractCommand {
 
-    @NotNull
     private UUID id;
 
     @NotBlank
-    private String name;
+    private final String name;
 
     @NotBlank
-    private String unit;
+    private final String unit;
 
     @NotNull
     @DecimalMin("0.00")
-    private BigDecimal costPrice;
+    private final BigDecimal costPrice;
 
-    private String supplier;
+    private final String supplier;
 
     @NotNull
     @DecimalMin("0")
-    private BigDecimal minimumQuantity;
+    private final BigDecimal minimumQuantity;
 
-    private String notes;
+    private final String notes;
 
-    public UpdateInventoryItemUseCase.UpdateInventoryItemCommand toDomainCommand() {
-        return new UpdateInventoryItemUseCase.UpdateInventoryItemCommand(
-                id, name, unit, costPrice, supplier, minimumQuantity, notes);
+    public UpdateInventoryItemCommand id(UUID id) {
+        this.id = id;
+        return this;
     }
 }
