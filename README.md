@@ -1,11 +1,11 @@
-# Lash Manager — Backend
+# Brava Pro — Backend
 
-Sistema de gestão para salões de lash design (extensão de cílios). API REST em Java/Spring Boot, arquitetura hexagonal (Ports & Adapters) multi-módulo, com suporte a multi-tenancy (schema-per-tenant) e padrão CQRS (Command/ApplicationService na escrita, QueryService na leitura).
+Sistema de gestão para negócios da área da beleza. API REST em Java/Spring Boot, arquitetura hexagonal (Ports & Adapters) multi-módulo, com suporte a multi-tenancy (schema-per-tenant) e padrão CQRS (Command/ApplicationService na escrita, QueryService na leitura).
 
 ## Stack
 
 - **Java 21** + **Spring Boot 3.3.5**
-- **Maven** (multi-módulo: `lash-core`, `lash-clients`, `lash-services`, `lash-appointments`, `lash-finance`, `lash-stock`, `lash-fichas`, `lash-dashboard`, `lash-app`)
+- **Maven** (multi-módulo: `brava-core`, `brava-clients`, `brava-services`, `brava-appointments`, `brava-finance`, `brava-stock`, `brava-fichas`, `brava-dashboard`, `brava-app`)
 - **PostgreSQL** — migrations via **Flyway** (schema `public`) e **Liquibase** (schemas de tenant, provisionados sob demanda)
 - **Spring Security** + **JWT**
 
@@ -16,12 +16,12 @@ Cada módulo de negócio (`clients`, `services`, `appointments`, `finance`, `sto
 ```
 Escrita:  HTTP (@RequestBody = Command) → {Agregado}Resource → ApplicationService.when(Command)
               → {Agregado}UseCase (regra de negócio) → entidade de domínio → Repository → DB
-              → resposta: corpo = a própria entidade (sem DTO), headers X-lash-alert/X-lash-params
+              → resposta: corpo = a própria entidade (sem DTO), headers X-bravapro-alert/X-bravapro-params
 
 Leitura:  HTTP → {Agregado}QueryResource → {Agregado}QueryService → QueryRepository → DB
 ```
 
-Sem `*Request`/`*Response` DTO — o `Command` da aplicação é o próprio corpo da requisição, a entidade de domínio é o próprio corpo da resposta. Erros seguem o formato `{code, message, customCode, infoUrl, details}`. Detalhes completos em `lash-docs/.specs/codebase/ARCHITECTURE.md` e `CLAUDE.md` (raiz do monorepo).
+Sem `*Request`/`*Response` DTO — o `Command` da aplicação é o próprio corpo da requisição, a entidade de domínio é o próprio corpo da resposta. Erros seguem o formato `{code, message, customCode, infoUrl, details}`. Detalhes completos em `brava-docs/.specs/codebase/ARCHITECTURE.md` e `CLAUDE.md` (raiz do monorepo).
 
 ### Endpoints principais
 
@@ -38,7 +38,7 @@ Sem `*Request`/`*Response` DTO — o `Command` da aplicação é o próprio corp
 
 ## Rodando localmente (via Docker — recomendado)
 
-Requer [Docker](https://www.docker.com/products/docker-desktop) instalado e o repositório [`lash-frontend`](https://github.com/Guilherme-ACouto/lash-pro-frontend) clonado como pasta irmã deste (`lash-backend`).
+Requer [Docker](https://www.docker.com/products/docker-desktop) instalado e o repositório [`brava-frontend`](https://github.com/Guilherme-ACouto/brava-pro-frontend) clonado como pasta irmã deste (`brava-backend`).
 
 ```bash
 cp .env.example .env
@@ -51,7 +51,7 @@ Isso sobe Postgres + backend + frontend juntos, já conectados. Backend em `http
 
 ## Rodando localmente (sem Docker)
 
-Pré-requisitos: Java 21, Maven, PostgreSQL rodando na porta `5433` com banco `lashmanager` criado.
+Pré-requisitos: Java 21, Maven, PostgreSQL rodando na porta `5433` com banco `bravapro` criado.
 
 ```bash
 sdk use java 21.0.5-zulu
@@ -77,8 +77,8 @@ mvn test -Dtest=NomeDaClasse  # roda uma única classe de teste
 ### Build (produção)
 
 ```bash
-mvn package -DskipTests -pl lash-app -am
-# gera o jar executável em lash-app/target/lash-app-1.0.0.jar
+mvn package -DskipTests -pl brava-app -am
+# gera o jar executável em brava-app/target/brava-app-1.0.0.jar
 ```
 
 ### Execução (modo dev, sem gerar jar)
@@ -94,7 +94,7 @@ Todas têm defaults para desenvolvimento local — ver `.env.example`.
 
 | Variável | Default local |
 |---|---|
-| `DB_URL` | `jdbc:postgresql://localhost:5433/lashmanager` |
+| `DB_URL` | `jdbc:postgresql://localhost:5433/bravapro` |
 | `DB_USER` / `DB_PASS` | `postgres` |
 | `JWT_SECRET` | obrigatório — sem default no Docker (gerar via `openssl rand -hex 32`) |
 | `CORS_ORIGINS` | `http://localhost:4200` |
@@ -102,9 +102,9 @@ Todas têm defaults para desenvolvimento local — ver `.env.example`.
 
 ## Credenciais de dev (seed)
 
-`admin@lashmanager.com` / `admin123`
+`admin@bravapro.com.br` / `admin123`
 
 ## Repositórios relacionados
 
-- Frontend: https://github.com/Guilherme-ACouto/lash-pro-frontend
-- Documentação/specs: https://github.com/Guilherme-ACouto/lash-pro-docs
+- Frontend: https://github.com/Guilherme-ACouto/brava-pro-frontend
+- Documentação/specs: https://github.com/Guilherme-ACouto/brava-pro-docs

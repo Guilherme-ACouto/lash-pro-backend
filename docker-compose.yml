@@ -1,11 +1,11 @@
-# Orquestra o ambiente completo do Lash Manager (Postgres + backend + frontend).
+# Orquestra o ambiente completo do Brava Pro (Postgres + backend + frontend).
 #
-# Pré-requisito: este arquivo espera `lash-frontend/` clonado como pasta IRMÃ
-# de `lash-backend/` (mesmo layout usado hoje em dev):
+# Pré-requisito: este arquivo espera `brava-frontend/` clonado como pasta IRMÃ
+# de `brava-backend/` (mesmo layout usado hoje em dev):
 #
-#   Lash/
-#   ├── lash-backend/    <- você está aqui, rode `docker compose up` a partir daqui
-#   └── lash-frontend/
+#   Brava Pro/
+#   ├── brava-backend/    <- você está aqui, rode `docker compose up` a partir daqui
+#   └── brava-frontend/
 #
 # Uso:
 #   docker compose up --build     # sobe tudo (primeira vez ou após mudar código)
@@ -16,17 +16,17 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: lash-db
+    container_name: brava-db
     environment:
-      POSTGRES_DB: ${DB_NAME:-lashmanager}
+      POSTGRES_DB: ${DB_NAME:-bravapro}
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASS:-postgres}
     ports:
       - "5433:5432"
     volumes:
-      - lash-db-data:/var/lib/postgresql/data
+      - brava-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-lashmanager}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-bravapro}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -34,12 +34,12 @@ services:
   backend:
     build:
       context: .
-    container_name: lash-backend
+    container_name: brava-backend
     depends_on:
       db:
         condition: service_healthy
     environment:
-      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-lashmanager}
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-bravapro}
       DB_USER: ${DB_USER:-postgres}
       DB_PASS: ${DB_PASS:-postgres}
       JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env}
@@ -53,12 +53,12 @@ services:
 
   frontend:
     build:
-      context: ../lash-frontend
-    container_name: lash-frontend
+      context: ../brava-frontend
+    container_name: brava-frontend
     depends_on:
       - backend
     ports:
       - "4200:80"
 
 volumes:
-  lash-db-data:
+  brava-db-data:

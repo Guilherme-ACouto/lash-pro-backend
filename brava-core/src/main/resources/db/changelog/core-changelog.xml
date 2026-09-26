@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <!-- Schema public: só tabelas de plataforma (tenants, usuários, auditoria de comandos).
+         Tabelas de negócio existem apenas nos schemas de tenant (ver LiquibasePaths). -->
+
+    <changeSet id="1" author="brava">
+        <sqlFile path="db/changelog/core/create-tenants-table.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="2" author="brava">
+        <sqlFile path="db/changelog/core/create-users-table.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="3" author="brava">
+        <sqlFile path="db/changelog/core/create-command-audit-log-table.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <!-- Roda em todos os tenants, mas só insere no tenant de dev: nos demais a precondição falha
+         e o changeset é marcado como executado sem fazer nada. -->
+
+    <changeSet id="1" author="brava">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT CASE WHEN '${tenantId}' = 'de000000-0000-0000-0000-000000000001' THEN 1 ELSE 0 END
+            </sqlCheck>
+        </preConditions>
+        <sqlFile path="db/changelog/dev/dev-seed-tenant.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <!-- Carga de demonstração (agenda, serviços, estoque e financeiro) pro Dashboard ter o que mostrar.
+         Datas relativas ao dia em que roda: pra "atualizar" a carga, recriar o banco de dev. -->
+    <changeSet id="2" author="brava">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT CASE WHEN '${tenantId}' = 'de000000-0000-0000-0000-000000000001' THEN 1 ELSE 0 END
+            </sqlCheck>
+        </preConditions>
+        <sqlFile path="db/changelog/dev/dev-seed-tenant-demo.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+</databaseChangeLog>

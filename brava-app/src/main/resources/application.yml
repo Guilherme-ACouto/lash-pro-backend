@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: brava-pro
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/bravapro}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      # Sem validação: o Hibernate validaria contra o public, que não tem tabelas de negócio
+      # (elas existem só nos schemas de tenant). O schema é governado pelo Liquibase (UpdateMigration).
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # Liquibase roda programaticamente (UpdateMigration: public + todos os tenants no boot;
+  # SchemaProvisionerImpl: tenant novo na ativação) — a auto-configuração do Spring Boot
+  # rodaria um changelog único contra o datasource principal, o que não serve pro
+  # schema-per-tenant.
+  liquibase:
+    enabled: false
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USER:}
+    password: ${MAIL_PASS:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    expiration: ${JWT_EXPIRATION:86400000}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:4200,http://192.168.18.193:4200}
+  tenant:
+    schema-prefix: ${TENANT_SCHEMA_PREFIX:tenant_}
+  platform:
+    admin-email-domain: ${PLATFORM_ADMIN_EMAIL_DOMAIN:bravapro.com.br}
+  activation:
+    key-expiration-hours: ${ACTIVATION_KEY_HOURS:48}
+  anamnese:
+    link-expiration-hours: ${ANAMNESE_LINK_HOURS:72}

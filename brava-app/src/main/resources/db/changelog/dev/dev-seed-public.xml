@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <!-- Tenant de desenvolvimento (id fixo, espelha o signature$test da Pontta) + usuária admin
+         vinculada a ele. O schema do tenant é criado e migrado pelo UpdateMigration no boot. -->
+
+    <changeSet id="1" author="brava">
+        <sql>
+            INSERT INTO tenants (id, name, schema_name, active)
+            VALUES (
+                'de000000-0000-0000-0000-000000000001',
+                'Estúdio Dev',
+                '${tenantSchemaPrefix}de000000000000000000000000000001',
+                true
+            ) ON CONFLICT (id) DO NOTHING;
+        </sql>
+        <sql>
+            -- senha: admin123
+            INSERT INTO users (id, name, email, password, role, active, tenant_id)
+            VALUES (
+                gen_random_uuid(),
+                'Administradora',
+                'admin@bravapro.com.br',
+                '$2a$10$Uz8wcxUcdoCF6ydtQsYe5enPYKYclzDcr3.aWpVy5AO/cQur0g.HO',
+                'OWNER',
+                true,
+                'de000000-0000-0000-0000-000000000001'
+            ) ON CONFLICT (email) DO NOTHING;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

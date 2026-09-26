@@ -11,23 +11,23 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.lashmanager</groupId>
-    <artifactId>lash-backend</artifactId>
+    <groupId>com.bravapro</groupId>
+    <artifactId>brava-backend</artifactId>
     <version>1.0.0</version>
-    <name>lash-backend</name>
-    <description>Sistema de gestão para lash design — parent POM</description>
+    <name>brava-backend</name>
+    <description>Sistema de gestão para negócios da área da beleza — parent POM</description>
     <packaging>pom</packaging>
 
     <modules>
-        <module>lash-core</module>
-        <module>lash-clients</module>
-        <module>lash-services</module>
-        <module>lash-appointments</module>
-        <module>lash-finance</module>
-        <module>lash-stock</module>
-        <module>lash-fichas</module>
-        <module>lash-dashboard</module>
-        <module>lash-app</module>
+        <module>brava-core</module>
+        <module>brava-clients</module>
+        <module>brava-services</module>
+        <module>brava-appointments</module>
+        <module>brava-finance</module>
+        <module>brava-stock</module>
+        <module>brava-fichas</module>
+        <module>brava-dashboard</module>
+        <module>brava-app</module>
     </modules>
 
     <properties>
@@ -39,43 +39,43 @@
         <dependencies>
             <!-- Módulos internos -->
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-core</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-clients</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-clients</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-services</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-services</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-appointments</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-appointments</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-finance</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-finance</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-stock</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-stock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-fichas</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-fichas</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.lashmanager</groupId>
-                <artifactId>lash-dashboard</artifactId>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-dashboard</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
