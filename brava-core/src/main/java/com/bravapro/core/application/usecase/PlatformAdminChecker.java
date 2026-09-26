@@ -25,8 +25,12 @@ public class PlatformAdminChecker {
 
     public void check() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (email == null || !email.toLowerCase(Locale.ROOT).endsWith(adminEmailSuffix)) {
+        if (!isPlatformAdmin(email)) {
             throw new PlatformAdminRequiredException();
         }
+    }
+
+    public boolean isPlatformAdmin(String email) {
+        return email != null && email.toLowerCase(Locale.ROOT).endsWith(adminEmailSuffix);
     }
 }

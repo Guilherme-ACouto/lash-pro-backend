@@ -1,5 +1,7 @@
 package com.bravapro.fichas.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import lombok.Getter;
  * rota autenticada, ou é resolvido a partir do token na rota pública), setado via
  * {@link #clientId(UUID)}.
  */
+@CommandPermission(Permission.RECORD_UPDATE)
 @Getter
 @AllArgsConstructor
 public class SaveAnamneseCommand extends AbstractCommand {

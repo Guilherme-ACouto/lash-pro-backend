@@ -14,6 +14,7 @@ COPY brava-finance/pom.xml brava-finance/
 COPY brava-stock/pom.xml brava-stock/
 COPY brava-fichas/pom.xml brava-fichas/
 COPY brava-dashboard/pom.xml brava-dashboard/
+COPY brava-settings/pom.xml brava-settings/
 COPY brava-app/pom.xml brava-app/
 RUN --mount=type=cache,target=/root/.m2 mvn -B -pl brava-app -am dependency:go-offline
 

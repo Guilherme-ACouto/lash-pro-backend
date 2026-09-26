@@ -43,10 +43,13 @@ public class LoginUseCaseImpl implements LoginUseCase {
             }
         }
 
+        user.registerLogin();
+        userRepository.save(user);
+
         String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
         String accessToken =
-                tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
-        String refreshToken = tokenPort.generateRefreshToken(user.getEmail());
+                tokenPort.generateAccessToken(user.getEmail(), user.isAdmin(), tenantId, user.getTokenVersion());
+        String refreshToken = tokenPort.generateRefreshToken(user.getEmail(), null, user.getTokenVersion());
 
         if (log.isInfoEnabled()) {
             log.info("Login realizado: {}", user.getEmail());
@@ -56,6 +59,6 @@ public class LoginUseCaseImpl implements LoginUseCase {
                 refreshToken,
                 user.getName(),
                 user.getEmail(),
-                user.getRole().name());
+                user.isAdmin());
     }
 }

@@ -16,23 +16,31 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
 
     private final TokenPort tokenPort;
     private final UserRepository userRepository;
+    private final PlatformAdminChecker platformAdminChecker;
 
     @Override
     public RefreshResponse execute(String refreshToken) {
         if (!tokenPort.isRefreshTokenValid(refreshToken)) {
             throw new TokenExpiredException();
         }
-
         String email = tokenPort.extractEmail(refreshToken);
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-
         if (!user.isActive()) {
             throw new InvalidCredentialsException();
         }
+        Integer tokenVersion = tokenPort.extractTokenVersion(refreshToken);
+        if ((tokenVersion != null ? tokenVersion : 0) != user.getTokenVersion()) {
+            throw new TokenExpiredException();
+        }
 
-        String tenantId = user.getTenantId() != null ? user.getTenantId().toString() : null;
+        // Sessão de suporte (equipe da plataforma dentro de outra assinatura) continua nela.
+        String supportTenantId = tokenPort.extractTenantId(refreshToken);
+        String tenantId = supportTenantId != null && platformAdminChecker.isPlatformAdmin(email)
+                ? supportTenantId
+                : user.getTenantId() != null ? user.getTenantId().toString() : null;
+
         String newAccessToken =
-                tokenPort.generateAccessToken(user.getEmail(), user.getRole().name(), tenantId);
+                tokenPort.generateAccessToken(user.getEmail(), user.isAdmin(), tenantId, user.getTokenVersion());
         return new RefreshResponse(newAccessToken);
     }
 }

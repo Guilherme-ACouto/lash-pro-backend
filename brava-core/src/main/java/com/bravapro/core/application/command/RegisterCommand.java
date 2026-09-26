@@ -1,5 +1,6 @@
 package com.bravapro.core.application.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.bravapro.core.domain.port.in.RegisterUseCase;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 import jakarta.validation.constraints.Email;
@@ -21,8 +22,10 @@ public class RegisterCommand extends AbstractCommand {
     @Email(message = "Email inválido")
     private String email;
 
+    /** WRITE_ONLY: lida do corpo da requisição, mas nunca serializada no payload da auditoria. */
     @NotBlank(message = "Senha é obrigatória")
     @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     public RegisterUseCase.RegisterData toDomainCommand() {

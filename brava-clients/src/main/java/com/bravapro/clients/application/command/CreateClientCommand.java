@@ -1,5 +1,7 @@
 package com.bravapro.clients.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.time.LocalDate;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@CommandPermission(Permission.CLIENT_CREATE)
 @Getter
 @AllArgsConstructor
 public class CreateClientCommand extends AbstractCommand {

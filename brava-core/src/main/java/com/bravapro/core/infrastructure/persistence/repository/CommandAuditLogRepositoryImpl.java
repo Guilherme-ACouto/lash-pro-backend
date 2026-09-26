@@ -30,4 +30,9 @@ public class CommandAuditLogRepositoryImpl implements CommandAuditLogRepository 
                 .findTopByCommandClassOrderByExecutedAtDesc(commandClass)
                 .map(mapper::toDomain);
     }
+
+    @Override
+    public boolean existsSuccessfulByUserId(String userId) {
+        return jpaRepository.existsByUserIdAndSuccessTrue(userId);
+    }
 }

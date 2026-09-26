@@ -33,4 +33,36 @@
                  splitStatements="true"
                  stripComments="true"/>
     </changeSet>
+
+    <!-- Permissões da equipe de exemplo (usuários criados no dev-seed-public, changeset 3) e dados
+         completos da unidade de negócio, pra testar o módulo Configurações. -->
+    <changeSet id="3" author="brava">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT CASE WHEN '${tenantId}' = 'de000000-0000-0000-0000-000000000001' THEN 1 ELSE 0 END
+            </sqlCheck>
+        </preConditions>
+        <sqlFile path="db/changelog/dev/dev-seed-tenant-settings.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <!-- admin@bravapro.com.br deixou de ser da equipe do Estúdio Dev (dev-seed-public, changeset 4):
+         remove o colaborador dela daqui e registra a dona nova. -->
+    <changeSet id="4" author="brava">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT CASE WHEN '${tenantId}' = 'de000000-0000-0000-0000-000000000001' THEN 1 ELSE 0 END
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            DELETE FROM collaborator
+            WHERE user_id IN (SELECT id FROM public.users WHERE email = 'admin@bravapro.com.br');
+        </sql>
+        <sql>
+            INSERT INTO collaborator (user_id) VALUES ('de000000-0000-0000-0000-0000000000a0')
+            ON CONFLICT (user_id) DO NOTHING;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

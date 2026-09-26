@@ -1,5 +1,7 @@
 package com.bravapro.fichas.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.time.LocalDate;
@@ -10,6 +12,7 @@ import lombok.Getter;
 
 /** O {@code clientId} não vem no corpo do JSON — vem do {@code @PathVariable}
  * ({@code POST /api/mappings/client/{clientId}}), setado via {@link #clientId(UUID)}. */
+@CommandPermission(Permission.RECORD_CREATE)
 @Getter
 @AllArgsConstructor
 public class CreateMappingCommand extends AbstractCommand {

@@ -3,7 +3,6 @@ package com.bravapro.core.application.usecase;
 import com.bravapro.core.domain.exception.EmailAlreadyInUseException;
 import com.bravapro.core.domain.model.Tenant;
 import com.bravapro.core.domain.model.User;
-import com.bravapro.core.domain.model.UserRole;
 import com.bravapro.core.domain.port.in.RegisterUseCase;
 import com.bravapro.core.domain.port.in.ResendActivationUseCase;
 import com.bravapro.core.domain.port.out.EmailPort;
@@ -60,8 +59,10 @@ public class RegisterUseCaseImpl implements RegisterUseCase {
         // tem FK para tenants.id, então não dá pra só atribuir o id sem o registro
         // correspondente; ActivateAccountUseCaseImpl só marca active=true depois.
         UUID tenantId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
         tenantRepository.save(Tenant.builder()
                 .id(tenantId)
+                .ownerUserId(userId)
                 .name(data.name())
                 .schemaName(tenantSchemaNaming.schemaNameFor(tenantId))
                 .active(false)
@@ -69,11 +70,11 @@ public class RegisterUseCaseImpl implements RegisterUseCase {
                 .build());
 
         User user = User.builder()
-                .id(UUID.randomUUID())
+                .id(userId)
                 .name(data.name())
                 .email(data.email())
                 .password(passwordEncoder.encode(data.password()))
-                .role(UserRole.OWNER)
+                .admin(true)
                 .active(false)
                 .tenantId(tenantId)
                 .activationKey(activationKey)

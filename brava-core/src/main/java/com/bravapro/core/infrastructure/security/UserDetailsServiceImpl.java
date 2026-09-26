@@ -1,10 +1,7 @@
 package com.bravapro.core.infrastructure.security;
 
 import com.bravapro.core.infrastructure.persistence.repository.UserJpaRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,10 +17,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userJpaRepository
                 .findByEmail(email)
-                .map(entity -> new User(
+                .map(entity -> new AuthenticatedUser(
+                        entity.getId(),
                         entity.getEmail(),
+                        entity.getName(),
                         entity.getPassword(),
-                        List.of(new SimpleGrantedAuthority("ROLE_" + entity.getRole()))))
+                        entity.isAdmin(),
+                        entity.isActive(),
+                        entity.getTenantId(),
+                        entity.getTenantId(),
+                        entity.getTokenVersion()))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
     }
 }

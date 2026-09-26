@@ -28,4 +28,11 @@
                  splitStatements="true"
                  stripComments="true"/>
     </changeSet>
+
+    <changeSet id="4" author="brava">
+        <sqlFile path="db/changelog/core/admin-access.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
 </databaseChangeLog>

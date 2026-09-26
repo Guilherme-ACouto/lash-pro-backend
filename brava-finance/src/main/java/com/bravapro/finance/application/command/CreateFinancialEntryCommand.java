@@ -1,5 +1,7 @@
 package com.bravapro.finance.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.math.BigDecimal;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@CommandPermission(Permission.FINANCIAL_CREATE)
 @Getter
 @AllArgsConstructor
 public class CreateFinancialEntryCommand extends AbstractCommand {

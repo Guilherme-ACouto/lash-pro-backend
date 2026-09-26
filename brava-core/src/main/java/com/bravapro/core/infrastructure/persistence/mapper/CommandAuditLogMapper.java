@@ -16,6 +16,8 @@ public class CommandAuditLogMapper {
                 .commandClass(entity.getCommandClass())
                 .payloadJson(entity.getPayloadJson())
                 .userId(entity.getUserId())
+                .userName(entity.getUserName())
+                .tenantId(entity.getTenantId())
                 .executedAt(entity.getExecutedAt())
                 .success(entity.isSuccess())
                 .build();
@@ -30,6 +32,8 @@ public class CommandAuditLogMapper {
                 .commandClass(domain.getCommandClass())
                 .payloadJson(domain.getPayloadJson())
                 .userId(domain.getUserId())
+                .userName(domain.getUserName())
+                .tenantId(domain.getTenantId())
                 .executedAt(domain.getExecutedAt())
                 .success(domain.isSuccess())
                 .build();

@@ -30,20 +30,8 @@ public class ForgotPasswordUseCaseImpl implements ForgotPasswordUseCase {
         User user = userOpt.get();
         String token = UUID.randomUUID().toString();
 
-        User updated = User.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
-                .active(user.isActive())
-                .passwordResetToken(token)
-                .passwordResetTokenExpiry(LocalDateTime.now().plusHours(1))
-                .createdAt(user.getCreatedAt())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        userRepository.save(updated);
+        user.requestPasswordReset(token, LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
         emailPort.sendPasswordResetEmail(user.getEmail(), user.getName(), token);
         log.info("Email de recuperação enviado para: {}", email);
     }

@@ -35,19 +35,10 @@ public class ResendActivationUseCaseImpl implements ResendActivationUseCase {
         User user = userOpt.get();
         String activationKey = UUID.randomUUID().toString();
 
-        User updated = User.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
+        User updated = user.toBuilder()
                 .active(false)
-                .passwordResetToken(user.getPasswordResetToken())
-                .passwordResetTokenExpiry(user.getPasswordResetTokenExpiry())
-                .tenantId(user.getTenantId())
                 .activationKey(activationKey)
                 .activationKeyExpiry(LocalDateTime.now().plusHours(activationKeyExpirationHours))
-                .createdAt(user.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .build();
 

@@ -11,4 +11,6 @@ public interface CommandAuditLogJpaRepository extends JpaRepository<CommandAudit
     boolean existsByCommandClass(String commandClass);
 
     Optional<CommandAuditLogEntity> findTopByCommandClassOrderByExecutedAtDesc(String commandClass);
+
+    boolean existsByUserIdAndSuccessTrue(String userId);
 }

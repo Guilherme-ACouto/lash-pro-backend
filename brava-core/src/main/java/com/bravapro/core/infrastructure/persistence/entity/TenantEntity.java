@@ -27,6 +27,9 @@ public class TenantEntity {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @Column(name = "owner_user_id")
+    private UUID ownerUserId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

@@ -28,11 +28,17 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Column(name = "admin", nullable = false)
+    private boolean admin;
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
+
+    @Column(name = "token_version", nullable = false)
+    private int tokenVersion;
 
     @Column(name = "password_reset_token")
     private String passwordResetToken;

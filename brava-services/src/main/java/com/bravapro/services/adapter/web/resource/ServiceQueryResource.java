@@ -1,5 +1,8 @@
 package com.bravapro.services.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.services.adapter.web.dto.ServiceResponse;
 import com.bravapro.services.domain.port.in.ServiceQueryService;
 
@@ -16,9 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/services")
 @RequiredArgsConstructor
-public class ServiceQueryResource {
+public class ServiceQueryResource implements QueryPermissionAware {
 
     private final ServiceQueryService serviceQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.SERVICE);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResponse> getById(@PathVariable UUID id) {

@@ -32,9 +32,10 @@ public class JwtService implements TokenPort {
     }
 
     @Override
-    public String generateAccessToken(String email, String role, String tenantId) {
+    public String generateAccessToken(String email, boolean admin, String tenantId, int tokenVersion) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role);
+        claims.put("admin", admin);
+        claims.put("tv", tokenVersion);
         claims.put("type", "ACCESS");
         if (tenantId != null) {
             claims.put("tenantId", tenantId);
@@ -43,10 +44,19 @@ public class JwtService implements TokenPort {
     }
 
     @Override
-    public String generateRefreshToken(String email) {
+    public String generateRefreshToken(String email, String supportTenantId, int tokenVersion) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "REFRESH");
+        claims.put("tv", tokenVersion);
+        if (supportTenantId != null) {
+            claims.put("tenantId", supportTenantId);
+        }
         return buildToken(claims, email, refreshExpiration);
+    }
+
+    @Override
+    public Integer extractTokenVersion(String token) {
+        return parseClaims(token).get("tv", Integer.class);
     }
 
     private String buildToken(Map<String, Object> claims, String subject, long expirationMs) {

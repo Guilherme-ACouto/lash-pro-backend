@@ -1,5 +1,8 @@
 package com.bravapro.appointments.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.appointments.domain.model.AppointmentDetails;
 import com.bravapro.appointments.domain.port.in.AppointmentQueryService;
 
@@ -15,9 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
-public class AppointmentQueryResource {
+public class AppointmentQueryResource implements QueryPermissionAware {
 
     private final AppointmentQueryService appointmentQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.APPOINTMENT);
+    }
 
     @GetMapping
     public ResponseEntity<List<AppointmentDetails>> listByDate(

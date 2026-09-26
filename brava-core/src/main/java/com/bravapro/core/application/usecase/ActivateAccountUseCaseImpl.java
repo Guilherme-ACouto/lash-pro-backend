@@ -46,7 +46,7 @@ public class ActivateAccountUseCaseImpl implements ActivateAccountUseCase {
         }
 
         UUID tenantId = user.getTenantId();
-        activateTenant(tenantId, user.getName());
+        activateTenant(tenantId, user);
         activateUser(user);
 
         schemaProvisionerPort.provision(tenantId);
@@ -62,40 +62,29 @@ public class ActivateAccountUseCaseImpl implements ActivateAccountUseCase {
      * necessário por causa da FK de users.tenant_id). Aqui só marca active=true; o fallback de criar
      * do zero cobre um estado inconsistente que não deveria acontecer no fluxo normal.
      */
-    private void activateTenant(UUID tenantId, String tenantName) {
+    private void activateTenant(UUID tenantId, User owner) {
         Tenant tenant = tenantRepository
                 .findById(tenantId)
-                .map(t -> Tenant.builder()
-                        .id(t.getId())
-                        .name(t.getName())
-                        .schemaName(t.getSchemaName())
+                .map(t -> t.toBuilder()
                         .active(true)
-                        .createdAt(t.getCreatedAt())
+                        .ownerUserId(t.getOwnerUserId() != null ? t.getOwnerUserId() : owner.getId())
                         .build())
                 .orElseGet(() -> Tenant.builder()
                         .id(tenantId)
-                        .name(tenantName)
+                        .name(owner.getName())
                         .schemaName(tenantSchemaNaming.schemaNameFor(tenantId))
                         .active(true)
+                        .ownerUserId(owner.getId())
                         .createdAt(LocalDateTime.now())
                         .build());
         tenantRepository.save(tenant);
     }
 
     private void activateUser(User user) {
-        userRepository.save(User.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
+        userRepository.save(user.toBuilder()
                 .active(true)
-                .passwordResetToken(user.getPasswordResetToken())
-                .passwordResetTokenExpiry(user.getPasswordResetTokenExpiry())
-                .tenantId(user.getTenantId())
                 .activationKey(null)
                 .activationKeyExpiry(null)
-                .createdAt(user.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .build());
     }

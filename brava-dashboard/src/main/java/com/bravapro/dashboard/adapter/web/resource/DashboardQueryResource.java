@@ -1,5 +1,8 @@
 package com.bravapro.dashboard.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.dashboard.domain.model.DashboardData;
 import com.bravapro.dashboard.domain.model.DashboardPeriod;
 import com.bravapro.dashboard.domain.port.in.DashboardQueryService;
@@ -17,9 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/dashboard")
 @RequiredArgsConstructor
 @PreAuthorize("isAuthenticated()")
-public class DashboardQueryResource {
+public class DashboardQueryResource implements QueryPermissionAware {
 
     private final DashboardQueryService dashboardQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.DASHBOARD);
+    }
 
     @GetMapping
     public ResponseEntity<DashboardData> get(@RequestParam DashboardPeriod period) {

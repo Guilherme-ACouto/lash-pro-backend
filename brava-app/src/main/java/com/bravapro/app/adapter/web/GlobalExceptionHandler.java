@@ -13,6 +13,10 @@ import com.bravapro.core.domain.exception.BusinessException;
 import com.bravapro.core.domain.exception.DomainException;
 import com.bravapro.core.domain.exception.EmailAlreadyInUseException;
 import com.bravapro.core.domain.exception.InvalidCredentialsException;
+import com.bravapro.core.domain.exception.InviteExpiredException;
+import com.bravapro.core.domain.exception.InviteInvalidException;
+import com.bravapro.core.domain.exception.PasswordResetTokenInvalidException;
+import com.bravapro.core.domain.exception.PermissionDeniedException;
 import com.bravapro.core.domain.exception.PlatformAdminRequiredException;
 import com.bravapro.core.domain.exception.SchemaProvisioningException;
 import com.bravapro.core.domain.exception.TenantInactiveException;
@@ -69,6 +73,28 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TenantInactiveException.class)
     public ResponseEntity<Error> handleTenantInactive(TenantInactiveException ex) {
         return err(HttpStatus.FORBIDDEN, "TENANT_INACTIVE", ex.getMessage());
+    }
+
+    @ExceptionHandler(PasswordResetTokenInvalidException.class)
+    public ResponseEntity<Error> handlePasswordResetTokenInvalid(PasswordResetTokenInvalidException ex) {
+        return err(HttpStatus.BAD_REQUEST, "PASSWORD_RESET_TOKEN_INVALID", ex.getMessage());
+    }
+
+    // ── Permissões / convites (Configurações) ─────────────────────────────────
+
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ResponseEntity<Error> handlePermissionDenied(PermissionDeniedException ex) {
+        return err(HttpStatus.FORBIDDEN, "PERMISSION_DENIED", ex.getMessage());
+    }
+
+    @ExceptionHandler(InviteInvalidException.class)
+    public ResponseEntity<Error> handleInviteInvalid(InviteInvalidException ex) {
+        return err(HttpStatus.NOT_FOUND, "INVITE_INVALID", ex.getMessage());
+    }
+
+    @ExceptionHandler(InviteExpiredException.class)
+    public ResponseEntity<Error> handleInviteExpired(InviteExpiredException ex) {
+        return err(HttpStatus.GONE, "INVITE_EXPIRED", ex.getMessage());
     }
 
     // ── Administração de tenants ──────────────────────────────────────────────

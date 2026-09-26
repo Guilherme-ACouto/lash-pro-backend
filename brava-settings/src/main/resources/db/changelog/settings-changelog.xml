@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="1" author="brava">
+        <sqlFile path="db/changelog/settings/create-business-unit-table.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <!-- Toda assinatura nasce com a unidade de negócio principal, com o nome da assinatura. -->
+    <changeSet id="2" author="brava">
+        <sql>
+            INSERT INTO business_unit (id, main, trade_name, created_at, updated_at)
+            SELECT gen_random_uuid(), TRUE, t.name, NOW(), NOW()
+            FROM public.tenants t
+            WHERE t.id = '${tenantId}'::uuid
+              AND NOT EXISTS (SELECT 1 FROM business_unit WHERE main);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

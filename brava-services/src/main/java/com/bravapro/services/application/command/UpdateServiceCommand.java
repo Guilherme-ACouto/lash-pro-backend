@@ -1,5 +1,7 @@
 package com.bravapro.services.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ import lombok.Getter;
  * {@link #id(UUID)} pelo Resource antes de repassar pra ApplicationService (ver ClientResource
  * como referência do mesmo padrão).
  */
+@CommandPermission(Permission.SERVICE_UPDATE)
 @Getter
 @AllArgsConstructor
 public class UpdateServiceCommand extends AbstractCommand {

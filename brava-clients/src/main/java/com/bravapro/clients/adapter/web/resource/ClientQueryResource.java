@@ -1,5 +1,8 @@
 package com.bravapro.clients.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.clients.adapter.web.dto.ClientResponse;
 import com.bravapro.clients.domain.port.in.ClientQueryService;
 
@@ -16,9 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/clients")
 @RequiredArgsConstructor
-public class ClientQueryResource {
+public class ClientQueryResource implements QueryPermissionAware {
 
     private final ClientQueryService clientQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.CLIENT);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponse> getById(@PathVariable UUID id) {

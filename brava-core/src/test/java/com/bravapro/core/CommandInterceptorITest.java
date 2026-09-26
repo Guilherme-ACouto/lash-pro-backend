@@ -9,7 +9,6 @@ import com.bravapro.core.domain.exception.EmailAlreadyInUseException;
 import com.bravapro.core.domain.model.CommandAuditLog;
 import com.bravapro.core.domain.model.Tenant;
 import com.bravapro.core.domain.model.User;
-import com.bravapro.core.domain.model.UserRole;
 import com.bravapro.core.domain.port.out.CommandAuditLogRepository;
 import com.bravapro.core.domain.port.out.TenantRepository;
 import com.bravapro.core.domain.port.out.UserRepository;
@@ -90,7 +89,7 @@ class CommandInterceptorITest extends AbstractIntegrationTest {
                 .name("Já Cadastrada")
                 .email(email)
                 .password(passwordEncoder.encode("outrasenha"))
-                .role(UserRole.OWNER)
+                .admin(true)
                 .active(true)
                 .tenantId(tenantId)
                 .createdAt(now)

@@ -1,5 +1,8 @@
 package com.bravapro.stock.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.stock.adapter.web.dto.InventoryMovementResponse;
 import com.bravapro.stock.domain.port.in.InventoryMovementQueryService;
 
@@ -17,9 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/inventory/items")
 @RequiredArgsConstructor
 @PreAuthorize("isAuthenticated()")
-public class InventoryMovementQueryResource {
+public class InventoryMovementQueryResource implements QueryPermissionAware {
 
     private final InventoryMovementQueryService inventoryMovementQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.INVENTORY);
+    }
 
     @GetMapping("/{id}/movements")
     public ResponseEntity<Page<InventoryMovementResponse>> listMovements(@PathVariable UUID id, Pageable pageable) {

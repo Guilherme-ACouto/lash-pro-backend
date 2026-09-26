@@ -7,8 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Assinatura. {@code ownerUserId} é a titular (quem criou a conta — equivalente ao contractor da
+ * Signature na Pontta): sempre administradora, não pode ser inativada nem excluída.
+ */
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tenant {
@@ -16,5 +20,14 @@ public class Tenant {
     private String name;
     private String schemaName;
     private boolean active;
+    private UUID ownerUserId;
     private LocalDateTime createdAt;
+
+    public void rename(String name) {
+        this.name = name;
+    }
+
+    public boolean isOwner(UUID userId) {
+        return ownerUserId != null && ownerUserId.equals(userId);
+    }
 }

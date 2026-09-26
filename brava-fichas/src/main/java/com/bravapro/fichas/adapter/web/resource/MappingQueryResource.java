@@ -1,5 +1,8 @@
 package com.bravapro.fichas.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.fichas.adapter.web.dto.MappingResponse;
 import com.bravapro.fichas.domain.model.MappingSummary;
 import com.bravapro.fichas.domain.port.in.MappingQueryService;
@@ -16,9 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/mappings")
 @RequiredArgsConstructor
-public class MappingQueryResource {
+public class MappingQueryResource implements QueryPermissionAware {
 
     private final MappingQueryService mappingQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.RECORD);
+    }
 
     @GetMapping
     public ResponseEntity<Page<MappingSummary>> list(

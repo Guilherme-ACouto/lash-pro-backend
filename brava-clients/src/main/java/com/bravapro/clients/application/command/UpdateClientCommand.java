@@ -1,5 +1,7 @@
 package com.bravapro.clients.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.time.LocalDate;
@@ -17,6 +19,7 @@ import lombok.Getter;
  * ApplicationService. Por isso {@code id} não tem validação de "não nulo": no momento em que o
  * Spring valida o {@code @Valid @RequestBody}, o id ainda não foi setado.
  */
+@CommandPermission(Permission.CLIENT_UPDATE)
 @Getter
 @AllArgsConstructor
 public class UpdateClientCommand extends AbstractCommand {

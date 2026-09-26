@@ -57,6 +57,11 @@
             <artifactId>brava-dashboard</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.bravapro</groupId>
+            <artifactId>brava-settings</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Runtime -->
         <dependency>

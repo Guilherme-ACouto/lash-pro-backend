@@ -3,6 +3,8 @@ package com.bravapro.core.infrastructure.command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.bravapro.core.domain.model.CommandAuditLog;
 import com.bravapro.core.domain.port.out.CommandAuditLogRepository;
+import com.bravapro.core.domain.port.out.CurrentAccess;
+import com.bravapro.core.infrastructure.security.PermissionEvaluator;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -15,16 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
  * Intercepta todo ApplicationService.when(AbstractCommand) por convenção de assinatura: valida
- * (Bean Validation), loga início/fim e grava auditoria — sucesso ou falha. Ponto de extensão
- * preparado, não implementado: leitura de uma futura anotação @CommandPermission (ver RBK-D04,
- * precisa de mais de um UserRole pra fazer sentido). Falha ao gravar auditoria nunca derruba a
- * operação de negócio em si — é registrada em log e seguida.
+ * (Bean Validation), checa a {@link CommandPermission} do Command (padrão Pontta — antes de
+ * qualquer regra de negócio), loga início/fim e grava auditoria — sucesso ou falha. Permissão
+ * negada também é auditada como falha. Falha ao gravar auditoria nunca derruba a operação de
+ * negócio em si — é registrada em log e seguida.
  */
 @Aspect
 @Component
@@ -35,6 +35,8 @@ public class CommandInterceptor {
     private final Validator validator;
     private final CommandAuditLogRepository commandAuditLogRepository;
     private final ObjectMapper objectMapper;
+    private final PermissionEvaluator permissionEvaluator;
+    private final CurrentAccess currentAccess;
 
     @Around("execution(* com.bravapro..*.application.service.*ApplicationService.when(..))")
     public Object intercept(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -43,6 +45,7 @@ public class CommandInterceptor {
 
         long start = System.currentTimeMillis();
         try {
+            checkPermission(command);
             Object result = joinPoint.proceed();
             audit(command, true);
             if (log.isInfoEnabled()) {
@@ -71,6 +74,13 @@ public class CommandInterceptor {
         return command;
     }
 
+    private void checkPermission(AbstractCommand command) {
+        CommandPermission required = command.getClass().getAnnotation(CommandPermission.class);
+        if (required != null) {
+            permissionEvaluator.check(required);
+        }
+    }
+
     private void validate(AbstractCommand command) {
         Set<ConstraintViolation<AbstractCommand>> violations = validator.validate(command);
         if (!violations.isEmpty()) {
@@ -88,7 +98,9 @@ public class CommandInterceptor {
                     .id(UUID.randomUUID())
                     .commandClass(command.getClass().getSimpleName())
                     .payloadJson(payload)
-                    .userId(currentUserId())
+                    .userId(currentAccess.email())
+                    .userName(currentAccess.userName())
+                    .tenantId(currentAccess.tenantId())
                     .executedAt(LocalDateTime.now())
                     .success(success)
                     .build());
@@ -102,8 +114,4 @@ public class CommandInterceptor {
         }
     }
 
-    private String currentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null ? authentication.getName() : null;
-    }
 }

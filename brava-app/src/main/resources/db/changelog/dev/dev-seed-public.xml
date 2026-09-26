@@ -32,4 +32,74 @@
             ) ON CONFLICT (email) DO NOTHING;
         </sql>
     </changeSet>
+
+    <!-- A admin de dev é administradora e titular do tenant de dev (colunas do core changeset 4). -->
+    <changeSet id="2" author="brava">
+        <sql>
+            UPDATE users SET admin = TRUE WHERE email = 'admin@bravapro.com.br';
+        </sql>
+        <sql>
+            UPDATE tenants
+            SET owner_user_id = (SELECT id FROM users WHERE email = 'admin@bravapro.com.br')
+            WHERE id = 'de000000-0000-0000-0000-000000000001';
+        </sql>
+    </changeSet>
+
+    <!-- Equipe de exemplo do Estúdio Dev, pra testar permissões sem depender de e-mail
+         (senha das duas: admin123). As permissões ficam no seed do tenant (changeset 3). -->
+    <changeSet id="3" author="brava">
+        <sql>
+            INSERT INTO users (id, name, email, password, admin, active, tenant_id)
+            VALUES
+                ('de000000-0000-0000-0000-0000000000a1', 'Rafaela Nunes (Recepção)', 'recepcao@estudiodev.com.br',
+                 '$2a$10$Uz8wcxUcdoCF6ydtQsYe5enPYKYclzDcr3.aWpVy5AO/cQur0g.HO', FALSE, TRUE,
+                 'de000000-0000-0000-0000-000000000001'),
+                ('de000000-0000-0000-0000-0000000000a2', 'Bianca Torres (Profissional)', 'profissional@estudiodev.com.br',
+                 '$2a$10$Uz8wcxUcdoCF6ydtQsYe5enPYKYclzDcr3.aWpVy5AO/cQur0g.HO', FALSE, TRUE,
+                 'de000000-0000-0000-0000-000000000001')
+            ON CONFLICT (email) DO NOTHING;
+        </sql>
+    </changeSet>
+
+    <!-- A equipe da plataforma não é funcionária de nenhuma empresa: admin@bravapro.com.br sai do
+         Estúdio Dev e vai pra uma assinatura interna "Brava Pro (plataforma)" (todo usuário precisa
+         de um tenant). Ela entra nas empresas só por "Trocar assinatura" (modo suporte). O Estúdio
+         Dev ganha dona própria (senha admin123). -->
+    <changeSet id="4" author="brava">
+        <sql>
+            INSERT INTO tenants (id, name, schema_name, active)
+            VALUES (
+                'f0000000-0000-0000-0000-000000000001',
+                'Brava Pro (plataforma)',
+                '${tenantSchemaPrefix}f0000000000000000000000000000001',
+                true
+            ) ON CONFLICT (id) DO NOTHING;
+        </sql>
+        <sql>
+            INSERT INTO users (id, name, email, password, admin, active, tenant_id)
+            VALUES (
+                'de000000-0000-0000-0000-0000000000a0',
+                'Dona do Estúdio Dev',
+                'dona@estudiodev.com.br',
+                '$2a$10$Uz8wcxUcdoCF6ydtQsYe5enPYKYclzDcr3.aWpVy5AO/cQur0g.HO',
+                TRUE,
+                TRUE,
+                'de000000-0000-0000-0000-000000000001'
+            ) ON CONFLICT (email) DO NOTHING;
+        </sql>
+        <sql>
+            UPDATE users SET tenant_id = 'f0000000-0000-0000-0000-000000000001'
+            WHERE email = 'admin@bravapro.com.br';
+        </sql>
+        <sql>
+            UPDATE tenants
+            SET owner_user_id = (SELECT id FROM users WHERE email = 'admin@bravapro.com.br')
+            WHERE id = 'f0000000-0000-0000-0000-000000000001';
+        </sql>
+        <sql>
+            UPDATE tenants
+            SET owner_user_id = (SELECT id FROM users WHERE email = 'dona@estudiodev.com.br')
+            WHERE id = 'de000000-0000-0000-0000-000000000001';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

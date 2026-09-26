@@ -1,5 +1,7 @@
 package com.bravapro.services.application.command;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.command.CommandPermission;
 import com.bravapro.core.infrastructure.command.AbstractCommand;
 
 import java.math.BigDecimal;
@@ -12,6 +14,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@CommandPermission(Permission.SERVICE_CREATE)
 @Getter
 @AllArgsConstructor
 public class CreateServiceCommand extends AbstractCommand {

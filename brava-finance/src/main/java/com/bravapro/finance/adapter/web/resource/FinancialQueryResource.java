@@ -1,5 +1,8 @@
 package com.bravapro.finance.adapter.web.resource;
 
+import com.bravapro.core.domain.permission.Permission;
+import com.bravapro.core.infrastructure.web.QueryPermission;
+import com.bravapro.core.infrastructure.web.QueryPermissionAware;
 import com.bravapro.finance.domain.model.FinancialEntryDetails;
 import com.bravapro.finance.domain.model.FinancialEntryFilter;
 import com.bravapro.finance.domain.model.FinancialSummary;
@@ -18,9 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/financial")
 @RequiredArgsConstructor
-public class FinancialQueryResource {
+public class FinancialQueryResource implements QueryPermissionAware {
 
     private final FinancialEntryQueryService financialEntryQueryService;
+
+    @Override
+    public QueryPermission queryPermission() {
+        return QueryPermission.of(Permission.FINANCIAL);
+    }
 
     @GetMapping("/summary")
     public ResponseEntity<FinancialSummary> summary() {

@@ -23,13 +23,7 @@ public class DeactivateTenantUseCaseImpl implements DeactivateTenantUseCase {
 
         Tenant tenant = tenantRepository.findById(tenantId).orElseThrow(TenantNotFoundException::new);
 
-        tenantRepository.save(Tenant.builder()
-                .id(tenant.getId())
-                .name(tenant.getName())
-                .schemaName(tenant.getSchemaName())
-                .active(false)
-                .createdAt(tenant.getCreatedAt())
-                .build());
+        tenantRepository.save(tenant.toBuilder().active(false).build());
 
         if (log.isInfoEnabled()) {
             log.info("Tenant desativado: {} ({})", tenant.getId(), tenant.getName());

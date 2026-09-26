@@ -27,6 +27,7 @@
         <module>brava-stock</module>
         <module>brava-fichas</module>
         <module>brava-dashboard</module>
+        <module>brava-settings</module>
         <module>brava-app</module>
     </modules>
 
@@ -76,6 +77,11 @@
             <dependency>
                 <groupId>com.bravapro</groupId>
                 <artifactId>brava-dashboard</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bravapro</groupId>
+                <artifactId>brava-settings</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

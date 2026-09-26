@@ -10,13 +10,15 @@ public enum LiquibasePaths {
     CORE("db/changelog/core-changelog.xml", PathType.PUBLIC, 1),
     DEV_SEED_PUBLIC("db/changelog/dev/dev-seed-public.xml", PathType.PUBLIC, 2),
 
+    CORE_TENANT("db/changelog/core-tenant-changelog.xml", PathType.TENANT, 0),
     CLIENTS("db/changelog/clients-changelog.xml", PathType.TENANT, 1),
     SERVICES("db/changelog/services-changelog.xml", PathType.TENANT, 2),
     APPOINTMENTS("db/changelog/appointments-changelog.xml", PathType.TENANT, 3),
     FINANCE("db/changelog/finance-changelog.xml", PathType.TENANT, 4),
     STOCK("db/changelog/stock-changelog.xml", PathType.TENANT, 5),
     FICHAS("db/changelog/fichas-changelog.xml", PathType.TENANT, 6),
-    DEV_SEED_TENANT("db/changelog/dev/dev-seed-tenant.xml", PathType.TENANT, 7);
+    SETTINGS("db/changelog/settings-changelog.xml", PathType.TENANT, 7),
+    DEV_SEED_TENANT("db/changelog/dev/dev-seed-tenant.xml", PathType.TENANT, 8);
 
     private final String path;
     private final PathType type;

@@ -29,6 +29,12 @@ spring:
   liquibase:
     enabled: false
 
+  # Upload do logo da unidade de negócio (até 2 MB; o resto é margem do multipart).
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 4MB
+
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
@@ -56,3 +62,8 @@ app:
     key-expiration-hours: ${ACTIVATION_KEY_HOURS:48}
   anamnese:
     link-expiration-hours: ${ANAMNESE_LINK_HOURS:72}
+  invite:
+    expiration-hours: ${INVITE_HOURS:48}
+  # Arquivos enviados (logo da unidade de negócio). Em produção, apontar pra um volume persistente.
+  storage:
+    path: ${STORAGE_PATH:${user.home}/bravapro-storage}

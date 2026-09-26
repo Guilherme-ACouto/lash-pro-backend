@@ -16,6 +16,7 @@ public class TenantMapper {
                 .name(entity.getName())
                 .schemaName(entity.getSchemaName())
                 .active(entity.isActive())
+                .ownerUserId(entity.getOwnerUserId())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
@@ -29,6 +30,7 @@ public class TenantMapper {
                 .name(domain.getName())
                 .schemaName(domain.getSchemaName())
                 .active(domain.isActive())
+                .ownerUserId(domain.getOwnerUserId())
                 .createdAt(domain.getCreatedAt())
                 .build();
     }

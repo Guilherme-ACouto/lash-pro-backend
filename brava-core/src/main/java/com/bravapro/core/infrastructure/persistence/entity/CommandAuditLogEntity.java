@@ -27,6 +27,12 @@ public class CommandAuditLogEntity {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "tenant_id")
+    private UUID tenantId;
+
     @Column(name = "executed_at", nullable = false, updatable = false)
     private LocalDateTime executedAt;
 
